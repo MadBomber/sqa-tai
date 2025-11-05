@@ -1,0 +1,95 @@
+site_name: SQA TALib
+site_description: Ruby wrapper for TA-Lib - 200+ Technical Analysis Indicators
+site_author: Dewayne VanHoozer
+site_url: https://madbomber.github.io/sqa-talib
+
+repo_name: MadBomber/sqa-talib
+repo_url: https://github.com/MadBomber/sqa-talib
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - tables
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quick-start.md
+    - Basic Usage: getting-started/basic-usage.md
+  - Indicators:
+    - Overview: indicators/index.md
+    - Overlap Studies:
+      - Simple Moving Average: indicators/overlap/sma.md
+      - Exponential Moving Average: indicators/overlap/ema.md
+      - Weighted Moving Average: indicators/overlap/wma.md
+      - Bollinger Bands: indicators/overlap/bbands.md
+    - Momentum:
+      - RSI: indicators/momentum/rsi.md
+      - MACD: indicators/momentum/macd.md
+      - Stochastic: indicators/momentum/stoch.md
+      - Momentum: indicators/momentum/mom.md
+    - Volatility:
+      - Average True Range: indicators/volatility/atr.md
+      - True Range: indicators/volatility/trange.md
+    - Volume:
+      - On Balance Volume: indicators/volume/obv.md
+      - Chaikin A/D Line: indicators/volume/ad.md
+    - Patterns:
+      - Overview: indicators/patterns/index.md
+      - Doji: indicators/patterns/doji.md
+      - Hammer: indicators/patterns/hammer.md
+      - Engulfing: indicators/patterns/engulfing.md
+  - API Reference: api-reference.md
+  - Examples:
+    - Trend Analysis: examples/trend-analysis.md
+    - Momentum Trading: examples/momentum-trading.md
+    - Volatility Analysis: examples/volatility-analysis.md
+  - Contributing: contributing.md
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/MadBomber/sqa-talib
