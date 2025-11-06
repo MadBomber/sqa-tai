@@ -89,6 +89,63 @@ class SQA::TAITest < Minitest::Test
     end
   end
 
+  def test_accbands_returns_three_arrays
+    skip "TA-Lib not installed" unless SQA::TAI.available?
+
+    # Use extended test data for better results
+    extended_high = TestData::HIGH * 3
+    extended_low = TestData::LOW * 3
+    extended_close = TestData::CLOSE * 3
+
+    upper, middle, lower = SQA::TAI.accbands(extended_high, extended_low, extended_close, period: 20)
+
+    assert_instance_of Array, upper
+    assert_instance_of Array, middle
+    assert_instance_of Array, lower
+
+    # Upper should be greater than middle, middle greater than lower
+    upper.compact.zip(middle.compact, lower.compact).each do |u, m, l|
+      assert u >= m if u && m
+      assert m >= l if m && l
+    end
+  end
+
+  def test_imi_with_open_close
+    skip "TA-Lib not installed" unless SQA::TAI.available?
+
+    result = SQA::TAI.imi(TestData::OPEN, TestData::CLOSE, period: 5)
+
+    assert_instance_of Array, result
+    refute_empty result
+    # IMI values should be between 0 and 100 (like RSI)
+    result.compact.each do |value|
+      assert value >= 0 && value <= 100, "IMI value #{value} out of range"
+    end
+  end
+
+  def test_ma_generic_moving_average
+    skip "TA-Lib not installed" unless SQA::TAI.available?
+
+    # Test SMA (ma_type: 0)
+    result_sma = SQA::TAI.ma(TestData::PRICES, period: 5, ma_type: 0)
+    assert_instance_of Array, result_sma
+    refute_empty result_sma
+
+    # Test EMA (ma_type: 1)
+    result_ema = SQA::TAI.ma(TestData::PRICES, period: 5, ma_type: 1)
+    assert_instance_of Array, result_ema
+    refute_empty result_ema
+
+    # Test WMA (ma_type: 2)
+    result_wma = SQA::TAI.ma(TestData::PRICES, period: 5, ma_type: 2)
+    assert_instance_of Array, result_wma
+    refute_empty result_wma
+
+    # All should return arrays of the same length
+    assert_equal result_sma.length, result_ema.length
+    assert_equal result_ema.length, result_wma.length
+  end
+
   def test_invalid_parameters
     skip "TA-Lib not installed" unless SQA::TAI.available?
 

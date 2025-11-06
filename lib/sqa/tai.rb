@@ -33,6 +33,19 @@ module SQA
       # Overlap Studies (Moving Averages, Bands)
       # ========================================
 
+      # Moving Average - Generic
+      # @param prices [Array<Float>] Array of prices
+      # @param period [Integer] Time period (default: 30)
+      # @param ma_type [Integer] MA type: 0=SMA, 1=EMA, 2=WMA, 3=DEMA, 4=TEMA, 5=TRIMA, 6=KAMA, 7=MAMA, 8=T3 (default: 0)
+      # @return [Array<Float>] MA values
+      def ma(prices, period: 30, ma_type: 0)
+        check_available!
+        validate_prices!(prices)
+        validate_period!(period, prices.size)
+
+        TALibFFI.ma(prices, time_period: period, ma_type: ma_type)
+      end
+
       # Simple Moving Average
       # @param prices [Array<Float>] Array of prices
       # @param period [Integer] Time period (default: 30)
@@ -170,6 +183,20 @@ module SQA
         validate_period!(period, prices.size)
 
         TALibFFI.rsi(prices, time_period: period)
+      end
+
+      # Intraday Momentum Index
+      # @param open_prices [Array<Float>] Array of open prices
+      # @param close_prices [Array<Float>] Array of close prices
+      # @param period [Integer] Time period (default: 14)
+      # @return [Array<Float>] IMI values
+      def imi(open_prices, close_prices, period: 14)
+        check_available!
+        validate_prices!(open_prices)
+        validate_prices!(close_prices)
+        validate_period!(period, [open_prices.size, close_prices.size].min)
+
+        TALibFFI.imi(open_prices, close_prices, time_period: period)
       end
 
       # Moving Average Convergence/Divergence
@@ -737,6 +764,29 @@ module SQA
           af_init: acceleration_init,
           af_increment: acceleration_step,
           af_max: acceleration_max)
+      end
+
+      # Acceleration Bands
+      # @param high [Array<Float>] High prices
+      # @param low [Array<Float>] Low prices
+      # @param close [Array<Float>] Close prices
+      # @param period [Integer] Time period (default: 20)
+      # @return [Array<Array<Float>>] [upper_band, middle_band, lower_band]
+      def accbands(high, low, close, period: 20)
+        check_available!
+        validate_prices!(high)
+        validate_prices!(low)
+        validate_prices!(close)
+        validate_period!(period, [high.size, low.size, close.size].min)
+
+        result = TALibFFI.accbands(high, low, close, time_period: period)
+
+        # Handle hash return format from newer ta_lib_ffi versions
+        if result.is_a?(Hash)
+          [result[:upper_band], result[:middle_band], result[:lower_band]]
+        else
+          result
+        end
       end
 
       # Hilbert Transform - Instantaneous Trendline

@@ -1,20 +1,32 @@
-# SQA::TAI - Technical Analysis Indicators
+<div align="center">
+  <h1>SQA::TAI - Technical Analysis Indicators</h1>
 
-[![Ruby](https://img.shields.io/badge/ruby-%3E%3D%203.1.0-ruby.svg)](https://www.ruby-lang.org/)
-[![Gem Version](https://badge.fury.io/rb/sqa-tai.svg)](https://badge.fury.io/rb/sqa-tai)
-[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://madbomber.github.io/sqa-tai)
+  <p>Ruby wrapper around [TA-Lib](https://ta-lib.org/) providing **136 technical analysis indicators** for stock market analysis.<br/>
+      Part of the [SQA](https://github.com/MadBomber/sqa) (Simple Qualitative Analysis) ecosystem.</p>
+</div>
 
-Ruby wrapper around [TA-Lib](https://ta-lib.org/) providing **132 technical analysis indicators** for stock market analysis. Part of the [SQA](https://github.com/MadBomber/sqa) (Stock Qualitative Analysis) ecosystem.
+<table>
+<tr>
+<td width="30%" valign="top" align="center">
+  <img src="docs/assets/images/sqa-tai.jpg" alt="Ruby Turns Information into Knowledge" width="60%">
+  <br/>
+</td>
+<td width="70%" valign="top">
 
 ## Features
 
-- 🚀 **132 Indicators** - Comprehensive coverage with 94% of trading-relevant TA-Lib indicators
+- 🚀 **136 Indicators** - Comprehensive coverage with 94% of trading-relevant TA-Lib indicators
 - ⚡ **Blazing Fast** - C library performance with Ruby convenience
 - 🎯 **Clean API** - Simple, intuitive Ruby interface with keyword arguments
 - 📊 **Comprehensive** - Overlap studies, momentum, volatility, volume, cycles, stats, patterns
+- 🔌 **Easy Integration** - Works seamlessly with existing Ruby trading tools
 - ✅ **Well Tested** - 73 tests, 332 assertions, 100% passing
 - 📚 **Documented** - Full documentation at [madbomber.github.io/sqa-tai](https://madbomber.github.io/sqa-tai)
 - 🔧 **Bug Fixed** - Includes monkey patch for ta_lib_ffi 0.3.0 multi-array parameter bug
+
+</td>
+</tr>
+</table>
 
 ## Prerequisites
 
@@ -74,7 +86,7 @@ if SQA::TAI.available?
 end
 ```
 
-## Available Indicators (132 Total)
+## Available Indicators (136 Total)
 
 ### Overlap Studies (15)
 - **SMA, EMA, WMA** - Moving Averages
@@ -274,11 +286,5 @@ The gem is available as open source under the terms of the [MIT License](LICENSE
 
 ## Support
 
-- 📧 Email: dvanhoozer@gmail.com
 - 🐛 Issues: [GitHub Issues](https://github.com/MadBomber/sqa-tai/issues)
 - 📚 Docs: [Documentation Site](https://madbomber.github.io/sqa-tai)
-
-## Disclaimer
-
-**DO NOT USE** this library for real money trading without thorough testing and professional advice.
-This is an educational tool. Trading stocks involves risk of loss.
