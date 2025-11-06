@@ -4,7 +4,7 @@ Welcome to **SQA::TAI**, a Ruby wrapper around the legendary [TA-Lib](https://ta
 
 ## Overview
 
-SQA::TAI is part of the [SQA (Stock Qualitative Analysis)](https://github.com/MadBomber/sqa) ecosystem, focusing on providing fast, reliable technical indicators for stock market analysis.
+SQA::TAI is part of the [SQA (Simple Qualitative Analysis)](https://github.com/MadBomber/sqa) ecosystem, focusing on providing fast, reliable technical indicators for stock market analysis.
 
 ## Features
 
