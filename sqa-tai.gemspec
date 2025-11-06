@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email        = ["dvanhoozer@gmail.com"]
 
   spec.summary      = "SQA::TAI - Technical Analysis Indicators"
-  spec.description  = "An SQA-specific wrapper around the ta_lib_ffi gem which access to TA-Lib providing 200+ technical analysis indicators for stock analysis. Part of the SQA (Simple Qualitative Analysis) ecosystem."
+  spec.description  = "An SQA-specific wrapper around the ta_lib_ffi gem which access to TA-Lib providing many technical analysis indicators for stock analysis. Part of the SQA (Simple Qualitative Analysis) ecosystem."
   spec.homepage     = "https://github.com/MadBomber/sqa-tai"
   spec.license      = "MIT"
 
