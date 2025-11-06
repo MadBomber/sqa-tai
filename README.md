@@ -7,7 +7,7 @@
 
 <table>
 <tr>
-<td width="30%" valign="top" align="center">
+<td width="30%" valign="middle" align="center">
   <img src="docs/assets/images/sqa-tai.jpg" alt="Ruby Turns Information into Knowledge" width="80%">
   <br/>
 </td>
