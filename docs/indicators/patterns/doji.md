@@ -5,7 +5,7 @@ A Doji is a candlestick pattern that occurs when the opening and closing prices 
 ## Usage
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 open  = [100.0, 101.5, 102.0, 103.5, 104.0]
 high  = [101.5, 103.0, 104.0, 105.0, 105.5]

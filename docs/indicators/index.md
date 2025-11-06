@@ -49,7 +49,7 @@ Identify candlestick patterns:
 All indicators follow a consistent API pattern:
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # Single input, single output
 result = SQA::TAI.sma(prices, period: 10)
@@ -91,7 +91,7 @@ Most indicators accept these standard parameters:
 ## Example: Multi-Indicator Analysis
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # Load historical data
 prices = load_stock_data('AAPL')

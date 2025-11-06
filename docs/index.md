@@ -17,7 +17,7 @@ SQA::TAI is part of the [SQA (Stock Qualitative Analysis)](https://github.com/Ma
 ## Quick Example
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 prices = [44.34, 44.09, 44.15, 43.61, 44.33, 44.83,
           45.10, 45.42, 45.84, 46.08]
@@ -56,7 +56,7 @@ First, install the TA-Lib C library:
 Then install the gem:
 
 ```bash
-gem install sqa-talib
+gem install sqa-tai
 ```
 
 ## Indicator Categories
@@ -99,7 +99,7 @@ Identify candlestick patterns:
 SQA::TAI is part of a larger ecosystem:
 
 - **[sqa](https://github.com/MadBomber/sqa)** - Trading strategy framework
-- **[sqa-talib](https://github.com/MadBomber/sqa-talib)** - Technical indicators (this gem)
+- **[sqa-tai](https://github.com/MadBomber/sqa-tai)** - Technical indicators (this gem)
 - **[sqa-cli](https://github.com/MadBomber/sqa-cli)** - CLI tool with AI integration
 
 ## Next Steps
@@ -111,9 +111,9 @@ SQA::TAI is part of a larger ecosystem:
 
 ## Support
 
-- **GitHub**: [Issues](https://github.com/MadBomber/sqa-talib/issues)
+- **GitHub**: [Issues](https://github.com/MadBomber/sqa-tai/issues)
 - **Email**: dvanhoozer@gmail.com
 
 ## License
 
-MIT License - see [LICENSE](https://github.com/MadBomber/sqa-talib/blob/main/LICENSE) for details.
+MIT License - see [LICENSE](https://github.com/MadBomber/sqa-tai/blob/main/LICENSE) for details.

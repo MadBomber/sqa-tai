@@ -5,7 +5,7 @@ True Range measures the price volatility of an asset for a single period. It's t
 ## Usage
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # OHLC data required
 high  = [46.08, 46.41, 46.46, 46.57, 46.50, 47.03]

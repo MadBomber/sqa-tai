@@ -5,7 +5,7 @@ Learn the fundamentals of using SQA::TAI in your Ruby applications.
 ## Requiring the Library
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 ```
 
 ## Simple Indicator Calculation

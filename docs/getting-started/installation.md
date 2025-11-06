@@ -70,7 +70,7 @@ sudo ldconfig
 Add to your `Gemfile`:
 
 ```ruby
-gem 'sqa-talib'
+gem 'sqa-tai'
 ```
 
 Then run:
@@ -82,7 +82,7 @@ bundle install
 ### Using RubyGems
 
 ```bash
-gem install sqa-talib
+gem install sqa-tai
 ```
 
 ## Verify Installation
@@ -90,7 +90,7 @@ gem install sqa-talib
 Test that everything is working:
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # Check if TA-Lib is available
 if SQA::TAI.available?
@@ -136,12 +136,12 @@ If you get permission errors during installation:
 
 ```bash
 # Use sudo for system installation
-sudo gem install sqa-talib
+sudo gem install sqa-tai
 
 # Or use a Ruby version manager (recommended)
 rbenv install 3.3.0
 rbenv global 3.3.0
-gem install sqa-talib
+gem install sqa-tai
 ```
 
 ### Build Failures on Linux

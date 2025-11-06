@@ -5,7 +5,7 @@ The Hammer is a bullish reversal candlestick pattern that forms during a downtre
 ## Usage
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 open  = [100.0, 99.0, 98.0, 96.0, 94.0]
 high  = [100.5, 99.5, 98.5, 96.5, 95.0]

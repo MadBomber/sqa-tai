@@ -5,7 +5,7 @@ The Chaikin Accumulation/Distribution Line is a volume-based indicator that meas
 ## Usage
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # OHLC data + Volume required
 high   = [46.08, 46.41, 46.46, 46.57, 46.50, 47.03, 47.35]

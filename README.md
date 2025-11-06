@@ -1,8 +1,8 @@
 # SQA::TAI - Technical Analysis Indicators
 
 [![Ruby](https://img.shields.io/badge/ruby-%3E%3D%203.1.0-ruby.svg)](https://www.ruby-lang.org/)
-[![Gem Version](https://badge.fury.io/rb/sqa-talib.svg)](https://badge.fury.io/rb/sqa-talib)
-[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://madbomber.github.io/sqa-talib)
+[![Gem Version](https://badge.fury.io/rb/sqa-tai.svg)](https://badge.fury.io/rb/sqa-tai)
+[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://madbomber.github.io/sqa-tai)
 
 Ruby wrapper around [TA-Lib](https://ta-lib.org/) providing 200+ battle-tested technical analysis indicators for stock market analysis. Part of the [SQA](https://github.com/MadBomber/sqa) (Stock Qualitative Analysis) ecosystem.
 
@@ -13,7 +13,7 @@ Ruby wrapper around [TA-Lib](https://ta-lib.org/) providing 200+ battle-tested t
 - 🎯 **Clean API** - Simple, intuitive Ruby interface
 - 📊 **Comprehensive** - Overlap studies, momentum, volatility, volume, patterns
 - ✅ **Well Tested** - Extensive test coverage
-- 📚 **Documented** - Full documentation at [madbomber.github.io/sqa-talib](https://madbomber.github.io/sqa-talib)
+- 📚 **Documented** - Full documentation at [madbomber.github.io/sqa-tai](https://madbomber.github.io/sqa-tai)
 
 ## Prerequisites
 
@@ -41,18 +41,18 @@ Download and install from [ta-lib.org](https://ta-lib.org/hdr_dw.html)
 
 Add to your Gemfile:
 ```ruby
-gem 'sqa-talib'
+gem 'sqa-tai'
 ```
 
 Or install directly:
 ```bash
-gem install sqa-talib
+gem install sqa-tai
 ```
 
 ## Quick Start
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 prices = [44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.10, 45.42, 45.84, 46.08]
 
@@ -107,13 +107,13 @@ end
 - **CDL_ENGULFING** - Engulfing Pattern
 - And 60+ more candlestick patterns...
 
-See [full indicator list](https://madbomber.github.io/sqa-talib/indicators/) in documentation.
+See [full indicator list](https://madbomber.github.io/sqa-tai/indicators/) in documentation.
 
 ## Usage Examples
 
 ### Trend Analysis
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # Golden Cross detection
 prices = load_stock_prices('AAPL')
@@ -184,16 +184,16 @@ end
 
 ## SQA Ecosystem
 
-`sqa-talib` is part of the SQA project:
+`sqa-tai` is part of the SQA project:
 
 - **[sqa](https://github.com/MadBomber/sqa)** - Trading strategy framework
-- **[sqa-talib](https://github.com/MadBomber/sqa-talib)** - Technical indicators (this gem)
+- **[sqa-tai](https://github.com/MadBomber/sqa-tai)** - Technical indicators (this gem)
 - **[sqa-cli](https://github.com/MadBomber/sqa-cli)** - Command-line tool with AI integration
 
 ## Documentation
 
 Full documentation available at:
-- **Online**: [madbomber.github.io/sqa-talib](https://madbomber.github.io/sqa-talib)
+- **Online**: [madbomber.github.io/sqa-tai](https://madbomber.github.io/sqa-tai)
 - **API Reference**: Detailed method documentation
 - **Tutorials**: Getting started guides
 - **Examples**: Real-world usage examples
@@ -201,8 +201,8 @@ Full documentation available at:
 ## Development
 
 ```bash
-git clone https://github.com/MadBomber/sqa-talib.git
-cd sqa-talib
+git clone https://github.com/MadBomber/sqa-tai.git
+cd sqa-tai
 bundle install
 bundle exec rake test
 ```
@@ -214,12 +214,12 @@ bundle exec rake test
 bundle exec rake test
 
 # Run specific test
-bundle exec ruby test/sqa/talib_test.rb
+bundle exec ruby test/sqa/tai_test.rb
 ```
 
 ## Contributing
 
-Bug reports and pull requests are welcome at https://github.com/MadBomber/sqa-talib.
+Bug reports and pull requests are welcome at https://github.com/MadBomber/sqa-tai.
 
 1. Fork it
 2. Create your feature branch (`git checkout -b feature/my-feature`)
@@ -239,8 +239,8 @@ The gem is available as open source under the terms of the [MIT License](LICENSE
 ## Support
 
 - 📧 Email: dvanhoozer@gmail.com
-- 🐛 Issues: [GitHub Issues](https://github.com/MadBomber/sqa-talib/issues)
-- 📚 Docs: [Documentation Site](https://madbomber.github.io/sqa-talib)
+- 🐛 Issues: [GitHub Issues](https://github.com/MadBomber/sqa-tai/issues)
+- 📚 Docs: [Documentation Site](https://madbomber.github.io/sqa-tai)
 
 ## Disclaimer
 

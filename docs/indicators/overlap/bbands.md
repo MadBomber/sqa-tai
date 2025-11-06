@@ -5,7 +5,7 @@ Bollinger Bands are volatility bands placed above and below a moving average. Th
 ## Usage
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 prices = [44.34, 44.09, 44.15, 43.61, 44.33, 44.83,
           45.10, 45.42, 45.84, 46.08, 46.03, 46.41,

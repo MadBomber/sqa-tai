@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2025-01-XX
 
 ### Added
-- Initial release of sqa-talib
+- Initial release of sqa-tai
 - Ruby wrapper around ta_lib_ffi
 - 200+ technical analysis indicators from TA-Lib
 - Overlap studies: SMA, EMA, WMA, BBANDS
@@ -30,5 +30,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Requires TA-Lib C library >= 0.4.0
 - Requires Ruby >= 3.1.0
 
-[Unreleased]: https://github.com/MadBomber/sqa-talib/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/MadBomber/sqa-talib/releases/tag/v0.1.0
+[Unreleased]: https://github.com/MadBomber/sqa-tai/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/MadBomber/sqa-tai/releases/tag/v0.1.0

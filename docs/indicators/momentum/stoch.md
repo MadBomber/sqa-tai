@@ -5,7 +5,7 @@ The Stochastic Oscillator is a momentum indicator that compares a closing price 
 ## Usage
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # OHLC data required
 high  = [46.08, 46.41, 46.46, 46.57, 46.50, 47.03, 47.35, 47.61, 48.12, 48.34]

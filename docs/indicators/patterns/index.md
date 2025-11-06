@@ -15,7 +15,7 @@ Candlestick patterns are formed by one or more candlesticks and can indicate:
 All pattern functions follow the same API:
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # OHLC data required
 open   = [100.0, 101.0, 102.0, 101.5, 103.0]

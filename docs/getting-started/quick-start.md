@@ -5,7 +5,7 @@ Get up and running with SQA::TAI in minutes.
 ## Your First Indicator
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # Sample price data
 prices = [44.34, 44.09, 44.15, 43.61, 44.33, 44.83,

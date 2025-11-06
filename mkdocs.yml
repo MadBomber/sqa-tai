@@ -1,10 +1,10 @@
-site_name: SQA TALib
+site_name: SQA TAI
 site_description: Ruby wrapper for TA-Lib - 200+ Technical Analysis Indicators
 site_author: Dewayne VanHoozer
-site_url: https://madbomber.github.io/sqa-talib
+site_url: https://madbomber.github.io/sqa-tai
 
-repo_name: MadBomber/sqa-talib
-repo_url: https://github.com/MadBomber/sqa-talib
+repo_name: MadBomber/sqa-tai
+repo_url: https://github.com/MadBomber/sqa-tai
 edit_uri: edit/main/docs/
 
 theme:
@@ -92,4 +92,4 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/MadBomber/sqa-talib
+      link: https://github.com/MadBomber/sqa-tai

@@ -34,7 +34,7 @@ If you find a bug, please create an issue on GitHub with:
 
 **Environment:**
 - Ruby: 3.2.0
-- sqa-talib: 0.1.0
+- sqa-tai: 0.1.0
 - TA-Lib: 0.4.0
 ```
 
@@ -96,8 +96,8 @@ We love pull requests! Here's the process:
 
 2. **Clone the repository**
    ```bash
-   git clone https://github.com/MadBomber/sqa-talib.git
-   cd sqa-talib
+   git clone https://github.com/MadBomber/sqa-tai.git
+   cd sqa-tai
    ```
 
 3. **Install dependencies**
@@ -114,7 +114,7 @@ bundle exec rake test
 
 Run a specific test file:
 ```bash
-bundle exec ruby test/sqa/talib_test.rb
+bundle exec ruby test/sqa/tai_test.rb
 ```
 
 Run tests with coverage:
@@ -213,13 +213,13 @@ When adding features that affect users:
 ## Project Structure
 
 ```
-sqa-talib/
+sqa-tai/
 ├── lib/
 │   └── sqa/
-│       └── talib.rb          # Main library code
+│       └── tai.rb            # Main library code
 ├── test/
 │   └── sqa/
-│       └── talib_test.rb     # Test files
+│       └── tai_test.rb       # Test files
 ├── docs/                     # MkDocs documentation
 │   ├── index.md
 │   ├── getting-started/
@@ -228,7 +228,7 @@ sqa-talib/
 ├── README.md
 ├── CHANGELOG.md
 ├── Gemfile
-└── sqa-talib.gemspec
+└── sqa-tai.gemspec
 ```
 
 ## Commit Message Guidelines
@@ -260,18 +260,18 @@ Now correctly handles edge cases.
 
 (For maintainers)
 
-1. Update version in `lib/sqa/talib/version.rb`
+1. Update version in `lib/sqa/tai/version.rb`
 2. Update CHANGELOG.md
 3. Commit changes
 4. Create git tag: `git tag v0.1.0`
 5. Push tag: `git push --tags`
-6. Build gem: `gem build sqa-talib.gemspec`
-7. Push to RubyGems: `gem push sqa-talib-0.1.0.gem`
+6. Build gem: `gem build sqa-tai.gemspec`
+7. Push to RubyGems: `gem push sqa-tai-0.1.0.gem`
 
 ## Getting Help
 
-- **Documentation**: [https://madbomber.github.io/sqa-talib](https://madbomber.github.io/sqa-talib)
-- **Issues**: [GitHub Issues](https://github.com/MadBomber/sqa-talib/issues)
+- **Documentation**: [https://madbomber.github.io/sqa-tai](https://madbomber.github.io/sqa-tai)
+- **Issues**: [GitHub Issues](https://github.com/MadBomber/sqa-tai/issues)
 - **Email**: dvanhoozer@gmail.com
 
 ## Recognition

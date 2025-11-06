@@ -7,7 +7,7 @@ Learn how to use SQA::TAI indicators to identify and analyze market trends.
 One of the most popular trend-following strategies using moving averages.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # Load historical data
 prices = [44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.10, 45.42,
@@ -56,7 +56,7 @@ end
 Combine multiple indicators to assess trend strength.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 def analyze_trend_strength(prices)
   # Calculate multiple timeframe MAs
@@ -125,7 +125,7 @@ puts "Momentum Confirmed: #{analysis[:momentum_confirmed] ? 'Yes' : 'No'}"
 Use moving averages as dynamic support and resistance levels.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 def find_ma_support_resistance(prices)
   ema_20 = SQA::TAI.ema(prices, period: 20)
@@ -179,7 +179,7 @@ end
 A complete trading system using three moving averages.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 class TripleMASystem
   def initialize(fast_period: 10, medium_period: 20, slow_period: 50)
@@ -310,7 +310,7 @@ puts "Number of Trades: #{results[:trades].length}"
 Use the Average Directional Index (ADX) to measure trend strength (if available in TA-Lib).
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 # Simplified trend strength based on moving averages
 def calculate_trend_strength(prices)

@@ -7,7 +7,7 @@ Examples of using volatility indicators like ATR and Bollinger Bands for risk ma
 Use Average True Range to calculate appropriate position sizes.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 def calculate_position_size(high, low, close, account_value, risk_per_trade_pct: 1.0, atr_multiplier: 2.0)
   # Calculate ATR
@@ -69,7 +69,7 @@ puts "Stop Loss Price: $#{position[:stop_price]}"
 Trade the extremes of Bollinger Bands for mean reversion.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 class BollingerBandsStrategy
   def initialize(period: 20, std_dev: 2.0)
@@ -210,7 +210,7 @@ puts "Trades: #{results[:num_trades]}"
 Identify when volatility expands after consolidation.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 def detect_volatility_breakout(high, low, close, lookback: 20)
   atr = SQA::TAI.atr(high, low, close, period: 14)
@@ -283,7 +283,7 @@ puts "\nRecommendation: #{result[:action]}"
 Implement a dynamic stop loss that adapts to volatility.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 class ATRTrailingStop
   def initialize(atr_multiplier: 2.0)
@@ -356,7 +356,7 @@ end
 Detect low volatility periods that often precede large moves.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 def detect_bb_squeeze(prices, lookback: 20)
   upper, middle, lower = SQA::TAI.bbands(prices, period: 20)
@@ -430,7 +430,7 @@ end
 Combine multiple volatility indicators for a complete system.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 class VolatilityTradingSystem
   def analyze(high, low, close, prices)

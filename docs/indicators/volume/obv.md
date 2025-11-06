@@ -5,7 +5,7 @@ On Balance Volume (OBV) is a momentum indicator that uses volume flow to predict
 ## Usage
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 close = [45.15, 46.26, 46.50, 45.21, 44.34, 44.09, 45.42, 46.08, 47.03, 47.28]
 volume = [2500, 3200, 2800, 4100, 3500, 3800, 4200, 3600, 5100, 4800]

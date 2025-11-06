@@ -7,7 +7,7 @@ Examples of using momentum indicators like RSI, MACD, and Stochastic for trading
 Classic RSI trading strategy using 70/30 levels.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 def rsi_strategy(prices)
   rsi = SQA::TAI.rsi(prices, period: 14)
@@ -42,7 +42,7 @@ puts "Price: $#{signal[:price]}"
 Trade based on MACD line crossing the signal line.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 class MACDStrategy
   def initialize(fast: 12, slow: 26, signal: 9)
@@ -151,7 +151,7 @@ puts "Reason: #{signal[:reason]}"
 Identify bullish and bearish divergences between price and RSI.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 def find_divergence(prices, lookback: 20)
   rsi = SQA::TAI.rsi(prices, period: 14)
@@ -234,7 +234,7 @@ end
 Combine RSI, MACD, and Momentum for stronger signals.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 class MultiMomentumSystem
   def analyze(prices)
@@ -324,7 +324,7 @@ puts "Momentum (#{analysis[:indicators][:momentum][:value]}): #{analysis[:indica
 Use Stochastic for entry timing in trending markets.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 def stochastic_strategy(high, low, close)
   # Calculate Stochastic
@@ -408,7 +408,7 @@ puts "Stochastic D: #{signal[:d]}"
 Combine momentum with price breakouts for high-probability trades.
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 def momentum_breakout(prices, volume, lookback: 20)
   # Find resistance

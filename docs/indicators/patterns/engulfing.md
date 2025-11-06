@@ -5,7 +5,7 @@ The Engulfing pattern is a powerful two-candlestick reversal pattern. A bullish 
 ## Usage
 
 ```ruby
-require 'sqa/talib'
+require 'sqa/tai'
 
 open  = [100.0, 101.0, 102.0, 104.0, 103.0]
 high  = [101.0, 102.5, 105.0, 105.0, 108.0]
