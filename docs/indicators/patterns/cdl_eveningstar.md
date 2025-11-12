@@ -1,50 +1,104 @@
-# Evening Star
+# CDL_CDL_EVENINGSTAR (Evening Star)
 
-Evening Star is a candlestick pattern that provides potential trading signals based on price action.
+## Overview
+
+The Evening Star is a three-candle bearish reversal pattern that bearish reversal pattern at the top of an uptrend. This pattern is used to identify potential trend changes and provides traders with entry signals when combined with proper confirmation.
 
 ## Parameters
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `open` | Array<Float> | Yes | - | Array of open prices |
-| `high` | Array<Float> | Yes | - | Array of high prices |
-| `low` | Array<Float> | Yes | - | Array of low prices |
-| `close` | Array<Float> | Yes | - | Array of close prices |
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `open` | Array | Required | Array of opening prices |
+| `high` | Array | Required | Array of high prices |
+| `low` | Array | Required | Array of low prices |
+| `close` | Array | Required | Array of closing prices |
 
-## Returns
+### Parameter Details
 
-Returns an array of pattern signals ranging from -100 to +100:
-- 0: No pattern detected
-- +100: Bullish pattern
-- -100: Bearish pattern
+**OHLC Arrays**
+- All four price arrays must have the same length
+- Minimum 3 candles required for pattern detection
+- More historical data provides better context for trend analysis
 
 ## Usage
+
+### Basic Usage
 
 ```ruby
 require 'sqa/tai'
 
-open =  [48.00, 48.20, 48.50, 48.40, 48.30]
-high =  [48.70, 48.72, 48.90, 48.87, 48.82]
-low =   [47.79, 48.14, 48.39, 48.37, 48.24]
-close = [48.20, 48.61, 48.75, 48.63, 48.74]
+open =  [50.0, 49.5, 48.0, 47.5, 48.5]
+high =  [50.5, 50.0, 48.5, 48.0, 49.5]
+low =   [49.5, 48.5, 47.5, 47.0, 48.0]
+close = [49.5, 48.5, 48.0, 47.5, 49.0]
 
 pattern = SQA::TAI.cdl_eveningstar(open, high, low, close)
 
-puts "Pattern detected: #{pattern.last}"
+puts "Evening Star signal: #{pattern.last}"
+# Output: -100 (pattern detected) or 0 (no pattern)
 ```
 
-## Interpretation
+## Understanding the Pattern
 
-This candlestick pattern should be used in conjunction with other technical indicators and price action analysis. Consult candlestick pattern references for detailed interpretation.
+### What It Measures
+
+The Evening Star pattern measures:
+- **Reversal Potential**: Shift in market sentiment and momentum
+- **Market Psychology**: Change in buyer/seller control
+- **Trend Exhaustion**: Signs that current trend is losing strength
+
+### Pattern Characteristics
+
+- **Type**: Three-candle bearish reversal
+- **Trend Context**: Must appear in uptrend
+- **Signal**: -100
+- **Reliability**: Moderate to High (with confirmation)
+- **Best Timeframes**: Daily, 4-hour charts
+
+## Trading Signals
+
+### Entry Signals
+
+**Primary Entry**:
+Short entry when pattern completes
+
+**Risk Management**:
+- Stop Loss: Above the high of the three-candle pattern
+- Target: Recent swing low or support level
+- Risk/Reward: Aim for minimum 1:2 ratio
+
+### Confirmation Requirements
+
+Strengthen the signal with:
+1. **Volume Confirmation**: Increased volume on signal candle
+2. **Trend Confirmation**: Clear uptrend established
+3. **Support/Resistance**: Pattern at key price level
+4. **Next Candle**: Following candle confirms direction
+
+## Best Practices
+
+### Optimal Use Cases
+
+- **Market Conditions**: After established trend with clear momentum
+- **Timeframes**: Most reliable on daily charts
+- **Asset Classes**: Stocks, forex, commodities
+- **Volatility**: Normal volatility environments
+
+### Combining with Other Indicators
+
+- **RSI**: Confirm overbought/oversold conditions
+- **MACD**: Verify momentum shift
+- **Volume**: Validate buying/selling pressure
+- **Moving Averages**: Confirm trend context
 
 ## Related Indicators
 
-- [Doji](cdl_doji.md)
-- [Hammer](cdl_hammer.md)
-- [Engulfing](cdl_engulfing.md)
-- [Back to Patterns](index.md)
+- [RSI](../momentum/rsi.md) - Momentum confirmation
+- [MACD](../momentum/macd.md) - Trend and momentum
+- [Volume OBV](../volume/obv.md) - Volume confirmation
 
 ## See Also
 
-- [Back to Indicators](../index.md)
-- [Pattern Recognition Overview](../index.md)
+- [Candlestick Pattern Overview](index.md)
+- [Pattern Recognition Guide](../../getting-started/pattern-recognition.md)
+- [API Reference](../../api-reference.md)

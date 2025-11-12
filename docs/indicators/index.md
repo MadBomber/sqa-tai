@@ -43,6 +43,31 @@ Identify candlestick patterns:
 - [Doji](patterns/cdl_doji.md)
 - [Hammer](patterns/cdl_hammer.md)
 - [Engulfing Pattern](patterns/cdl_engulfing.md)
+- [View All Patterns](patterns/index.md)
+
+### Cycle Indicators
+
+Hilbert Transform indicators for cycle analysis:
+
+- [HT Dominant Cycle Period](cycle/ht_dcperiod.md)
+- [HT Trend vs Cycle Mode](cycle/ht_trendmode.md)
+- [View All Cycle Indicators](cycle/index.md)
+
+### Price Transform Indicators
+
+Transform OHLC data into representative prices:
+
+- [Typical Price](price_transform/typprice.md)
+- [Weighted Close Price](price_transform/wclprice.md)
+- [View All Price Transforms](price_transform/index.md)
+
+### Statistical Indicators
+
+Statistical functions for trend analysis:
+
+- [Linear Regression](statistical/linearreg.md)
+- [Standard Deviation](statistical/stddev.md)
+- [View All Statistical Indicators](statistical/index.md)
 
 ## Usage Overview
 

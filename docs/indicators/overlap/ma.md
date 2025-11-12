@@ -1,8 +1,57 @@
-# Moving Average - Generic (MA)
+# MA (Moving Average - Generic Interface)
 
-The Generic Moving Average (MA) function provides a unified interface to calculate any of the eight supported moving average types in SQA::TAI. This is a convenience function that eliminates the need to call individual moving average functions, making it easier to switch between different MA types or implement strategies that compare multiple MA types.
+## Overview
+
+The Generic Moving Average (MA) function is a unified interface that provides access to all eight supported moving average types in SQA::TAI through a single, convenient method. This powerful abstraction eliminates the need to call individual moving average functions, making it easier to switch between different MA types, implement strategies that dynamically select MA algorithms, or compare multiple MA types simultaneously. The MA function is particularly valuable for backtesting systems, adaptive strategies, and educational purposes where understanding the differences between MA types is important.
+
+## Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `input_data` | Array | Required | The price data array (typically close prices) |
+| `period` | Integer | 30 | Number of periods for MA calculation |
+| `ma_type` | Integer | 0 | Moving average type (0-8, see table below) |
+
+### Parameter Details
+
+**input_data**
+- Typically uses closing prices for standard trend analysis
+- Can use other price types for specialized applications
+- Requirements vary by MA type selected
+- More historical data provides better context
+
+**period** (time_period)
+- Default is 30 periods
+- Applies to all MA types uniformly
+- Common periods:
+  - 9-20 periods: Short-term trading
+  - 20-50 periods: Medium-term trends
+  - 50-200 periods: Long-term trends
+- Each MA type interprets the period differently based on its algorithm
+
+**ma_type** (moving_average_type)
+- Selects which MA algorithm to use
+- Integer values 0-8 correspond to specific MA types
+- Each type has different lag, smoothness, and responsiveness characteristics
+- See MA Types table below for detailed comparison
+
+### Moving Average Types
+
+| ma_type | Name | Weighting | Lag | Best For |
+|---------|------|-----------|-----|----------|
+| 0 | [SMA](sma.md) | Equal | High | Basic trend, support/resistance |
+| 1 | [EMA](ema.md) | Exponential | Medium | Responsive trend following |
+| 2 | [WMA](wma.md) | Linear | Medium | Balance of smoothness |
+| 3 | [DEMA](dema.md) | Double Exponential | Low | Reduced lag trading |
+| 4 | [TEMA](tema.md) | Triple Exponential | Very Low | Minimal lag, fast signals |
+| 5 | [TRIMA](trima.md) | Triangular | Very High | Smoothest, noise reduction |
+| 6 | [KAMA](kama.md) | Adaptive | Adaptive | Auto-adjusts to volatility |
+| 7 | MAMA | Adaptive | Low | Cycle-adaptive |
+| 8 | [T3](t3.md) | Multi-EMA | Low | Smooth with low lag |
 
 ## Usage
+
+### Basic Usage
 
 ```ruby
 require 'sqa/tai'

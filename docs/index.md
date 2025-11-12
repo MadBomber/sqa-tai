@@ -1,24 +1,36 @@
-# SQA::TAI - Technical Analysis Indicators
+<div align="center">
+  <h1>SQA::TAI - Technical Analysis Indicators</h1>
 
-Welcome to **SQA::TAI**, a Ruby wrapper around the legendary [TA-Lib](https://ta-lib.org/) C library, providing **132 technical analysis indicators** with a clean Ruby API.
+  <p>Ruby wrapper around the legendary <a href="https://ta-lib.org/">TA-Lib</a> C library, providing <strong>132 technical analysis indicators</strong> with a clean Ruby API.<br/>
+      Part of the <a href="https://github.com/MadBomber/sqa">SQA</a> (Simple Qualitative Analysis) ecosystem.</p>
+</div>
 
-## Overview
+<table>
+<tr>
+<td width="30%" valign="middle" align="center">
+  <img src="assets/images/sqa.jpg" alt="SQA - Simple Qualitative Analysis" width="80%">
+</td>
+<td width="70%" valign="top">
 
-SQA::TAI is part of the [SQA (Simple Qualitative Analysis)](https://github.com/MadBomber/sqa) ecosystem, focusing on providing fast, reliable technical indicators for stock market analysis.
+<h2>Features</h2>
+📊 **132 Indicators** - Comprehensive coverage with 94% of trading-relevant TA-Lib indicators<br/>
+⚡ **Blazing Fast** - C library performance with Ruby convenience<br/>
+🎯 **Clean API** - Simple, intuitive interface with keyword arguments<br/>
+✅ **Well Tested** - 73 tests, 332 assertions, comprehensive coverage<br/>
+🔒 **Type Safe** - Parameter validation and error handling<br/>
+🐛 **Bug Fixed** - Includes monkey patch for ta_lib_ffi 0.3.0 multi-array parameter bug<br/>
 
-## Features
-
-- **132 Indicators** - Comprehensive coverage with 94% of trading-relevant TA-Lib indicators
-- **Blazing Fast** - C library performance with Ruby convenience
-- **Clean API** - Simple, intuitive interface with keyword arguments
-- **Well Tested** - 73 tests, 332 assertions, comprehensive coverage
-- **Type Safe** - Parameter validation and error handling
-- **Bug Fixed** - Includes monkey patch for ta_lib_ffi 0.3.0 multi-array parameter bug
+</td>
+</tr>
+</table>
 
 ## Quick Example
 
 ```ruby
 require 'sqa/tai'
+
+# NOTE: All arrays passed to the TA-Lib functions
+#       are in ascending order oldest data to newest
 
 prices = [44.34, 44.09, 44.15, 43.61, 44.33, 44.83,
           45.10, 45.42, 45.84, 46.08]

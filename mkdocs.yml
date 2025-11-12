@@ -138,9 +138,6 @@ extra:
       link: https://rubygems.org/gems/sqa-tai
       name: SQA TAI on RubyGems
 
-  version:
-    provider: mike
-
 # Navigation
 nav:
   - Home: index.md
