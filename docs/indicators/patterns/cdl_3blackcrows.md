@@ -108,6 +108,8 @@ The Three Black Crows signals a significant shift in market sentiment:
 | Position | Mid-chart | After rally | At resistance |
 | Consistency | Variable sizes | Similar sizes | Uniform sizes |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Three Black Crows in Context
 
 ```ruby

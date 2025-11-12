@@ -46,6 +46,8 @@ puts "Current CCI: #{cci.last.round(2)}"
 | 0 to -100 | Bearish zone |
 | Below -100 | Oversold - strong downtrend |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: CCI Trading Signals
 
 ```ruby

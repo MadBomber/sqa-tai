@@ -27,6 +27,8 @@ Typical Period: 20 or 21 days
 
 ## Typical Usage
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 If CMF were available, it would be used like this:
 
 ```ruby

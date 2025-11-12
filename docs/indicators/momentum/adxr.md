@@ -57,6 +57,8 @@ ADXR uses the same interpretation thresholds as ADX but provides smoother, more 
 | 50-75 | Very strong trend | Excellent trending environment |
 | 75-100 | Extremely strong trend | Rare but powerful directional movement |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **Key Point**: Like ADX, ADXR measures trend STRENGTH, not direction. Use with directional indicators (+DI, -DI) to determine trend direction.
 
 ## ADXR vs ADX: Key Differences

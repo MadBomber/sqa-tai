@@ -54,6 +54,8 @@ The difference between actual price and TSF indicates:
 | Widening gap | Acceleration | Strong momentum in direction |
 | Narrowing gap | Deceleration | Momentum weakening |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Forecast Interpretation
 
 | TSF Pattern | Market Condition |

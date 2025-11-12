@@ -51,6 +51,8 @@ Step 4: TRIX = 1-day ROC of Triple EMA = ((Triple EMA today / Triple EMA yesterd
 | Increasing | Momentum strengthening |
 | Decreasing | Momentum weakening |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Typical Range
 TRIX values are unbounded but typically range between -0.5 and +0.5. In strong trends, values may exceed this range.
 

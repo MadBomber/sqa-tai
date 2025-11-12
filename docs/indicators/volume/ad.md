@@ -15,6 +15,9 @@ The Chaikin Accumulation/Distribution Line (AD) is a cumulative volume-based ind
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **high**
 - The highest price reached during each period
 - Must have same length as other price arrays

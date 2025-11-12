@@ -40,6 +40,8 @@ Returns an array of CMO values ranging from -100 to +100. The first `period` val
 | -50 to -100 | Strong downtrend / Extremely oversold |
 | 0 | Neutral - balanced momentum |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Basic CMO Trading Signals
 
 ```ruby

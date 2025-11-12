@@ -16,6 +16,9 @@ The Evening Doji Star is a three-candle bearish reversal pattern that typically 
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **open**
 - Opening price for each trading period
 - Must be same length as high, low, and close arrays

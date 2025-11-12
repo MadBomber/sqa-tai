@@ -49,6 +49,8 @@ Returns an array of slope values representing the rate of price change per perio
 | -1.0 to -0.1 | Moderate downtrend - steady price decrease |
 | < -1.0 | Strong downtrend - rapid price decrease |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Key Signals
 
 1. **Slope Direction**:

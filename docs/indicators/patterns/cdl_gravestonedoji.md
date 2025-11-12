@@ -15,6 +15,9 @@ The Gravestone Doji is a single-candle bearish reversal pattern that bearish doj
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **OHLC Arrays**
 - All four price arrays must have the same length
 - Minimum 1 candle required for pattern detection

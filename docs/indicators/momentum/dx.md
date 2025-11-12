@@ -48,6 +48,8 @@ puts "Current DX: #{dx.last.round(2)}"
 | 50-75 | Strong directional movement (established trend) |
 | 75-100 | Very strong directional movement (powerful trend) |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **Key Points:**
 - DX measures the *strength* of directional movement, not direction
 - Higher DX = stronger trend (either up or down)

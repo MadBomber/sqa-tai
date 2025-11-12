@@ -13,6 +13,9 @@ The Double Exponential Moving Average (DEMA) is an advanced technical indicator 
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **input_data**
 - Typically uses closing prices for standard trend analysis
 - Can use other price types (high, low, typical price) for specialized applications

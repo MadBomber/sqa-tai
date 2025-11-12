@@ -15,6 +15,9 @@ The Inverted Hammer is a single-candle bullish reversal pattern that bullish rev
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **OHLC Arrays**
 - All four price arrays must have the same length
 - Minimum 1 candle required for pattern detection

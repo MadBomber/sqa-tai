@@ -129,6 +129,8 @@ The Three Stars in the South signals bullish reversal through:
 | Higher Lows | Slight | Clear | Very distinct |
 | Support | No support | Some support | At key support |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Three Stars in the South After Downtrend
 
 ```ruby

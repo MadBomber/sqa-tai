@@ -23,6 +23,8 @@ puts "Current OBV: #{obv.last.round(0)}"
 | `close` | Array | Yes | - | Array of closing prices |
 | `volume` | Array | Yes | - | Array of volume values |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Returns
 
 Returns an array of cumulative OBV values.

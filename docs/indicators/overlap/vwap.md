@@ -26,6 +26,8 @@ Where:
 
 ## Typical Usage
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 If VWAP were available, it would be used like this:
 
 ```ruby

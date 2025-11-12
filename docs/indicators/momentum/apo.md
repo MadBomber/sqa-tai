@@ -53,6 +53,8 @@ Where:
 | Increasing | Momentum strengthening |
 | Decreasing | Momentum weakening |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## APO vs PPO
 
 The key difference between APO and PPO:

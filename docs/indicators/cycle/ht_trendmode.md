@@ -12,6 +12,9 @@ The Hilbert Transform - Trend vs Cycle Mode (HT_TRENDMODE) is a critical market 
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **prices**
 - Input data should be an array of closing prices
 - Minimum 32 data points required for reliable results (due to Hilbert Transform calculation requirements)

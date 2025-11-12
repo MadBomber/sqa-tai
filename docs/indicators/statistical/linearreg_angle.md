@@ -43,6 +43,8 @@ Returns an array of angle values in degrees, ranging from -90 to +90. The first 
 | -45 to -30 | Downtrend | Strong | Sustained downward momentum |
 | -90 to -45 | Downtrend | Very Strong | Steep downward momentum - strong bear trend |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Key Insights
 
 - **Positive angles**: Indicate uptrends with steeper angles showing stronger upward momentum

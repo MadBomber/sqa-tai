@@ -15,6 +15,9 @@ The Moving Average Convergence Divergence (MACD) is one of the most popular and 
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **prices**
 - Typically uses closing prices, though any price data can be used
 - Requires sufficient data points: at least `slow_period + signal_period` values for accurate results

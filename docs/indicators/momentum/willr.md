@@ -41,6 +41,8 @@ puts "Current Williams %R: #{willr.last.round(2)}"
 | -20 to -80 | Normal trading range |
 | -80 to -100 | Oversold |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Basic Trading Signals
 
 ```ruby

@@ -15,6 +15,9 @@ The Average Price (AVGPRICE) is a simple yet effective price transformation indi
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **open**
 - Opening price for each trading period
 - Represents the first traded price when the period begins

@@ -15,6 +15,9 @@ The Stalled Pattern is a three-candle bearish reversal candlestick pattern. It f
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **open**
 - Array of opening prices for the analyzed time series
 - Must have the same length as high, low, and close arrays

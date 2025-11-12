@@ -15,6 +15,9 @@ The Separating Lines pattern is a two-candle continuation pattern that can be ei
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **open**
 - Array of opening prices for the analyzed time series
 - Critical for identifying the "separating" open at same level

@@ -13,6 +13,9 @@ The Simple Moving Average (SMA) is the most basic and widely used moving average
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **input_data**
 - Typically uses closing prices for standard trend analysis
 - Can use other price types (high, low, open, typical price) for specialized analysis

@@ -48,6 +48,8 @@ Returns an array of ROCP values as percentages. The first `period` values will b
 | < -10% | Strong downward momentum, potential oversold |
 | Extremes (+/-20%) | Very strong momentum, possible reversal |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Key Concepts
 
 - **Zero-Line Crossovers**: ROCP crossing above/below zero signals momentum shifts

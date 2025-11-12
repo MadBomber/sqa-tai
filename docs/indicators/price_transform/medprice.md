@@ -43,6 +43,8 @@ This formula calculates the arithmetic mean of the highest and lowest prices tra
 | Noise Filtering | Less affected by gap openings or volatile closes |
 | Balance Point | Captures both buying and selling extremes equally |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 The median price is particularly useful when:
 - You want to reduce the impact of outlier closes
 - Analyzing the typical price level for a period

@@ -59,6 +59,8 @@ end
 | 12-14 | Standard trading |
 | 20-25 | Longer-term momentum |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Related Indicators
 
 - [ROCP](rocp.md) - Rate of Change Percentage

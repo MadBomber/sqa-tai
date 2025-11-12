@@ -124,6 +124,8 @@ The Concealing Baby Swallow is paradoxical - it uses all bearish candles to sign
 | Volume | Increasing | Stable | Decreasing |
 | RSI | Above 40 | 30-40 | Below 30 |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Pattern Detection and Analysis
 
 ```ruby

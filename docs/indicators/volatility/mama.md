@@ -24,6 +24,9 @@ The algorithm continuously measures the market's dominant cycle and adjusts the 
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **fast_limit**
 - Controls maximum responsiveness during strong trends
 - Higher values (0.5-0.9) make MAMA more responsive but noisier

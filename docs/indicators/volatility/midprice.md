@@ -386,6 +386,8 @@ breakout = close > midprice && close > prior_high
 | 30-50 | Medium-term | Smoother, less noise |
 | 100+ | Long-term | Major range levels |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## MIDPRICE vs Similar Indicators
 
 | Indicator | Input | Use Case | Key Difference |

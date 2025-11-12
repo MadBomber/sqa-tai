@@ -326,6 +326,8 @@ end
 | Small Caps | Aggressive (0.03/0.25) | Aggressive (0.03/0.25) | High volatility both ways |
 | Commodities | Depends | Depends | Market-specific |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### 4. Position Size Considerations
 **Larger positions:**
 - Use lower initial acceleration (wider entry stops)

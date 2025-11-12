@@ -26,6 +26,8 @@ puts "Current True Range: #{trange.last.round(2)}"
 | `low` | Array | Yes | - | Array of low prices |
 | `close` | Array | Yes | - | Array of closing prices |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Returns
 
 Returns an array of True Range values. The first value will be `nil` (no previous close to compare).

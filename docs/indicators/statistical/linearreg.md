@@ -44,6 +44,8 @@ Returns an array of linear regression values representing the fitted trend line.
 | LinReg falling | Downtrend in progress |
 | LinReg flat | Sideways/consolidation phase |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Deviation Analysis
 - **Small deviation**: Price is following the trend closely
 - **Large deviation**: Price has deviated significantly - mean reversion opportunity

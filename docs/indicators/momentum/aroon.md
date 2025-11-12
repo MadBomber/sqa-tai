@@ -69,6 +69,8 @@ For a 25-period Aroon:
 | Parallel Movement | Both high | - | Strong trending market (direction depends on which is higher) |
 | Parallel Low | Both low | - | Consolidation, potential breakout coming |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Trend Strength Indicators
 
 - **Aroon Up near 100**: Stock is making new highs regularly - strong uptrend

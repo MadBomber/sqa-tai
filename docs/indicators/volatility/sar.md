@@ -96,6 +96,8 @@ end
 | 0.01 | 0.15 | Trending markets |
 | 0.03 | 0.25 | Volatile markets |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Best Practices
 
 1. Works best in trending markets

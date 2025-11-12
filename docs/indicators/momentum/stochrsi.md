@@ -53,6 +53,8 @@ Both values range from 0 to 100.
 | 20-80 | Neutral zone |
 | 0-20 | Oversold - potential buy signal |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **Key Characteristics:**
 - More sensitive than standard RSI
 - Generates earlier signals

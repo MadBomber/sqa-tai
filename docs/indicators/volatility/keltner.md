@@ -26,6 +26,8 @@ Default Multiplier = 2
 
 ## Typical Usage
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 If Keltner Channels were available, they would be used like this:
 
 ```ruby

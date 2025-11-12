@@ -14,23 +14,23 @@ edit_uri: edit/main/docs/
 theme:
   name: material
 
-  # Color scheme - Default to light mode
+  # Color scheme - Default to dark mode
   palette:
-    # Palette toggle for light mode (default)
-    - scheme: default
-      primary: blue
-      accent: blue
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-
-    # Palette toggle for dark mode
+    # Palette toggle for dark mode (default)
     - scheme: slate
       primary: blue
       accent: blue
       toggle:
-        icon: material/brightness-4
+        icon: material/brightness-7
         name: Switch to light mode
+
+    # Palette toggle for light mode
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
 
   # Typography
   font:

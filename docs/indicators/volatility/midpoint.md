@@ -428,6 +428,8 @@ distance_pct = ((price - midpoint.last) / midpoint.last) * 100
 | 20-30 | Position trading | Smoother, less noise |
 | 50+ | Long-term trends | Very stable, major levels |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Trading Strategies
 
 ### Mean Reversion Strategy

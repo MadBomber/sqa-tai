@@ -53,6 +53,8 @@ Returns an array of BOP values ranging from -1.0 to +1.0. Each value represents 
 | -0.75 to -0.25 | Moderate selling pressure | Close below midpoint, sellers in control |
 | -1.0 to -0.75 | Strong selling pressure | Close near low, sellers dominating |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Key Levels
 
 - **+1.0**: Perfect buying pressure (Close = High, Open = Low)

@@ -126,6 +126,8 @@ The Three Outside pattern signals reversal through:
 | Location | Mid-chart | Near S/R | At major S/R level |
 | Shadows | Long shadows | Normal | Minimal shadows |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Three Outside Up in Context
 
 ```ruby

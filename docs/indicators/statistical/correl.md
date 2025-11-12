@@ -14,6 +14,9 @@ The Pearson's Correlation Coefficient (CORREL) is a statistical indicator that m
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **prices1**
 - First price series for correlation calculation
 - Should be synchronized with prices2 (same timestamps)

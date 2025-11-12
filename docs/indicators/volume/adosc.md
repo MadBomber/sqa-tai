@@ -17,6 +17,9 @@ The Chaikin A/D Oscillator (ADOSC) is a momentum indicator derived from the Accu
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **high, low, close, volume**
 - Same requirements as AD Line (see AD documentation)
 - All arrays must be same length

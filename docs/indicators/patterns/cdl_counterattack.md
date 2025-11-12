@@ -150,6 +150,8 @@ The Counterattack pattern signals reversal through:
 | Volume | Low/normal | Increasing | High spike on 2nd |
 | Technical Level | Random | Near S/R | At major S/R |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Bullish Counterattack at Bottom
 
 ```ruby

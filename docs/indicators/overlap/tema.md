@@ -13,6 +13,9 @@ The Triple Exponential Moving Average (TEMA) is an advanced technical indicator 
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **input_data**
 - Typically uses closing prices for standard trend analysis
 - Can use other price types (high, low, typical price, median price) for specialized applications

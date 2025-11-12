@@ -46,6 +46,8 @@ puts "Current -DI: #{minus_di.last.round(2)}"
 | 40-60 | Strong downward movement |
 | 60-100 | Very strong downward movement |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Key Signals
 
 **-DI vs +DI Comparison:**

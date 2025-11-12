@@ -58,6 +58,8 @@ MACDEXT supports 9 different moving average algorithms, each with unique charact
 | 7 | MAMA | MESA Adaptive MA | Adapts to market cycles, complex algorithm |
 | 8 | T3 | Triple Exponential Smoothed | Very smooth with minimal lag |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Returns
 
 Returns three arrays:

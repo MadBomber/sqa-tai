@@ -13,6 +13,8 @@ Combines short, intermediate, and long-term momentum.
 | `period2` | Integer | No | 14 | Period2 |
 | `period3` | Integer | No | 28 | Period3 |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Returns
 
 Returns an array of indicator values.

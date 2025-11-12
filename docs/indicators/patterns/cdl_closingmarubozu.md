@@ -125,6 +125,8 @@ The Closing Marubozu shows strong directional momentum into the close, suggestin
 | Trend | Counter-trend | No clear trend | With trend |
 | Prior Action | Choppy | Some direction | Clear momentum |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 
 ## Example: Pattern Detection and Analysis
 

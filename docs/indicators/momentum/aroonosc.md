@@ -83,6 +83,8 @@ The Aroon Oscillator simplifies this by calculating the difference:
 | < -50 | Strong downtrend - Aroon Down dominant |
 | 0 | Neutral - Aroon Up equals Aroon Down |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Key Signals
 
 - **Zero Line Cross Above**: Bullish signal (Aroon Up > Aroon Down)

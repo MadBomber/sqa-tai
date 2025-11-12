@@ -40,6 +40,8 @@ Returns an array of ROCR values typically ranging from 0.8 to 1.2 (representing 
 | 0.90-0.95 | Moderate downward momentum (5-10% loss) |
 | < 0.90 | Strong downward momentum (10%+ loss) |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Formula
 
 ```

@@ -115,6 +115,8 @@ The Three White Soldiers signals strong bullish reversal through:
 | Position | Mid-chart | After decline | At support |
 | Consistency | Variable sizes | Similar sizes | Uniform sizes |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Three White Soldiers After Downtrend
 
 ```ruby

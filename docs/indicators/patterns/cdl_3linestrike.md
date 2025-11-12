@@ -128,6 +128,8 @@ The Three Line Strike signals a powerful reversal through:
 | First Three Quality | Variable sizes | Consistent | Uniform progression |
 | Location | Mid-chart | Near S/R | At major S/R level |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Bullish Three Line Strike
 
 ```ruby

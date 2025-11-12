@@ -13,6 +13,9 @@ The Exponential Moving Average (EMA) is one of the most widely used moving avera
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **input_data**
 - Typically uses closing prices for standard trend analysis
 - Can use other price types (high, low, open, typical price) for specialized applications

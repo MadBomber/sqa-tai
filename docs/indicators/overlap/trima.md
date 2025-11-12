@@ -13,6 +13,9 @@ The Triangular Moving Average (TRIMA) is a double-smoothed moving average that p
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **input_data**
 - Typically uses closing prices for standard trend analysis
 - Can use other price types (high, low, typical price) for specialized applications

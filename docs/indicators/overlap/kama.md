@@ -13,6 +13,9 @@ The Kaufman Adaptive Moving Average (KAMA) is a sophisticated adaptive moving av
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **input_data**
 - Typically uses closing prices for standard trend analysis
 - Can use other price types for specialized applications

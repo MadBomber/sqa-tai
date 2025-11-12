@@ -36,6 +36,8 @@ The complete documentation includes:
 
 ## Usage Example
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ```ruby
 require 'sqa/tai'
 

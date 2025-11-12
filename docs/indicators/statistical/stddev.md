@@ -39,6 +39,8 @@ Returns an array of standard deviation values. The first `period - 1` values wil
 | Expanding | Volatility increasing | Trend acceleration, breakout occurring |
 | Contracting | Volatility decreasing | Range compression, pre-breakout squeeze |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Volatility Regime Detection
 
 ```ruby

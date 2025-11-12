@@ -212,6 +212,8 @@ trade_signal = entry_signal && atr > avg_atr
 | 21 | Medium-term |
 | 50 | Long-term trends |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Advantages
 
 - Non-directional (works in any trend)

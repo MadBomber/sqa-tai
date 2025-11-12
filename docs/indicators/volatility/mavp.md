@@ -348,6 +348,8 @@ MAVP supports all standard moving average types:
 | MAMA | 7 | MESA Adaptive MA |
 | T3 | 8 | Tillson T3 |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Common Period Sources
 
 ### 1. Volatility-Based

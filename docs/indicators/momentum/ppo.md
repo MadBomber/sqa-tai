@@ -52,6 +52,8 @@ PPO = ((46.50 - 45.00) / 45.00) × 100 = 3.33%
 | Increasing | Momentum strengthening |
 | Decreasing | Momentum weakening |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Signal Strength
 
 - **0 to ±2%**: Weak momentum or consolidation

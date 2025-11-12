@@ -63,6 +63,8 @@ The close price receives 2x weight because:
 | Close | 2 | 50% |
 | **Total** | **4** | **100%** |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Characteristics
 
 - **Close Emphasis**: With 50% weight on close, values gravitate toward closing prices

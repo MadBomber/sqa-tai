@@ -15,6 +15,9 @@ The Normalized Average True Range (NATR) is a volatility indicator that expresse
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **high, low, close**
 - Same requirements as ATR calculation
 - Must have same length

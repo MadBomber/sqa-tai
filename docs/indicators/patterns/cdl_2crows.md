@@ -92,6 +92,8 @@ The Two Crows pattern signals potential trend reversal through:
 | Location | Mid-chart | Near resistance | At major resistance |
 | Third Candle | Shallow close | Moderate close | Closes near first candle |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Two Crows in Uptrend Context
 
 ```ruby

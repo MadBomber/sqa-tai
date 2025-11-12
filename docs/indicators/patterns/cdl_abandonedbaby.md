@@ -157,6 +157,8 @@ The Abandoned Baby signals dramatic reversal through:
 | Volume | Low/normal | Increasing | High spike on 3rd |
 | Technical Level | Random | Near S/R | At major S/R |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Bullish Abandoned Baby at Bottom
 
 ```ruby

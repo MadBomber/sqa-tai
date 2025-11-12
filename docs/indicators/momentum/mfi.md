@@ -16,6 +16,9 @@ The Money Flow Index (MFI) is a momentum oscillator that incorporates both price
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **high, low, close**
 - Complete OHLC data required for typical price calculation
 - Arrays must all be of equal length

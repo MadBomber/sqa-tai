@@ -70,6 +70,8 @@ Where:
 | 90-98 | Moderate downward momentum (2-10% loss) |
 | < 90 | Strong downward momentum (10%+ loss) |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Key Interpretation Points
 
 - **100 is the center line**: Unlike ROCR which centers at 1.0, ROCR100's 100 baseline is more intuitive

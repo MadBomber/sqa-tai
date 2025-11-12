@@ -15,6 +15,9 @@ The Matching Low is a two-candle bullish reversal candlestick pattern. It featur
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **open**
 - Array of opening prices for the analyzed time series
 - Must have the same length as high, low, and close arrays

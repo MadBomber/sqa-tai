@@ -15,6 +15,9 @@ The Ladder Bottom is a bullish reversal candlestick pattern used in technical an
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **OHLC Arrays**
 - All four price arrays must have the same length
 - Requires sufficient historical data for pattern recognition

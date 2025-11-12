@@ -74,6 +74,8 @@ puts "Current +DM: #{plus_dm.last.round(2)}"
 | +DM falling | Upward momentum decreasing |
 | +DM near zero | Little to no upward directional force |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **Important**: +DM is NOT normalized and therefore:
 - Values depend on the price scale of the security
 - Cannot be compared across different securities

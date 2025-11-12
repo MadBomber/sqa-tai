@@ -13,6 +13,9 @@ The Relative Strength Index (RSI) is one of the most widely used momentum oscill
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **input_data**
 - Typically uses closing prices, though any price data can be used
 - Requires sufficient data points: at least `period + 1` values

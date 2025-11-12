@@ -111,6 +111,8 @@ The Three Inside pattern signals trend reversal through:
 | Volume | Decreasing | Normal | Increasing on 3rd |
 | Location | Mid-chart | Near level | At support/resistance |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Three Inside Up in Downtrend
 
 ```ruby

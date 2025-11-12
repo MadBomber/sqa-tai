@@ -50,6 +50,8 @@ Where:
 | Rising Variance | Volatility expanding | Risk increasing, position size down |
 | Falling Variance | Volatility contracting | Risk decreasing, may increase size |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Variance-Based Risk Assessment
 
 ```ruby

@@ -134,6 +134,8 @@ The Advance Block signals trend exhaustion through:
 | Resistance Level | Random location | Near resistance | At major resistance |
 | Prior Rally | Weak | Moderate | Strong/extended |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Advance Block at Resistance
 
 ```ruby

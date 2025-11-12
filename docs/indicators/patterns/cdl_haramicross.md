@@ -15,6 +15,9 @@ The Harami Cross is a two-candle reversal pattern where a doji appears completel
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **open**
 - Opening price for each trading period
 - Must be same length as high, low, and close arrays

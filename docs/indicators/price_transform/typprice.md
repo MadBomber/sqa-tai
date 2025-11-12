@@ -49,6 +49,8 @@ The Typical Price provides a more balanced view of price action than using close
 | Centered measure | Represents the "middle ground" of the period's action |
 | Volume neutral | Does not incorporate volume data |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Why Use Typical Price?
 
 1. **More Representative Than Close**: While the close is important, it's just one moment in time. The typical price captures the entire range of price movement.

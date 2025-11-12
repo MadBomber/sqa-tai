@@ -369,6 +369,8 @@ end
 | RSI | Neutral | Approaching | Extreme |
 | Location | Random | Near level | At key level |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Advantages
 
 - Clear visual pattern

@@ -16,6 +16,9 @@ Bollinger Bands are one of the most widely used volatility indicators in technic
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **input_data**
 - Typically uses closing prices for standard analysis
 - Can also use other price types (high, low, typical price) for specialized applications

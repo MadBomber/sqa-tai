@@ -15,6 +15,9 @@ The Evening Star is a three-candle bearish reversal pattern that bearish reversa
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **OHLC Arrays**
 - All four price arrays must have the same length
 - Minimum 3 candles required for pattern detection

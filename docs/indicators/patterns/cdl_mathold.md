@@ -15,6 +15,9 @@ The Mat Hold is a bullish continuation candlestick pattern used in technical ana
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **OHLC Arrays**
 - All four price arrays must have the same length
 - Requires sufficient historical data for pattern recognition

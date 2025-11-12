@@ -55,6 +55,8 @@ Histogram = MACD Line - Signal Line
 | Histogram decreasing | Momentum weakening in current direction |
 | Histogram crosses zero | MACD and Signal lines have crossed |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Why MACDFIX Exists
 
 ### Standardization Benefits

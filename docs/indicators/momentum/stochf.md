@@ -17,6 +17,9 @@ The Fast Stochastic Oscillator (STOCHF) is a momentum indicator that shows where
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **high, low, close**
 - Complete HLC data required (open not needed)
 - Arrays must be of equal length

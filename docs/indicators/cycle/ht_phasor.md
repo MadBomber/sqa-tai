@@ -12,6 +12,9 @@ The Hilbert Transform - Phasor Components (HT_PHASOR) is an advanced cycle analy
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **prices**
 - Input data should be an array of closing prices
 - Minimum 32 data points required for reliable results (due to Hilbert Transform calculation requirements)

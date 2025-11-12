@@ -126,6 +126,8 @@ The Dragonfly Doji measures:
 | Location | Mid-chart | Swing low | Major support |
 | Body Size | Medium | Small | Perfect doji |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Trading Signals
 
 ### Buy Signals

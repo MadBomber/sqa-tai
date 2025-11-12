@@ -123,6 +123,8 @@ The Dark Cloud Cover signals bearish reversal through:
 | Volume | Low/normal | Increasing | High spike on 2nd |
 | Technical Level | Random | Near resistance | At major resistance |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Dark Cloud Cover at Resistance
 
 ```ruby

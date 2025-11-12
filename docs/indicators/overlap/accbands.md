@@ -15,6 +15,9 @@ Acceleration Bands are a sophisticated volatility-based indicator that creates d
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **high**
 - Array of high prices for each period
 - Used to calculate upper band with acceleration factor

@@ -15,6 +15,9 @@ The Up/Down-Gap Side-by-Side White Lines pattern is a rare three-candle continua
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **open**
 - Array of opening prices for the analyzed time series
 - Must have the same length as high, low, and close arrays

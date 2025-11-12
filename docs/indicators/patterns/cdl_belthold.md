@@ -40,6 +40,8 @@ end
 | `low` | Array<Float> | Yes | Array of low prices |
 | `close` | Array<Float> | Yes | Array of closing prices |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Returns
 
 Returns an array of integers:

@@ -53,6 +53,8 @@ Returns two arrays:
 | 20-80 | Neutral zone |
 | 0-20 | Oversold zone |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Basic Stochastic Strategy
 
 ```ruby

@@ -15,6 +15,9 @@ The Kicking pattern is a powerful two-candle reversal pattern characterized by t
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **open**
 - Opening price for each trading period
 - Critical for identifying marubozu characteristics (open near high/low)

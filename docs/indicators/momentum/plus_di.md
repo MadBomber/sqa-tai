@@ -49,6 +49,8 @@ puts "Current +DI: #{plus_di.last.round(2)}"
 | 40-60 | Very strong upward movement |
 | 60-100 | Extremely strong upward movement |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **Key Signals:**
 - **+DI > -DI**: Uptrend in control, bullish dominance
 - **+DI < -DI**: Downtrend in control, bearish dominance

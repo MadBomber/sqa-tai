@@ -51,6 +51,8 @@ puts "Current MINUS_DM: #{minus_dm.last.round(2)}"
 | Low values | Small or no downward movements |
 | 0 | No downward directional movement |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **Important**: MINUS_DM is measured in price units and is NOT normalized. A MINUS_DM of 2.50 means different things for a $10 stock versus a $1000 stock. For normalized comparisons, use -DI instead.
 
 ## Understanding Raw vs Normalized Movement

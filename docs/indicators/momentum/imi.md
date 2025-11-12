@@ -43,6 +43,8 @@ Returns an array of IMI values ranging from 0 to 100. The first `period` values 
 | 0-30 | Oversold - strong intraday selling pressure |
 | 50 | Neutral - balanced intraday action |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Example: Basic IMI Trading Signals
 
 ```ruby

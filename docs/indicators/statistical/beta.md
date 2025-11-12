@@ -49,6 +49,8 @@ Returns an array of beta coefficient values. The first `period` values will be `
 | β ≈ 0 | Market independent | No correlation | Diversification benefit |
 | β < 0 | Inverse | Negative correlation | Hedge position |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Detailed Beta Values
 
 | Beta | Meaning | Example |

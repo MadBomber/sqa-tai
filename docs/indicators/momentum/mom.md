@@ -188,6 +188,8 @@ end
 | 20 | Medium-term trends |
 | 30+ | Long-term analysis |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Advantages
 
 - Simple and easy to understand

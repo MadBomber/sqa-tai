@@ -15,6 +15,9 @@ The Average Directional Index (ADX) is a technical indicator that measures the s
 
 ### Parameter Details
 
+
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 **high, low, close**
 - Requires complete OHLC data (open not needed)
 - Arrays must be of equal length

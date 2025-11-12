@@ -29,6 +29,8 @@ Meeting Lines is a two-candle reversal pattern where two opposite-colored candle
 | `low` | Array | Required | Array of low prices |
 | `close` | Array | Required | Array of closing prices |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Hypothetical Usage
 
 ```ruby

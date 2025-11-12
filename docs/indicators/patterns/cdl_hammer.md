@@ -322,6 +322,8 @@ end
 | Volume | Average | 1.3× avg | 2×+ avg |
 | Support | None | Near | At major level |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ## Common Mistakes
 
 1. **Trading without confirmation**: Wait for next candle

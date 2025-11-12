@@ -48,6 +48,8 @@ Returns an array of intercept values. The first `period - 1` values will be `nil
 | High vs Price | Price trading below trendline, potential support |
 | Low vs Price | Price trading above trendline, potential resistance |
 
+**Note**: Array elements should be ordered from oldest to newest (chronological order)
+
 ### Key Concepts
 
 1. **Trendline Construction**: Intercept + Slope define the complete trendline
