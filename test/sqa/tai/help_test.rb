@@ -12,10 +12,13 @@ class SQA::TAI::HelpTest < Minitest::Test
     assert_match %r{https://madbomber.github.io/sqa-tai/indicators/overlap/sma}, help.url
   end
 
-  def test_help_resource_to_s_returns_url
+  def test_help_resource_to_s_returns_formatted_info
     help = SQA::TAI.help(:rsi)
+    output = help.to_s
 
-    assert_equal help.url, help.to_s
+    assert_match(/Indicator: RSI \(RSI\)/, output)
+    assert_match(/Category:  Momentum Indicators/, output)
+    assert_match(%r{Website:   https://madbomber.github.io/sqa-tai/indicators/momentum/rsi}, output)
   end
 
   def test_help_resource_uri_returns_uri_object

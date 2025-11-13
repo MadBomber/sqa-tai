@@ -44,10 +44,15 @@ module SQA
           Net::HTTP.get(uri)
         end
 
-        # Returns the URL as a string
+        # Returns formatted help information
         # @return [String]
         def to_s
-          @url
+          category_label = @category.to_s.split('_').map(&:capitalize).join(' ')
+          <<~HELP
+            Indicator: #{@indicator.to_s.upcase} (#{@name})
+            Category:  #{category_label}
+            Website:   #{@url}
+          HELP
         end
 
         # Returns detailed information about the help resource
