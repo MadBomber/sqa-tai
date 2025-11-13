@@ -86,6 +86,34 @@ if SQA::TAI.available?
 end
 ```
 
+## Getting Help on Indicators
+
+Access comprehensive documentation for any indicator directly from your code:
+
+```ruby
+# Get documentation URL for an indicator
+help = SQA::TAI.help(:sma)
+puts help.url
+# => https://madbomber.github.io/sqa-tai/indicators/overlap/sma/
+
+# Open documentation in browser
+SQA::TAI.help(:rsi, open: true)
+
+# Search for indicators
+SQA::TAI.help(search: "momentum")
+# => {mom: "https://...", cmo: "https://...", ...}
+
+# List all indicators in a category
+SQA::TAI.help(category: :momentum_indicators)
+# => {rsi: "https://...", macd: "https://...", ...}
+
+# Get all available indicators
+SQA::TAI.help(:all)
+# => {sma: "https://...", ema: "https://...", ...}
+```
+
+See the [Help System Guide](https://madbomber.github.io/sqa-tai/getting-started/help/) for more details.
+
 ## Available Indicators (136 Total)
 
 ### Overlap Studies (15)

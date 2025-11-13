@@ -145,6 +145,7 @@ nav:
     - Installation: getting-started/installation.md
     - Quick Start: getting-started/quick-start.md
     - Basic Usage: getting-started/basic-usage.md
+    - Help System: getting-started/help.md
   - Indicators:
     - Overview: indicators/index.md
     - Overlap Studies:

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Help system for accessing indicator documentation (`SQA::TAI.help`)
+  - Returns URLs to online documentation for any indicator
+  - Supports searching by name, filtering by category, and listing all indicators
+  - Auto-generated from mkdocs documentation files via `rake help:generate`
+  - Flexible API returns HelpResource objects with URL, name, and category
+  - Optional browser integration to open documentation directly
+  - Zeitwerk-compatible file structure with `help.rb` and `help_resource.rb`
+
 ## [0.1.1] 2025-11-13
 ### Added
 - Intraday Momentum Index (IMI) indicator

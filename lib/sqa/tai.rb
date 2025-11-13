@@ -16,6 +16,9 @@ require_relative "tai/cycle_indicators"
 require_relative "tai/statistical_functions"
 require_relative "tai/pattern_recognition"
 
+# Require help system
+require_relative "tai/help"
+
 module SQA
   module TAI
     class Error < StandardError; end
@@ -47,6 +50,68 @@ module SQA
         raise TAINotInstalledError,
               "TA-Lib C library is not installed. " \
               "Please install it from https://ta-lib.org/"
+      end
+
+      # Get help documentation for indicators
+      #
+      # @param indicator [Symbol, nil] The indicator to get help for
+      # @param options [Hash] Options for help output
+      # @option options [Symbol] :category Filter by category
+      # @option options [String] :search Search for indicators
+      # @option options [Boolean] :open Open URL in browser
+      # @option options [Symbol] :format Return format (:uri, :hash, or Help::Resource)
+      #
+      # @return [Help::Resource, Hash, String, URI] Help information
+      #
+      # @example Get help for SMA
+      #   SQA::TAI.help(:sma)
+      #   # => #<SQA::TAI::Help::Resource ...>
+      #
+      # @example Open help in browser
+      #   SQA::TAI.help(:rsi, open: true)
+      #
+      # @example List all momentum indicators
+      #   SQA::TAI.help(category: :momentum_indicators)
+      #
+      # @example Search for indicators
+      #   SQA::TAI.help(search: "moving average")
+      #
+      def help(indicator = nil, **options)
+        # List all indicators
+        if indicator == :all
+          return Help.indicators.transform_values { |meta| "#{Help::BASE_URL}/#{meta[:path]}/" }
+        end
+
+        # Category listing
+        if options[:category]
+          category_indicators = Help.indicators.select { |_k, v| v[:category] == options[:category] }
+          return category_indicators.transform_values { |meta| "#{Help::BASE_URL}/#{meta[:path]}/" }
+        end
+
+        # Search
+        if options[:search]
+          query = options[:search].downcase
+          matches = Help.indicators.select do |k, v|
+            k.to_s.include?(query) || v[:name].downcase.include?(query)
+          end
+          return matches.transform_values { |meta| "#{Help::BASE_URL}/#{meta[:path]}/" }
+        end
+
+        # Single indicator
+        meta = Help.indicators[indicator]
+        raise ArgumentError, "Unknown indicator: #{indicator}" unless meta
+
+        resource = Help::Resource.new(indicator, meta[:name], meta[:category], meta[:path])
+
+        # Open in browser if requested
+        resource.open if options[:open]
+
+        # Return format
+        case options[:format]
+        when :uri then resource.uri
+        when :hash then {name: meta[:name], category: meta[:category], url: resource.url}
+        else resource # Return Help::Resource object (responds to to_s)
+        end
       end
 
       private

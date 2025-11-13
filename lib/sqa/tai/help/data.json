@@ -1,0 +1,697 @@
+{
+  "ht_dcperiod": {
+    "name": "HT_DCPERIOD",
+    "category": "cycle_indicators",
+    "path": "indicators/cycle/ht_dcperiod"
+  },
+  "ht_dcphase": {
+    "name": "HT_DCPHASE",
+    "category": "cycle_indicators",
+    "path": "indicators/cycle/ht_dcphase"
+  },
+  "ht_phasor": {
+    "name": "HT_PHASOR",
+    "category": "cycle_indicators",
+    "path": "indicators/cycle/ht_phasor"
+  },
+  "ht_sine": {
+    "name": "HT_SINE",
+    "category": "cycle_indicators",
+    "path": "indicators/cycle/ht_sine"
+  },
+  "ht_trendmode": {
+    "name": "HT_TRENDMODE",
+    "category": "cycle_indicators",
+    "path": "indicators/cycle/ht_trendmode"
+  },
+  "adx": {
+    "name": "ADX",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/adx"
+  },
+  "adxr": {
+    "name": "Average Directional Movement Index Rating",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/adxr"
+  },
+  "apo": {
+    "name": "Absolute Price Oscillator",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/apo"
+  },
+  "aroon": {
+    "name": "Aroon Indicator",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/aroon"
+  },
+  "aroonosc": {
+    "name": "Aroon Oscillator",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/aroonosc"
+  },
+  "bop": {
+    "name": "Balance of Power",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/bop"
+  },
+  "cci": {
+    "name": "Commodity Channel Index",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/cci"
+  },
+  "cmo": {
+    "name": "Chande Momentum Oscillator",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/cmo"
+  },
+  "dx": {
+    "name": "Directional Movement Index",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/dx"
+  },
+  "imi": {
+    "name": "Intraday Momentum Index",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/imi"
+  },
+  "macd": {
+    "name": "MACD",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/macd"
+  },
+  "macdext": {
+    "name": "MACD with Controllable MA Type",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/macdext"
+  },
+  "macdfix": {
+    "name": "Moving Average Convergence Divergence - Fixed Parameters",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/macdfix"
+  },
+  "mfi": {
+    "name": "MFI",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/mfi"
+  },
+  "minus_di": {
+    "name": "Minus Directional Indicator",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/minus_di"
+  },
+  "minus_dm": {
+    "name": "Minus Directional Movement",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/minus_dm"
+  },
+  "mom": {
+    "name": "Momentum",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/mom"
+  },
+  "plus_di": {
+    "name": "Plus Directional Indicator",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/plus_di"
+  },
+  "plus_dm": {
+    "name": "Plus Directional Movement",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/plus_dm"
+  },
+  "ppo": {
+    "name": "Percentage Price Oscillator",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/ppo"
+  },
+  "roc": {
+    "name": "Rate of Change",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/roc"
+  },
+  "rocp": {
+    "name": "Rate of Change Percentage",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/rocp"
+  },
+  "rocr": {
+    "name": "Rate of Change Ratio",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/rocr"
+  },
+  "rocr100": {
+    "name": "Rate of Change Ratio 100 Scale",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/rocr100"
+  },
+  "rsi": {
+    "name": "RSI",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/rsi"
+  },
+  "stoch": {
+    "name": "Stochastic Oscillator",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/stoch"
+  },
+  "stochf": {
+    "name": "STOCHF",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/stochf"
+  },
+  "stochrsi": {
+    "name": "Stochastic Relative Strength Index",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/stochrsi"
+  },
+  "trix": {
+    "name": "TRIX",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/trix"
+  },
+  "ultosc": {
+    "name": "Ultimate Oscillator",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/ultosc"
+  },
+  "willr": {
+    "name": "Williams %R",
+    "category": "momentum_indicators",
+    "path": "indicators/momentum/willr"
+  },
+  "accbands": {
+    "name": "ACCBANDS",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/accbands"
+  },
+  "bbands": {
+    "name": "BBANDS",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/bbands"
+  },
+  "dema": {
+    "name": "DEMA",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/dema"
+  },
+  "ema": {
+    "name": "EMA",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/ema"
+  },
+  "kama": {
+    "name": "KAMA",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/kama"
+  },
+  "ma": {
+    "name": "MA",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/ma"
+  },
+  "sma": {
+    "name": "SMA",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/sma"
+  },
+  "t3": {
+    "name": "T3",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/t3"
+  },
+  "tema": {
+    "name": "TEMA",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/tema"
+  },
+  "trima": {
+    "name": "TRIMA",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/trima"
+  },
+  "vwap": {
+    "name": "VWAP",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/vwap"
+  },
+  "wma": {
+    "name": "WMA",
+    "category": "overlap_studies",
+    "path": "indicators/overlap/wma"
+  },
+  "cdl_2crows": {
+    "name": "Two Crows Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_2crows"
+  },
+  "cdl_3blackcrows": {
+    "name": "Three Black Crows Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_3blackcrows"
+  },
+  "cdl_3inside": {
+    "name": "Three Inside Up/Down Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_3inside"
+  },
+  "cdl_3linestrike": {
+    "name": "Three Line Strike Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_3linestrike"
+  },
+  "cdl_3outside": {
+    "name": "Three Outside Up/Down Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_3outside"
+  },
+  "cdl_3starsinsouth": {
+    "name": "Three Stars in the South Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_3starsinsouth"
+  },
+  "cdl_3whitesoldiers": {
+    "name": "Three White Soldiers Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_3whitesoldiers"
+  },
+  "cdl_abandonedbaby": {
+    "name": "Abandoned Baby Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_abandonedbaby"
+  },
+  "cdl_advanceblock": {
+    "name": "Advance Block Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_advanceblock"
+  },
+  "cdl_belthold": {
+    "name": "Belt Hold Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_belthold"
+  },
+  "cdl_breakaway": {
+    "name": "Breakaway Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_breakaway"
+  },
+  "cdl_closingmarubozu": {
+    "name": "Closing Marubozu Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_closingmarubozu"
+  },
+  "cdl_concealbabyswall": {
+    "name": "Concealing Baby Swallow Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_concealbabyswall"
+  },
+  "cdl_counterattack": {
+    "name": "Counterattack Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_counterattack"
+  },
+  "cdl_darkcloudcover": {
+    "name": "Dark Cloud Cover Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_darkcloudcover"
+  },
+  "cdl_doji": {
+    "name": "CDL_DOJI",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_doji"
+  },
+  "cdl_dojistar": {
+    "name": "CDL_DOJISTAR",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_dojistar"
+  },
+  "cdl_dragonflydoji": {
+    "name": "Dragonfly Doji Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_dragonflydoji"
+  },
+  "cdl_engulfing": {
+    "name": "Engulfing Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_engulfing"
+  },
+  "cdl_eveningdojistar": {
+    "name": "CDL_EVENINGDOJISTAR",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_eveningdojistar"
+  },
+  "cdl_eveningstar": {
+    "name": "CDL_CDL_EVENINGSTAR",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_eveningstar"
+  },
+  "cdl_gapsidesidewhite": {
+    "name": "CDL_GAPSIDESIDEWHITE",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_gapsidesidewhite"
+  },
+  "cdl_gravestonedoji": {
+    "name": "CDL_CDL_GRAVESTONEDOJI",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_gravestonedoji"
+  },
+  "cdl_hammer": {
+    "name": "Hammer Pattern",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_hammer"
+  },
+  "cdl_hangingman": {
+    "name": "CDL_HANGINGMAN",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_hangingman"
+  },
+  "cdl_harami": {
+    "name": "CDL_CDL_HARAMI",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_harami"
+  },
+  "cdl_haramicross": {
+    "name": "CDL_HARAMICROSS",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_haramicross"
+  },
+  "cdl_highwave": {
+    "name": "CDL_CDL_HIGHWAVE",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_highwave"
+  },
+  "cdl_hikkake": {
+    "name": "CDL_CDL_HIKKAKE",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_hikkake"
+  },
+  "cdl_hikkakemod": {
+    "name": "CDL_CDL_HIKKAKEMOD",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_hikkakemod"
+  },
+  "cdl_homingpigeon": {
+    "name": "CDL_CDL_HOMINGPIGEON",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_homingpigeon"
+  },
+  "cdl_identical3crows": {
+    "name": "CDL_IDENTICAL3CROWS",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_identical3crows"
+  },
+  "cdl_inneck": {
+    "name": "CDL_INNECK",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_inneck"
+  },
+  "cdl_inside": {
+    "name": "CDL_INSIDE - See Three Inside Up/Down",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_inside"
+  },
+  "cdl_invertedhammer": {
+    "name": "CDL_CDL_INVERTEDHAMMER",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_invertedhammer"
+  },
+  "cdl_kicking": {
+    "name": "CDL_KICKING",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_kicking"
+  },
+  "cdl_kickingbylength": {
+    "name": "CDL_CDL_KICKINGBYLENGTH",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_kickingbylength"
+  },
+  "cdl_ladderbottom": {
+    "name": "CDL_CDL_LADDERBOTTOM",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_ladderbottom"
+  },
+  "cdl_longleggeddoji": {
+    "name": "CDL_CDL_LONGLEGGEDDOJI",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_longleggeddoji"
+  },
+  "cdl_longline": {
+    "name": "CDL_LONGLINE",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_longline"
+  },
+  "cdl_marubozu": {
+    "name": "CDL_CDL_MARUBOZU",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_marubozu"
+  },
+  "cdl_matchinglow": {
+    "name": "CDL_MATCHINGLOW",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_matchinglow"
+  },
+  "cdl_mathold": {
+    "name": "CDL_CDL_MATHOLD",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_mathold"
+  },
+  "cdl_meetinglines": {
+    "name": "CDL_MEETINGLINES",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_meetinglines"
+  },
+  "cdl_morningdojistar": {
+    "name": "CDL_MORNINGDOJISTAR",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_morningdojistar"
+  },
+  "cdl_morningstar": {
+    "name": "CDL_MORNINGSTAR",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_morningstar"
+  },
+  "cdl_onneck": {
+    "name": "CDL_ONNECK",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_onneck"
+  },
+  "cdl_piercing": {
+    "name": "CDL_CDL_PIERCING",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_piercing"
+  },
+  "cdl_rickshawman": {
+    "name": "CDL_CDL_RICKSHAWMAN",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_rickshawman"
+  },
+  "cdl_risefall3methods": {
+    "name": "CDL_CDL_RISEFALL3METHODS",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_risefall3methods"
+  },
+  "cdl_separatinglines": {
+    "name": "CDL_SEPARATINGLINES",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_separatinglines"
+  },
+  "cdl_shootingstar": {
+    "name": "CDL_CDL_SHOOTINGSTAR",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_shootingstar"
+  },
+  "cdl_shortline": {
+    "name": "CDL_SHORTLINE",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_shortline"
+  },
+  "cdl_spinningtop": {
+    "name": "CDL_CDL_SPINNINGTOP",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_spinningtop"
+  },
+  "cdl_stalledpattern": {
+    "name": "CDL_STALLEDPATTERN",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_stalledpattern"
+  },
+  "cdl_sticksandwich": {
+    "name": "CDL_STICKSANDWICH",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_sticksandwich"
+  },
+  "cdl_takuri": {
+    "name": "CDL_CDL_TAKURI",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_takuri"
+  },
+  "cdl_tasukigap": {
+    "name": "CDL_TASUKIGAP",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_tasukigap"
+  },
+  "cdl_thrusting": {
+    "name": "CDL_THRUSTING",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_thrusting"
+  },
+  "cdl_tristar": {
+    "name": "CDL_TRISTAR",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_tristar"
+  },
+  "cdl_unique3river": {
+    "name": "CDL_UNIQUE3RIVER",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_unique3river"
+  },
+  "cdl_upsidegap2crows": {
+    "name": "CDL_UPSIDEGAP2CROWS",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_upsidegap2crows"
+  },
+  "cdl_xsidegap3methods": {
+    "name": "CDL_XSIDEGAP3METHODS",
+    "category": "pattern_recognition",
+    "path": "indicators/patterns/cdl_xsidegap3methods"
+  },
+  "avgprice": {
+    "name": "AVGPRICE",
+    "category": "price_transform",
+    "path": "indicators/price_transform/avgprice"
+  },
+  "medprice": {
+    "name": "Median Price",
+    "category": "price_transform",
+    "path": "indicators/price_transform/medprice"
+  },
+  "typprice": {
+    "name": "Typical Price",
+    "category": "price_transform",
+    "path": "indicators/price_transform/typprice"
+  },
+  "wclprice": {
+    "name": "Weighted Close Price",
+    "category": "price_transform",
+    "path": "indicators/price_transform/wclprice"
+  },
+  "beta": {
+    "name": "Beta Coefficient",
+    "category": "statistical_functions",
+    "path": "indicators/statistical/beta"
+  },
+  "correl": {
+    "name": "CORREL",
+    "category": "statistical_functions",
+    "path": "indicators/statistical/correl"
+  },
+  "linearreg": {
+    "name": "Linear Regression",
+    "category": "statistical_functions",
+    "path": "indicators/statistical/linearreg"
+  },
+  "linearreg_angle": {
+    "name": "Linear Regression Angle",
+    "category": "statistical_functions",
+    "path": "indicators/statistical/linearreg_angle"
+  },
+  "linearreg_intercept": {
+    "name": "Linear Regression Intercept",
+    "category": "statistical_functions",
+    "path": "indicators/statistical/linearreg_intercept"
+  },
+  "linearreg_slope": {
+    "name": "Linear Regression Slope",
+    "category": "statistical_functions",
+    "path": "indicators/statistical/linearreg_slope"
+  },
+  "stddev": {
+    "name": "Standard Deviation",
+    "category": "statistical_functions",
+    "path": "indicators/statistical/stddev"
+  },
+  "tsf": {
+    "name": "Time Series Forecast",
+    "category": "statistical_functions",
+    "path": "indicators/statistical/tsf"
+  },
+  "var": {
+    "name": "Variance",
+    "category": "statistical_functions",
+    "path": "indicators/statistical/var"
+  },
+  "atr": {
+    "name": "Average True Range",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/atr"
+  },
+  "ht_trendline": {
+    "name": "HT_TRENDLINE",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/ht_trendline"
+  },
+  "keltner": {
+    "name": "Keltner Channels",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/keltner"
+  },
+  "mama": {
+    "name": "MAMA",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/mama"
+  },
+  "mavp": {
+    "name": "Moving Average with Variable Period",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/mavp"
+  },
+  "midpoint": {
+    "name": "Midpoint Over Period",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/midpoint"
+  },
+  "midprice": {
+    "name": "Midpoint Price",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/midprice"
+  },
+  "natr": {
+    "name": "NATR",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/natr"
+  },
+  "sar": {
+    "name": "Parabolic SAR",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/sar"
+  },
+  "sarext": {
+    "name": "Parabolic SAR Extended",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/sarext"
+  },
+  "trange": {
+    "name": "True Range",
+    "category": "volatility_indicators",
+    "path": "indicators/volatility/trange"
+  },
+  "ad": {
+    "name": "AD",
+    "category": "volume_indicators",
+    "path": "indicators/volume/ad"
+  },
+  "adosc": {
+    "name": "ADOSC",
+    "category": "volume_indicators",
+    "path": "indicators/volume/adosc"
+  },
+  "cmf": {
+    "name": "CMF",
+    "category": "volume_indicators",
+    "path": "indicators/volume/cmf"
+  },
+  "obv": {
+    "name": "On Balance Volume",
+    "category": "volume_indicators",
+    "path": "indicators/volume/obv"
+  }
+}

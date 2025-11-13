@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sqa-tai (0.1.1)
+    sqa-tai (0.1.2)
       ta_lib_ffi (~> 0.3)
 
 GEM
