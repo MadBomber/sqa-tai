@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] 2025-11-13
 ### Added
 - Intraday Momentum Index (IMI) indicator
 - GitHub Actions workflow to automatically deploy documentation to GitHub Pages
@@ -19,6 +20,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API reference documentation formatting and index links
 
 ### Changed
+- Refactored library code into modular structure with 8 focused modules organized by indicator category
+  - `lib/sqa/tai/overlap_studies.rb` - Moving averages and bands
+  - `lib/sqa/tai/momentum_indicators.rb` - Momentum and oscillator indicators
+  - `lib/sqa/tai/volatility_indicators.rb` - Volatility and range indicators
+  - `lib/sqa/tai/volume_indicators.rb` - Volume-based indicators
+  - `lib/sqa/tai/price_transform.rb` - Price transformation functions
+  - `lib/sqa/tai/cycle_indicators.rb` - Hilbert Transform cycle indicators
+  - `lib/sqa/tai/statistical_functions.rb` - Statistical analysis functions
+  - `lib/sqa/tai/pattern_recognition.rb` - Candlestick pattern recognition
+- Refactored test suite to mirror lib directory organization with 8 modular test files
+- Reduced main `lib/sqa/tai.rb` from 1,851 lines to 67 lines (96% reduction)
+- Reduced main `test/sqa/tai_test.rb` to core tests only, extracted 72 tests into category-specific files
 - Updated indicator count to 132
 - Reorganized README sections
 - Improved SQA name from "Stock Qualitative Analysis" to "Simple Qualitative Analysis"
