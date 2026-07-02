@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-02
+- Coordinated version bump to v0.3.0 across the SQA workspace.
+
 ## [0.1.2] 2025-11-13
 ### Added
 - Help system for accessing indicator documentation (`SQA::TAI.help`)
