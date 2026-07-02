@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+# sqa-tai — Ruby wrapper around TA-Lib, 136+ technical indicators.
+
+import_up "repo_dev.loki"
+
+class Tasks
+  @@gem_name ||= "sqa-tai".freeze
+
+  header "sqa-tai v#{gem_version} — TA-Lib technical indicators"
+end

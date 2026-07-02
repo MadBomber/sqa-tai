@@ -10,7 +10,7 @@ class SQA::TAI::OverlapStudiesTest < Minitest::Test
 
     assert_instance_of Array, result
     refute_empty result
-    assert result.all? { |v| v.is_a?(Numeric) }
+    assert(result.all?(Numeric))
   end
 
   def test_ema_basic

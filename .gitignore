@@ -1,0 +1,5 @@
+*_output.txt
+site/
+pkg/
+Gemfile.lock
+coverage/

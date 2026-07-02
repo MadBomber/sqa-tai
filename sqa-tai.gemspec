@@ -9,7 +9,8 @@ Gem::Specification.new do |spec|
   spec.email        = ["dvanhoozer@gmail.com"]
 
   spec.summary      = "SQA::TAI - Technical Analysis Indicators"
-  spec.description  = "An SQA-specific wrapper around the ta_lib_ffi gem which access to TA-Lib providing many technical analysis indicators for stock analysis. Part of the SQA (Simple Qualitative Analysis) ecosystem."
+  spec.description  = "An SQA-specific wrapper around the ta_lib_ffi gem which access to TA-Lib providing many " \
+                      "technical analysis indicators for stock analysis. Part of the SQA (Simple Qualitative Analysis) ecosystem."
   spec.homepage     = "https://github.com/MadBomber/sqa-tai"
   spec.license      = "MIT"
 
@@ -20,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"]   = spec.homepage
   spec.metadata["changelog_uri"]     = "#{spec.homepage}/blob/main/CHANGELOG.md"
   spec.metadata["documentation_uri"] = "https://madbomber.github.io/sqa-tai"
+  spec.metadata['rubygems_mfa_required'] = 'true'
 
   spec.files = Dir.chdir(__dir__) do
     `git ls-files -z`.split("\x0").reject do |f|
@@ -39,5 +41,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "minitest-reporters"
   spec.add_development_dependency "simplecov"
+  spec.add_development_dependency "debug"
   spec.add_development_dependency "debug_me"
+  spec.add_development_dependency "flog"
+  spec.add_development_dependency "flay"
+  spec.add_development_dependency "racc" # flog/flay transitively need this on Ruby 4+
+  spec.add_development_dependency "rubocop"
 end

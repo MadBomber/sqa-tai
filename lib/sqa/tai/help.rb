@@ -19,18 +19,23 @@ module SQA
         private
 
         def load_indicators
-          json_path = File.join(__dir__, "help", "data.json")
-          json_data = File.read(json_path)
-          data = JSON.parse(json_data)
-
-          # Convert to symbol keys for Ruby idioms
-          data.transform_keys(&:to_sym).transform_values do |meta|
-            {
-              name: meta["name"],
-              category: meta["category"].to_sym,
-              path: meta["path"]
-            }
+          read_indicators_json.transform_keys(&:to_sym).transform_values do |meta|
+            symbolize_indicator_meta(meta)
           end
+        end
+
+        def read_indicators_json
+          json_path = File.join(__dir__, "help", "data.json")
+          JSON.parse(File.read(json_path))
+        end
+
+        # Convert a single indicator's metadata hash to symbol keys/values for Ruby idioms
+        def symbolize_indicator_meta(meta)
+          {
+            name: meta["name"],
+            category: meta["category"].to_sym,
+            path: meta["path"]
+          }
         end
       end
     end

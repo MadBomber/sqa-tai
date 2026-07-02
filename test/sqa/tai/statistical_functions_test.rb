@@ -12,7 +12,7 @@ class SQA::TAI::StatisticalFunctionsTest < Minitest::Test
     refute_empty result
     # Correlation should be between -1 and 1
     result.compact.each do |value|
-      assert value >= -1 && value <= 1, "CORREL value out of range"
+      assert value.between?(-1, 1), "CORREL value out of range"
     end
   end
 

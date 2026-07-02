@@ -12,7 +12,7 @@ class SQA::TAI::MomentumIndicatorsTest < Minitest::Test
     refute_empty result
     # RSI values should be between 0 and 100
     result.compact.each do |value|
-      assert value >= 0 && value <= 100, "RSI value #{value} out of range"
+      assert value.between?(0, 100), "RSI value #{value} out of range"
     end
   end
 
@@ -41,7 +41,7 @@ class SQA::TAI::MomentumIndicatorsTest < Minitest::Test
 
     # Stochastic values should be between 0 and 100
     slowk.compact.each do |value|
-      assert value >= 0 && value <= 100, "Stoch K value out of range"
+      assert value.between?(0, 100), "Stoch K value out of range"
     end
   end
 
@@ -64,7 +64,7 @@ class SQA::TAI::MomentumIndicatorsTest < Minitest::Test
     assert_instance_of Array, result
     # Williams %R should be between -100 and 0 for values that exist
     result.compact.each do |value|
-      assert value >= -100 && value <= 0, "WILLR value out of range"
+      assert value.between?(-100, 0), "WILLR value out of range"
     end
   end
 
@@ -113,7 +113,7 @@ class SQA::TAI::MomentumIndicatorsTest < Minitest::Test
     assert_instance_of Array, result
     # ADX should be between 0 and 100 for values that exist
     result.compact.each do |value|
-      assert value >= 0 && value <= 100, "ADX value out of range"
+      assert value.between?(0, 100), "ADX value out of range"
     end
   end
 
@@ -248,7 +248,7 @@ class SQA::TAI::MomentumIndicatorsTest < Minitest::Test
     refute_empty result
     # IMI values should be between 0 and 100 (like RSI)
     result.compact.each do |value|
-      assert value >= 0 && value <= 100, "IMI value #{value} out of range"
+      assert value.between?(0, 100), "IMI value #{value} out of range"
     end
   end
 end

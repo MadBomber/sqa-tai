@@ -2,6 +2,13 @@
 
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 
+require "simplecov"
+SimpleCov.start do
+  add_filter "/test/"
+  add_group "Indicators", "lib/sqa/tai"
+  add_group "Extensions", "lib/extensions"
+end
+
 require "sqa/tai"
 require "minitest/autorun"
 require "minitest/reporters"

@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(bundle exec rake:*)",
+      "Bash(ruby -e:*)",
+      "Bash(gem which:*)",
+      "Bash(xargs dirname:*)",
+      "Bash(xargs:*)",
+      "Bash(gem info:*)",
+      "Bash(ruby analyze_indicators.rb:*)",
+      "Bash(bundle exec rspec:*)",
+      "Bash(ruby count_indicators.rb:*)",
+      "Bash(ruby test_new_indicators.rb:*)",
+      "Bash(ruby verify_count.rb:*)",
+      "Bash(ruby generate_docs.rb:*)",
+      "Bash(mkdocs build:*)",
+      "Bash(test:*)",
+      "Bash(for file in cdl_counterattack.md cdl_darkcloudcover.md cdl_dojistar.md cdl_dragonflydoji.md cdl_eveningdojistar.md cdl_eveningstar.md cdl_gapsidesidewhite.md cdl_gravestonedoji.md cdl_hammer.md cdl_hangingman.md)",
+      "Bash(done)",
+      "Bash(wc:*)",
+      "Bash(for file in cdl_sticksandwich cdl_matchinglow cdl_identical3crows cdl_unique3river cdl_tristar cdl_stalledpattern cdl_tasukigap cdl_xsidegap3methods cdl_upsidegap2crows cdl_longline cdl_shortline)",
+      "Bash(do echo \"Processing $file\")",
+      "Bash(ls:*)",
+      "Bash(ruby:*)",
+      "Bash(git commit:*)",
+      "Bash(mkdir:*)",
+      "Bash(bundle install:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

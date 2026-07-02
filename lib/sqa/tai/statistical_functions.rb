@@ -5,31 +5,31 @@ module SQA
     # Statistical Functions
     module StatisticalFunctions
       # Pearson's Correlation Coefficient
-      # @param prices1 [Array<Float>] First array of prices
-      # @param prices2 [Array<Float>] Second array of prices
+      # @param prices_1 [Array<Float>] First array of prices
+      # @param prices_2 [Array<Float>] Second array of prices
       # @param period [Integer] Time period (default: 30)
       # @return [Array<Float>] Correlation values
-      def correl(prices1, prices2, period: 30)
+      def correl(prices_1, prices_2, period: 30)
         check_available!
-        validate_prices!(prices1)
-        validate_prices!(prices2)
-        validate_period!(period, [prices1.size, prices2.size].min)
+        validate_prices!(prices_1)
+        validate_prices!(prices_2)
+        validate_period!(period, [prices_1.size, prices_2.size].min)
 
-        TALibFFI.correl(prices1, prices2, time_period: period)
+        TALibFFI.correl(prices_1, prices_2, time_period: period)
       end
 
       # Beta
-      # @param prices1 [Array<Float>] First array of prices
-      # @param prices2 [Array<Float>] Second array of prices
+      # @param prices_1 [Array<Float>] First array of prices
+      # @param prices_2 [Array<Float>] Second array of prices
       # @param period [Integer] Time period (default: 5)
       # @return [Array<Float>] Beta values
-      def beta(prices1, prices2, period: 5)
+      def beta(prices_1, prices_2, period: 5)
         check_available!
-        validate_prices!(prices1)
-        validate_prices!(prices2)
-        validate_period!(period, [prices1.size, prices2.size].min)
+        validate_prices!(prices_1)
+        validate_prices!(prices_2)
+        validate_period!(period, [prices_1.size, prices_2.size].min)
 
-        TALibFFI.beta(prices1, prices2, time_period: period)
+        TALibFFI.beta(prices_1, prices_2, time_period: period)
       end
 
       # Variance

@@ -77,44 +77,54 @@ module SQA
       #   SQA::TAI.help(search: "moving average")
       #
       def help(indicator = nil, **options)
-        # List all indicators
-        if indicator == :all
-          return Help.indicators.transform_values { |meta| "#{Help::BASE_URL}/#{meta[:path]}/" }
-        end
+        return help_all_indicators if indicator == :all
+        return help_by_category(options[:category]) if options[:category]
+        return help_by_search(options[:search]) if options[:search]
 
-        # Category listing
-        if options[:category]
-          category_indicators = Help.indicators.select { |_k, v| v[:category] == options[:category] }
-          return category_indicators.transform_values { |meta| "#{Help::BASE_URL}/#{meta[:path]}/" }
-        end
+        help_for_indicator(indicator, options)
+      end
 
-        # Search
-        if options[:search]
-          query = options[:search].downcase
-          matches = Help.indicators.select do |k, v|
-            k.to_s.include?(query) || v[:name].downcase.include?(query)
-          end
-          return matches.transform_values { |meta| "#{Help::BASE_URL}/#{meta[:path]}/" }
-        end
+      private
 
-        # Single indicator
+      # Build a hash of {indicator => url} from a set of indicator metadata entries
+      def help_urls_for(meta_entries)
+        meta_entries.transform_values { |meta| "#{Help::BASE_URL}/#{meta[:path]}/" }
+      end
+
+      def help_all_indicators
+        help_urls_for(Help.indicators)
+      end
+
+      def help_by_category(category)
+        category_indicators = Help.indicators.select { |_k, v| v[:category] == category }
+        help_urls_for(category_indicators)
+      end
+
+      def help_by_search(search)
+        query = search.downcase
+        matches = Help.indicators.select do |k, v|
+          k.to_s.include?(query) || v[:name].downcase.include?(query)
+        end
+        help_urls_for(matches)
+      end
+
+      def help_for_indicator(indicator, options)
         meta = Help.indicators[indicator]
         raise ArgumentError, "Unknown indicator: #{indicator}" unless meta
 
         resource = Help::Resource.new(indicator, meta[:name], meta[:category], meta[:path])
-
-        # Open in browser if requested
         resource.open if options[:open]
 
-        # Return format
-        case options[:format]
+        format_help_resource(resource, meta, options[:format])
+      end
+
+      def format_help_resource(resource, meta, format)
+        case format
         when :uri then resource.uri
-        when :hash then {name: meta[:name], category: meta[:category], url: resource.url}
+        when :hash then { name: meta[:name], category: meta[:category], url: resource.url }
         else resource # Return Help::Resource object (responds to to_s)
         end
       end
-
-      private
 
       def validate_prices!(prices)
         raise InvalidParameterError, "Prices array cannot be nil" if prices.nil?

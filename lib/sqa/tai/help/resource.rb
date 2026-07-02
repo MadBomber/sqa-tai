@@ -25,11 +25,12 @@ module SQA
         # Opens the documentation URL in the default browser
         # @return [Resource] self for chaining
         def open
-          if RbConfig::CONFIG["host_os"] =~ /darwin/
+          case RbConfig::CONFIG["host_os"]
+          when /darwin/
             system("open", @url)
-          elsif RbConfig::CONFIG["host_os"] =~ /linux|bsd/
+          when /linux|bsd/
             system("xdg-open", @url)
-          elsif RbConfig::CONFIG["host_os"] =~ /mswin|mingw|cygwin/
+          when /mswin|mingw|cygwin/
             system("start", @url)
           else
             warn "Unable to open browser on this platform"

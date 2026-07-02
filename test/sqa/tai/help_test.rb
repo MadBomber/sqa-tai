@@ -57,7 +57,7 @@ class SQA::TAI::HelpTest < Minitest::Test
     assert result.key?(:sma)
     assert result.key?(:rsi)
     assert result.key?(:macd)
-    assert result.values.all? { |url| url.start_with?("https://") }
+    assert(result.values.all? { |url| url.start_with?("https://") })
   end
 
   def test_help_category_returns_indicators_in_category

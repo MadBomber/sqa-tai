@@ -71,17 +71,18 @@ module SQA
       # @param acceleration_step [Float] Acceleration step (default: 0.02)
       # @param acceleration_max [Float] Acceleration max (default: 0.20)
       # @return [Array<Float>] SAREXT values
-      def sarext(high, low, start_value: 0.0, offset_on_reverse: 0.0, acceleration_init: 0.02, acceleration_step: 0.02, acceleration_max: 0.20)
+      def sarext(high, low, start_value: 0.0, offset_on_reverse: 0.0, acceleration_init: 0.02, acceleration_step: 0.02,
+                 acceleration_max: 0.20)
         check_available!
         validate_prices!(high)
         validate_prices!(low)
 
         TALibFFI.sarext(high, low,
-          start_value: start_value,
-          offset_on_reverse: offset_on_reverse,
-          af_init: acceleration_init,
-          af_increment: acceleration_step,
-          af_max: acceleration_max)
+                        start_value: start_value,
+                        offset_on_reverse: offset_on_reverse,
+                        af_init: acceleration_init,
+                        af_increment: acceleration_step,
+                        af_max: acceleration_max)
       end
 
       # Acceleration Bands
