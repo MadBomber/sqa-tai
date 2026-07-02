@@ -46,5 +46,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "flog"
   spec.add_development_dependency "flay"
   spec.add_development_dependency "racc" # flog/flay transitively need this on Ruby 4+
+  spec.add_development_dependency "reek" # code smell gate (rake reek_check)
   spec.add_development_dependency "rubocop"
 end

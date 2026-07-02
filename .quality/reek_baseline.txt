@@ -1,0 +1,9 @@
+6	lib/extensions/ta_lib_ffi.rb
+1	lib/sqa/tai.rb
+2	lib/sqa/tai/cycle_indicators.rb
+12	lib/sqa/tai/momentum_indicators.rb
+2	lib/sqa/tai/overlap_studies.rb
+2	lib/sqa/tai/pattern_recognition.rb
+1	lib/sqa/tai/price_transform.rb
+5	lib/sqa/tai/volatility_indicators.rb
+1	lib/sqa/tai/volume_indicators.rb

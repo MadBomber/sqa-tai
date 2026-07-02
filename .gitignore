@@ -3,3 +3,6 @@ site/
 pkg/
 Gemfile.lock
 coverage/
+
+# Local cross-repo dev lockfile (Gemfile.local)
+/Gemfile.local.lock

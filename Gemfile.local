@@ -1,0 +1,19 @@
+# frozen_string_literal: true
+
+# Local cross-repo development Gemfile.
+#
+# sqa-tai is the leaf of the SQA dependency chain (it has no sibling
+# SQA-ecosystem dependencies), so this file is identical to Gemfile.
+# It exists so that `BUNDLE_GEMFILE=Gemfile.local` works uniformly in
+# every repo of the workspace.
+#
+# Activate with:  BUNDLE_GEMFILE=Gemfile.local bundle <command>
+
+source "https://rubygems.org"
+
+gemspec
+
+group :documentation do
+  # MkDocs is Python-based, managed separately
+  # See docs/README.md for setup instructions
+end
