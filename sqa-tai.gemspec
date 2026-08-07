@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
 
   # Core dependency
   spec.add_dependency "ta_lib_ffi", "~> 0.3"
+  spec.add_dependency "myway_config"  # XDG-aware configuration management (extends anyway_config)
 
   # Development dependencies
   spec.add_development_dependency "bundler"
