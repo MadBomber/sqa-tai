@@ -3,6 +3,12 @@
 module SQA
   module TAI
     # Price Transform
+    #
+    # :reek:DataClump -- these methods intentionally mirror TA-Lib's own
+    # C function signatures (high/low/close as separate positional args);
+    # bundling them into a value object would be a breaking public API
+    # change for this gem and its downstream consumers (sqa, sqa-cli,
+    # sqa-advisor) and their 133 published indicator doc pages.
     module PriceTransform
       # Average Price
       # @param open [Array<Float>] Open prices
@@ -17,7 +23,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.avgprice(open, high, low, close)
+        Native.avgprice([open, high, low, close])
       end
 
       # Median Price
@@ -29,7 +35,7 @@ module SQA
         validate_prices!(high)
         validate_prices!(low)
 
-        TALibFFI.medprice(high, low)
+        Native.medprice([high, low])
       end
 
       # Typical Price
@@ -43,7 +49,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.typprice(high, low, close)
+        Native.typprice([high, low, close])
       end
 
       # Weighted Close Price
@@ -57,7 +63,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.wclprice(high, low, close)
+        Native.wclprice([high, low, close])
       end
     end
   end

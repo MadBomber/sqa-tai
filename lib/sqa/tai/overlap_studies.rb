@@ -14,7 +14,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.ma(prices, time_period: period, ma_type: ma_type)
+        Native.ma(prices, time_period: period, ma_type:)
       end
 
       # Simple Moving Average
@@ -26,7 +26,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.sma(prices, time_period: period)
+        Native.sma(prices, time_period: period)
       end
 
       # Exponential Moving Average
@@ -38,7 +38,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.ema(prices, time_period: period)
+        Native.ema(prices, time_period: period)
       end
 
       # Weighted Moving Average
@@ -50,7 +50,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.wma(prices, time_period: period)
+        Native.wma(prices, time_period: period)
       end
 
       # Double Exponential Moving Average
@@ -62,7 +62,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.dema(prices, time_period: period)
+        Native.dema(prices, time_period: period)
       end
 
       # Triple Exponential Moving Average
@@ -74,7 +74,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.tema(prices, time_period: period)
+        Native.tema(prices, time_period: period)
       end
 
       # Triangular Moving Average
@@ -86,7 +86,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.trima(prices, time_period: period)
+        Native.trima(prices, time_period: period)
       end
 
       # Kaufman Adaptive Moving Average
@@ -98,7 +98,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.kama(prices, time_period: period)
+        Native.kama(prices, time_period: period)
       end
 
       # Triple Exponential Moving Average (T3)
@@ -106,12 +106,14 @@ module SQA
       # @param period [Integer] Time period (default: 5)
       # @param vfactor [Float] Volume factor (default: 0.7)
       # @return [Array<Float>] T3 values
+      # :reek:UncommunicativeMethodName -- T3 is TA-Lib's own canonical
+      # indicator name; renaming it breaks the public API.
       def t3(prices, period: 5, vfactor: 0.7)
         check_available!
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.t3(prices, time_period: period, vfactor: vfactor)
+        Native.t3(prices, time_period: period, vfactor:)
       end
 
       # Bollinger Bands
@@ -125,19 +127,8 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        result = TALibFFI.bbands(
-          prices,
-          time_period: period,
-          nbdev_up: nbdev_up,
-          nbdev_dn: nbdev_down
-        )
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:upper_band], result[:middle_band], result[:lower_band]]
-        else
-          result
-        end
+        result = Native.bbands(prices, time_period: period, nbdev_up:, nbdev_dn: nbdev_down)
+        [result[:upper_band], result[:middle_band], result[:lower_band]]
       end
     end
   end

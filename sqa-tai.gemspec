@@ -9,12 +9,12 @@ Gem::Specification.new do |spec|
   spec.email        = ["dvanhoozer@gmail.com"]
 
   spec.summary      = "SQA::TAI - Technical Analysis Indicators"
-  spec.description  = "An SQA-specific wrapper around the ta_lib_ffi gem which access to TA-Lib providing many " \
+  spec.description  = "An SQA-specific Fiddle binding directly against the installed TA-Lib C library, providing many " \
                       "technical analysis indicators for stock analysis. Part of the SQA (Simple Qualitative Analysis) ecosystem."
   spec.homepage     = "https://github.com/MadBomber/sqa-tai"
   spec.license      = "MIT"
 
-  spec.required_ruby_version = ">= 3.1.0"
+  spec.required_ruby_version = ">= 3.4.0"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   spec.metadata["homepage_uri"]      = spec.homepage
@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Core dependency
-  spec.add_dependency "ta_lib_ffi", "~> 0.3"
+  spec.add_dependency "fiddle" # Ruby 3.5+ moved this to a bundled (not default) gem
   spec.add_dependency "myway_config"  # XDG-aware configuration management (extends anyway_config)
 
   # Development dependencies
@@ -49,4 +49,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "racc" # flog/flay transitively need this on Ruby 4+
   spec.add_development_dependency "reek" # code smell gate (rake reek_check)
   spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "fasterer" # performance-hint gate (asgard fasterer_check); not in bundle by
+  # default, so `bundle exec fasterer` silently fails into fasterer_output.txt without this
 end

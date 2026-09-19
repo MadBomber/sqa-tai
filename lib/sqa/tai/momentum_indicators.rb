@@ -3,6 +3,13 @@
 module SQA
   module TAI
     # Momentum Indicators
+    #
+    # :reek:DataClump and :reek:LongParameterList -- these methods
+    # intentionally mirror TA-Lib's own C function signatures (separate
+    # high/low/close/period args, up to 7 for macdext); bundling them into
+    # a value object would be a breaking public API change for this gem
+    # and its downstream consumers (sqa, sqa-cli, sqa-advisor) and their
+    # 133 published indicator doc pages.
     module MomentumIndicators
       # Relative Strength Index
       # @param prices [Array<Float>] Array of prices
@@ -13,7 +20,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.rsi(prices, time_period: period)
+        Native.rsi(prices, time_period: period)
       end
 
       # Intraday Momentum Index
@@ -27,7 +34,7 @@ module SQA
         validate_prices!(close_prices)
         validate_period!(period, [open_prices.size, close_prices.size].min)
 
-        TALibFFI.imi(open_prices, close_prices, time_period: period)
+        Native.imi([open_prices, close_prices], time_period: period)
       end
 
       # Moving Average Convergence/Divergence
@@ -40,19 +47,7 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        result = TALibFFI.macd(
-          prices,
-          fast_period: fast_period,
-          slow_period: slow_period,
-          signal_period: signal_period
-        )
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:macd], result[:macd_signal], result[:macd_hist]]
-        else
-          result
-        end
+        Native.macd(prices, fast_period:, slow_period:, signal_period:).values_at(:macd, :macd_signal, :macd_hist)
       end
 
       # Stochastic Oscillator
@@ -69,21 +64,8 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        result = TALibFFI.stoch(
-          high,
-          low,
-          close,
-          fastk_period: fastk_period,
-          slowk_period: slowk_period,
-          slowd_period: slowd_period
-        )
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:slow_k], result[:slow_d]]
-        else
-          result
-        end
+        result = Native.stoch([high, low, close], fastk_period:, slowk_period:, slowd_period:)
+        [result[:slow_k], result[:slow_d]]
       end
 
       # Momentum
@@ -95,7 +77,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.mom(prices, time_period: period)
+        Native.mom(prices, time_period: period)
       end
 
       # Commodity Channel Index
@@ -110,7 +92,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cci(high, low, close, time_period: period)
+        Native.cci([high, low, close], time_period: period)
       end
 
       # Williams' %R
@@ -125,7 +107,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.willr(high, low, close, time_period: period)
+        Native.willr([high, low, close], time_period: period)
       end
 
       # Rate of Change
@@ -137,7 +119,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.roc(prices, time_period: period)
+        Native.roc(prices, time_period: period)
       end
 
       # Rate of Change Percentage
@@ -149,7 +131,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.rocp(prices, time_period: period)
+        Native.rocp(prices, time_period: period)
       end
 
       # Rate of Change Ratio
@@ -161,7 +143,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.rocr(prices, time_period: period)
+        Native.rocr(prices, time_period: period)
       end
 
       # Percentage Price Oscillator
@@ -174,7 +156,7 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        TALibFFI.ppo(prices, fast_period: fast_period, slow_period: slow_period, ma_type: ma_type)
+        Native.ppo(prices, fast_period:, slow_period:, ma_type:)
       end
 
       # Average Directional Movement Index
@@ -189,7 +171,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.adx(high, low, close, time_period: period)
+        Native.adx([high, low, close], time_period: period)
       end
 
       # Average Directional Movement Index Rating
@@ -204,7 +186,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.adxr(high, low, close, time_period: period)
+        Native.adxr([high, low, close], time_period: period)
       end
 
       # Absolute Price Oscillator
@@ -217,7 +199,7 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        TALibFFI.apo(prices, fast_period: fast_period, slow_period: slow_period, ma_type: ma_type)
+        Native.apo(prices, fast_period:, slow_period:, ma_type:)
       end
 
       # Aroon
@@ -230,14 +212,8 @@ module SQA
         validate_prices!(high)
         validate_prices!(low)
 
-        result = TALibFFI.aroon(high, low, time_period: period)
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:aroon_down], result[:aroon_up]]
-        else
-          result
-        end
+        result = Native.aroon([high, low], time_period: period)
+        [result[:aroon_down], result[:aroon_up]]
       end
 
       # Aroon Oscillator
@@ -250,7 +226,7 @@ module SQA
         validate_prices!(high)
         validate_prices!(low)
 
-        TALibFFI.aroonosc(high, low, time_period: period)
+        Native.aroonosc([high, low], time_period: period)
       end
 
       # Balance of Power
@@ -266,7 +242,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.bop(open, high, low, close)
+        Native.bop([open, high, low, close])
       end
 
       # Chande Momentum Oscillator
@@ -278,7 +254,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.cmo(prices, time_period: period)
+        Native.cmo(prices, time_period: period)
       end
 
       # Directional Movement Index
@@ -293,7 +269,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.dx(high, low, close, time_period: period)
+        Native.dx([high, low, close], time_period: period)
       end
 
       # MACD with Controllable MA Type
@@ -309,22 +285,15 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        result = TALibFFI.macdext(
+        Native.macdext(
           prices,
-          fast_period: fast_period,
-          fast_ma_type: fast_ma_type,
-          slow_period: slow_period,
-          slow_ma_type: slow_ma_type,
-          signal_period: signal_period,
-          signal_ma_type: signal_ma_type
-        )
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:macd], result[:macd_signal], result[:macd_hist]]
-        else
-          result
-        end
+          fast_period:,
+          fast_ma_type:,
+          slow_period:,
+          slow_ma_type:,
+          signal_period:,
+          signal_ma_type:
+        ).values_at(:macd, :macd_signal, :macd_hist)
       end
 
       # MACD Fix 12/26
@@ -335,14 +304,7 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        result = TALibFFI.macdfix(prices, signal_period: signal_period)
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:macd], result[:macd_signal], result[:macd_hist]]
-        else
-          result
-        end
+        Native.macdfix(prices, signal_period:).values_at(:macd, :macd_signal, :macd_hist)
       end
 
       # Money Flow Index
@@ -359,7 +321,7 @@ module SQA
         validate_prices!(close)
         validate_prices!(volume)
 
-        TALibFFI.mfi(high, low, close, volume, time_period: period)
+        Native.mfi([high, low, close, volume], time_period: period)
       end
 
       # Minus Directional Indicator
@@ -374,7 +336,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.minus_di(high, low, close, time_period: period)
+        Native.minus_di([high, low, close], time_period: period)
       end
 
       # Minus Directional Movement
@@ -387,7 +349,7 @@ module SQA
         validate_prices!(high)
         validate_prices!(low)
 
-        TALibFFI.minus_dm(high, low, time_period: period)
+        Native.minus_dm([high, low], time_period: period)
       end
 
       # Plus Directional Indicator
@@ -402,7 +364,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.plus_di(high, low, close, time_period: period)
+        Native.plus_di([high, low, close], time_period: period)
       end
 
       # Plus Directional Movement
@@ -415,19 +377,21 @@ module SQA
         validate_prices!(high)
         validate_prices!(low)
 
-        TALibFFI.plus_dm(high, low, time_period: period)
+        Native.plus_dm([high, low], time_period: period)
       end
 
       # Rate of Change Ratio 100 scale
       # @param prices [Array<Float>] Array of prices
       # @param period [Integer] Time period (default: 10)
       # @return [Array<Float>] ROCR100 values
+      # :reek:UncommunicativeMethodName -- ROCR100 is TA-Lib's own
+      # canonical indicator name; renaming it breaks the public API.
       def rocr100(prices, period: 10)
         check_available!
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.rocr100(prices, time_period: period)
+        Native.rocr100(prices, time_period: period)
       end
 
       # Stochastic Fast
@@ -443,20 +407,8 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        result = TALibFFI.stochf(
-          high,
-          low,
-          close,
-          fastk_period: fastk_period,
-          fastd_period: fastd_period
-        )
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:fast_k], result[:fast_d]]
-        else
-          result
-        end
+        result = Native.stochf([high, low, close], fastk_period:, fastd_period:)
+        [result[:fast_k], result[:fast_d]]
       end
 
       # Stochastic RSI
@@ -469,19 +421,8 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        result = TALibFFI.stochrsi(
-          prices,
-          time_period: period,
-          fastk_period: fastk_period,
-          fastd_period: fastd_period
-        )
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:fast_k], result[:fast_d]]
-        else
-          result
-        end
+        result = Native.stochrsi(prices, time_period: period, fastk_period:, fastd_period:)
+        [result[:fast_k], result[:fast_d]]
       end
 
       # 1-day Rate-Of-Change (ROC) of a Triple Smooth EMA
@@ -493,7 +434,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.trix(prices, time_period: period)
+        Native.trix(prices, time_period: period)
       end
 
       # Ultimate Oscillator
@@ -510,7 +451,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.ultosc(high, low, close, time_period1: period1, time_period2: period2, time_period3: period3)
+        Native.ultosc([high, low, close], time_period1: period1, time_period2: period2, time_period3: period3)
       end
     end
   end

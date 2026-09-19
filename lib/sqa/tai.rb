@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "tai/version"
-require "ta_lib_ffi"
-
-# Apply monkey patch to fix ta_lib_ffi 0.3.0 multi-array parameter bug
-require_relative "../extensions/ta_lib_ffi"
+require_relative "tai/native"
 
 # Require all indicator modules
 require_relative "tai/overlap_studies"
@@ -38,7 +35,7 @@ module SQA
     class << self
       # Check if TA-Lib C library is available
       def available?
-        defined?(TALibFFI) && TALibFFI.respond_to?(:sma)
+        Native.available?
       rescue LoadError
         false
       end
@@ -118,6 +115,8 @@ module SQA
         format_help_resource(resource, meta, options[:format])
       end
 
+      # :reek:ControlParameter -- dispatches on the caller-requested output
+      # shape (:uri/:hash/default); that's the method's whole job.
       def format_help_resource(resource, meta, format)
         case format
         when :uri then resource.uri

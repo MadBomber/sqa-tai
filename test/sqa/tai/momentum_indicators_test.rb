@@ -28,7 +28,6 @@ class SQA::TAI::MomentumIndicatorsTest < Minitest::Test
 
   def test_stoch_oscillator
     skip "TA-Lib not installed" unless SQA::TAI.available?
-    # Fixed by lib/extensions/ta_lib_ffi.rb monkey patch
 
     slowk, slowd = SQA::TAI.stoch(
       TestData::HIGH,
@@ -47,7 +46,6 @@ class SQA::TAI::MomentumIndicatorsTest < Minitest::Test
 
   def test_cci
     skip "TA-Lib not installed" unless SQA::TAI.available?
-    # Fixed by lib/extensions/ta_lib_ffi.rb monkey patch
 
     result = SQA::TAI.cci(TestData::HIGH, TestData::LOW, TestData::CLOSE, period: 5)
 
@@ -57,7 +55,6 @@ class SQA::TAI::MomentumIndicatorsTest < Minitest::Test
 
   def test_willr
     skip "TA-Lib not installed" unless SQA::TAI.available?
-    # Fixed by lib/extensions/ta_lib_ffi.rb monkey patch
 
     result = SQA::TAI.willr(TestData::HIGH, TestData::LOW, TestData::CLOSE, period: 5)
 
@@ -106,7 +103,6 @@ class SQA::TAI::MomentumIndicatorsTest < Minitest::Test
 
   def test_adx
     skip "TA-Lib not installed" unless SQA::TAI.available?
-    # Fixed by lib/extensions/ta_lib_ffi.rb monkey patch
 
     result = SQA::TAI.adx(TestData::HIGH, TestData::LOW, TestData::CLOSE, period: 5)
 

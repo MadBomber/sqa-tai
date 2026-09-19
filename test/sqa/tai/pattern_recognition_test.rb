@@ -22,7 +22,6 @@ class SQA::TAI::PatternRecognitionTest < Minitest::Test
 
   def test_cdl_morningstar
     skip "TA-Lib not installed" unless SQA::TAI.available?
-    # Fixed by lib/extensions/ta_lib_ffi.rb monkey patch
 
     result = SQA::TAI.cdl_morningstar(
       TestData::OPEN,
@@ -39,7 +38,6 @@ class SQA::TAI::PatternRecognitionTest < Minitest::Test
 
   def test_cdl_eveningstar
     skip "TA-Lib not installed" unless SQA::TAI.available?
-    # Fixed by lib/extensions/ta_lib_ffi.rb monkey patch
 
     result = SQA::TAI.cdl_eveningstar(
       TestData::OPEN,
@@ -56,7 +54,6 @@ class SQA::TAI::PatternRecognitionTest < Minitest::Test
 
   def test_cdl_harami
     skip "TA-Lib not installed" unless SQA::TAI.available?
-    # Fixed by lib/extensions/ta_lib_ffi.rb monkey patch
 
     result = SQA::TAI.cdl_harami(
       TestData::OPEN,
