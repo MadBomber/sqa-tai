@@ -1,7 +1,7 @@
 <div align="center">
   <h1>SQA::TAI - Technical Analysis Indicators</h1>
 
-  <p>Ruby wrapper around [TA-Lib](https://ta-lib.org/) providing **136 technical analysis indicators** for stock market analysis.<br/>
+  <p>Ruby wrapper around [TA-Lib](https://ta-lib.org/) providing **134 technical analysis indicators** for stock market analysis.<br/>
       Part of the [SQA](https://github.com/MadBomber/sqa) (Simple Qualitative Analysis) ecosystem.</p>
 </div>
 
@@ -15,14 +15,13 @@
 
 ## Features
 
-- 🚀 **136 Indicators** - Comprehensive coverage with 94% of trading-relevant TA-Lib indicators
-- ⚡ **Blazing Fast** - C library performance with Ruby convenience
+- 🚀 **134 Indicators** - Comprehensive coverage with 94% of trading-relevant TA-Lib indicators
+- ⚡ **Blazing Fast** - Talks directly to the TA-Lib C library via a vendored Fiddle binding, no unmaintained FFI gem in between
 - 🎯 **Clean API** - Simple, intuitive Ruby interface with keyword arguments
 - 📊 **Comprehensive** - Overlap studies, momentum, volatility, volume, cycles, stats, patterns
 - 🔌 **Easy Integration** - Works seamlessly with existing Ruby trading tools
 - ✅ **Well Tested** - 73 tests, 332 assertions, 100% passing
 - 📚 **Documented** - Full documentation at [madbomber.github.io/sqa-tai](https://madbomber.github.io/sqa-tai)
-- 🔧 **Bug Fixed** - Includes monkey patch for ta_lib_ffi 0.3.0 multi-array parameter bug
 
 </td>
 </tr>
@@ -114,17 +113,17 @@ SQA::TAI.help(:all)
 
 See the [Help System Guide](https://madbomber.github.io/sqa-tai/getting-started/help/) for more details.
 
-## Available Indicators (136 Total)
+## Available Indicators (134 Total)
 
-### Overlap Studies (15)
-- **SMA, EMA, WMA** - Moving Averages
+### Overlap Studies (17)
+- **SMA, EMA, WMA, MA** - Moving Averages
 - **DEMA, TEMA, TRIMA** - Advanced Moving Averages
 - **KAMA, T3, MAMA** - Adaptive Moving Averages
-- **BBANDS** - Bollinger Bands
+- **BBANDS, ACCBANDS** - Bands
 - **SAREXT, HT_TRENDLINE** - Trend indicators
 - **MIDPOINT, MIDPRICE, MAVP** - Price calculations
 
-### Momentum Indicators (30)
+### Momentum Indicators (31)
 - **RSI** - Relative Strength Index
 - **MACD, MACDEXT, MACDFIX** - MACD variants
 - **STOCH, STOCHF, STOCHRSI** - Stochastic variants
@@ -138,6 +137,7 @@ See the [Help System Guide](https://madbomber.github.io/sqa-tai/getting-started/
 - **BOP** - Balance of Power
 - **CMO** - Chande Momentum Oscillator
 - **MFI** - Money Flow Index
+- **IMI** - Intraday Momentum Index
 - **PLUS_DI, MINUS_DI, PLUS_DM, MINUS_DM** - Directional indicators
 - **TRIX** - Triple Smooth EMA
 - **ULTOSC** - Ultimate Oscillator
@@ -310,7 +310,6 @@ The gem is available as open source under the terms of the [MIT License](LICENSE
 ## Acknowledgments
 
 - [TA-Lib](https://ta-lib.org/) - The underlying C library
-- [ta_lib_ffi](https://github.com/TA-Lib/ta-lib-ruby) - Ruby FFI wrapper
 
 ## Support
 

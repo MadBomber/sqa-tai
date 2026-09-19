@@ -1,4 +1,4 @@
-# CDL_CDL_TAKURI (Takuri Line (Dragonfly Doji at Support))
+# CDL_TAKURI (Takuri Line (Dragonfly Doji at Support))
 
 ## Overview
 

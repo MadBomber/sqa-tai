@@ -1,4 +1,4 @@
-# CDL_CDL_SPINNINGTOP (Spinning Top)
+# CDL_SPINNINGTOP (Spinning Top)
 
 ## Overview
 

@@ -1,4 +1,4 @@
-# CDL_CDL_PIERCING (Piercing Pattern)
+# CDL_PIERCING (Piercing Pattern)
 
 ## Overview
 

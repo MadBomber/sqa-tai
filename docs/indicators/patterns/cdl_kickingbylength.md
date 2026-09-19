@@ -1,4 +1,4 @@
-# CDL_CDL_KICKINGBYLENGTH (Kicking By Length)
+# CDL_KICKINGBYLENGTH (Kicking By Length)
 
 ## Overview
 

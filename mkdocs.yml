@@ -145,33 +145,171 @@ nav:
     - Installation: getting-started/installation.md
     - Quick Start: getting-started/quick-start.md
     - Basic Usage: getting-started/basic-usage.md
+    - Pattern Recognition Guide: getting-started/pattern-recognition.md
     - Help System: getting-started/help.md
+  - Concepts:
+    - Technical Analysis Basics: basics.md
+    - Support and Resistance: concepts/support-resistance.md
   - Indicators:
     - Overview: indicators/index.md
     - Overlap Studies:
-      - Simple Moving Average: indicators/overlap/sma.md
-      - Exponential Moving Average: indicators/overlap/ema.md
-      - Weighted Moving Average: indicators/overlap/wma.md
-      - Bollinger Bands: indicators/overlap/bbands.md
+      - Overview: indicators/overlap/index.md
+      - ACCBANDS (Acceleration Bands): indicators/overlap/accbands.md
+      - BBANDS (Bollinger Bands): indicators/overlap/bbands.md
+      - DEMA (Double Exponential Moving Average): indicators/overlap/dema.md
+      - EMA (Exponential Moving Average): indicators/overlap/ema.md
+      - HT_TRENDLINE (Hilbert Transform - Instantaneous Trendline): indicators/volatility/ht_trendline.md
+      - KAMA (Kaufman Adaptive Moving Average): indicators/overlap/kama.md
+      - MA (Moving Average - Generic Interface): indicators/overlap/ma.md
+      - MAMA (MESA Adaptive Moving Average): indicators/volatility/mama.md
+      - Moving Average with Variable Period (MAVP): indicators/volatility/mavp.md
+      - Midpoint Over Period (MIDPOINT): indicators/volatility/midpoint.md
+      - Midpoint Price (MIDPRICE): indicators/volatility/midprice.md
+      - Parabolic SAR Extended (SAREXT): indicators/volatility/sarext.md
+      - SMA (Simple Moving Average): indicators/overlap/sma.md
+      - T3 (Tillson T3 Moving Average): indicators/overlap/t3.md
+      - TEMA (Triple Exponential Moving Average): indicators/overlap/tema.md
+      - TRIMA (Triangular Moving Average): indicators/overlap/trima.md
+      - VWAP (Volume-Weighted Average Price): indicators/overlap/vwap.md
+      - WMA (Weighted Moving Average): indicators/overlap/wma.md
     - Momentum:
-      - RSI: indicators/momentum/rsi.md
-      - MACD: indicators/momentum/macd.md
-      - Stochastic: indicators/momentum/stoch.md
-      - Momentum: indicators/momentum/mom.md
+      - ADX (Average Directional Index): indicators/momentum/adx.md
+      - Average Directional Movement Index Rating (ADXR): indicators/momentum/adxr.md
+      - Absolute Price Oscillator (APO): indicators/momentum/apo.md
+      - Aroon Indicator (AROON): indicators/momentum/aroon.md
+      - Aroon Oscillator (AROONOSC): indicators/momentum/aroonosc.md
+      - Balance of Power (BOP): indicators/momentum/bop.md
+      - Commodity Channel Index (CCI): indicators/momentum/cci.md
+      - Chande Momentum Oscillator (CMO): indicators/momentum/cmo.md
+      - Directional Movement Index (DX): indicators/momentum/dx.md
+      - Intraday Momentum Index (IMI): indicators/momentum/imi.md
+      - MACD (Moving Average Convergence Divergence): indicators/momentum/macd.md
+      - MACD with Controllable MA Type (MACDEXT): indicators/momentum/macdext.md
+      - Moving Average Convergence Divergence - Fixed Parameters (MACDFIX): indicators/momentum/macdfix.md
+      - MFI (Money Flow Index): indicators/momentum/mfi.md
+      - Minus Directional Indicator (MINUS_DI): indicators/momentum/minus_di.md
+      - Minus Directional Movement (MINUS_DM): indicators/momentum/minus_dm.md
+      - Momentum (MOM): indicators/momentum/mom.md
+      - Plus Directional Indicator (+DI): indicators/momentum/plus_di.md
+      - Plus Directional Movement (PLUS_DM): indicators/momentum/plus_dm.md
+      - Percentage Price Oscillator (PPO): indicators/momentum/ppo.md
+      - Rate of Change (ROC): indicators/momentum/roc.md
+      - Rate of Change Percentage (ROCP): indicators/momentum/rocp.md
+      - Rate of Change Ratio (ROCR): indicators/momentum/rocr.md
+      - Rate of Change Ratio 100 Scale (ROCR100): indicators/momentum/rocr100.md
+      - RSI (Relative Strength Index): indicators/momentum/rsi.md
+      - Stochastic Oscillator (STOCH): indicators/momentum/stoch.md
+      - STOCHF (Fast Stochastic Oscillator): indicators/momentum/stochf.md
+      - Stochastic Relative Strength Index (STOCHRSI): indicators/momentum/stochrsi.md
+      - TRIX (Triple Exponential Average): indicators/momentum/trix.md
+      - Ultimate Oscillator (ULTOSC): indicators/momentum/ultosc.md
+      - "Williams %R (WILLR)": indicators/momentum/willr.md
     - Volatility:
-      - Average True Range: indicators/volatility/atr.md
-      - True Range: indicators/volatility/trange.md
+      - Average True Range (ATR): indicators/volatility/atr.md
+      - Keltner Channels: indicators/volatility/keltner.md
+      - NATR (Normalized Average True Range): indicators/volatility/natr.md
+      - Parabolic SAR (Stop and Reverse): indicators/volatility/sar.md
+      - True Range (TRANGE): indicators/volatility/trange.md
     - Volume:
-      - On Balance Volume: indicators/volume/obv.md
-      - Chaikin A/D Line: indicators/volume/ad.md
+      - Overview: indicators/volume/index.md
+      - AD (Chaikin Accumulation/Distribution Line): indicators/volume/ad.md
+      - ADOSC (Chaikin A/D Oscillator): indicators/volume/adosc.md
+      - CMF (Chaikin Money Flow): indicators/volume/cmf.md
+      - On Balance Volume (OBV): indicators/volume/obv.md
+    - Cycle:
+      - Overview: indicators/cycle/index.md
+      - HT_DCPERIOD (Hilbert Transform - Dominant Cycle Period): indicators/cycle/ht_dcperiod.md
+      - HT_DCPHASE (Hilbert Transform - Dominant Cycle Phase): indicators/cycle/ht_dcphase.md
+      - HT_PHASOR (Hilbert Transform - Phasor Components): indicators/cycle/ht_phasor.md
+      - HT_SINE (Hilbert Transform - Sine Wave Indicator): indicators/cycle/ht_sine.md
+      - HT_TRENDMODE (Hilbert Transform - Trend vs Cycle Mode): indicators/cycle/ht_trendmode.md
+    - Statistical Functions:
+      - Overview: indicators/statistical/index.md
+      - Beta Coefficient (BETA): indicators/statistical/beta.md
+      - "CORREL (Pearson's Correlation Coefficient)": indicators/statistical/correl.md
+      - Linear Regression (LINEARREG): indicators/statistical/linearreg.md
+      - Linear Regression Angle (LINEARREG_ANGLE): indicators/statistical/linearreg_angle.md
+      - Linear Regression Intercept (LINEARREG_INTERCEPT): indicators/statistical/linearreg_intercept.md
+      - Linear Regression Slope (LINEARREG_SLOPE): indicators/statistical/linearreg_slope.md
+      - Standard Deviation (STDDEV): indicators/statistical/stddev.md
+      - Time Series Forecast (TSF): indicators/statistical/tsf.md
+      - Variance (VAR): indicators/statistical/var.md
+    - Price Transform:
+      - Overview: indicators/price_transform/index.md
+      - AVGPRICE (Average Price): indicators/price_transform/avgprice.md
+      - Median Price (MEDPRICE): indicators/price_transform/medprice.md
+      - Typical Price (TYPPRICE): indicators/price_transform/typprice.md
+      - Weighted Close Price (WCLPRICE): indicators/price_transform/wclprice.md
     - Patterns:
       - Overview: indicators/patterns/index.md
-      - Doji: indicators/patterns/cdl_doji.md
-      - Hammer: indicators/patterns/cdl_hammer.md
-      - Engulfing: indicators/patterns/cdl_engulfing.md
+      - Two Crows Pattern: indicators/patterns/cdl_2crows.md
+      - Three Black Crows Pattern: indicators/patterns/cdl_3blackcrows.md
+      - Three Inside Up/Down Pattern: indicators/patterns/cdl_3inside.md
+      - Three Line Strike Pattern: indicators/patterns/cdl_3linestrike.md
+      - Three Outside Up/Down Pattern: indicators/patterns/cdl_3outside.md
+      - Three Stars in the South Pattern: indicators/patterns/cdl_3starsinsouth.md
+      - Three White Soldiers Pattern: indicators/patterns/cdl_3whitesoldiers.md
+      - Abandoned Baby Pattern: indicators/patterns/cdl_abandonedbaby.md
+      - Advance Block Pattern: indicators/patterns/cdl_advanceblock.md
+      - Belt Hold Pattern: indicators/patterns/cdl_belthold.md
+      - Breakaway Pattern: indicators/patterns/cdl_breakaway.md
+      - Closing Marubozu Pattern: indicators/patterns/cdl_closingmarubozu.md
+      - Concealing Baby Swallow Pattern: indicators/patterns/cdl_concealbabyswall.md
+      - Counterattack Pattern: indicators/patterns/cdl_counterattack.md
+      - Dark Cloud Cover Pattern: indicators/patterns/cdl_darkcloudcover.md
+      - CDL_DOJI (Doji Candlestick Pattern): indicators/patterns/cdl_doji.md
+      - CDL_DOJISTAR (Doji Star Candlestick Pattern): indicators/patterns/cdl_dojistar.md
+      - Dragonfly Doji Pattern: indicators/patterns/cdl_dragonflydoji.md
+      - Engulfing Pattern: indicators/patterns/cdl_engulfing.md
+      - CDL_EVENINGDOJISTAR (Evening Doji Star): indicators/patterns/cdl_eveningdojistar.md
+      - CDL_EVENINGSTAR (Evening Star): indicators/patterns/cdl_eveningstar.md
+      - CDL_GAPSIDESIDEWHITE (Up/Down-Gap Side-by-Side White Lines): indicators/patterns/cdl_gapsidesidewhite.md
+      - CDL_GRAVESTONEDOJI (Gravestone Doji): indicators/patterns/cdl_gravestonedoji.md
+      - Hammer Pattern: indicators/patterns/cdl_hammer.md
+      - CDL_HANGINGMAN (Hanging Man Candlestick Pattern): indicators/patterns/cdl_hangingman.md
+      - CDL_HARAMI (Harami): indicators/patterns/cdl_harami.md
+      - CDL_HARAMICROSS (Harami Cross): indicators/patterns/cdl_haramicross.md
+      - CDL_HIGHWAVE (High Wave Candle): indicators/patterns/cdl_highwave.md
+      - CDL_HIKKAKE (Hikkake Pattern): indicators/patterns/cdl_hikkake.md
+      - CDL_HIKKAKEMOD (Modified Hikkake Pattern): indicators/patterns/cdl_hikkakemod.md
+      - CDL_HOMINGPIGEON (Homing Pigeon): indicators/patterns/cdl_homingpigeon.md
+      - CDL_IDENTICAL3CROWS (Identical Three Crows): indicators/patterns/cdl_identical3crows.md
+      - CDL_INNECK (In-Neck Pattern): indicators/patterns/cdl_inneck.md
+      - CDL_INSIDE - See Three Inside Up/Down: indicators/patterns/cdl_inside.md
+      - CDL_INVERTEDHAMMER (Inverted Hammer): indicators/patterns/cdl_invertedhammer.md
+      - CDL_KICKING (Kicking Pattern): indicators/patterns/cdl_kicking.md
+      - CDL_KICKINGBYLENGTH (Kicking By Length): indicators/patterns/cdl_kickingbylength.md
+      - CDL_LADDERBOTTOM (Ladder Bottom): indicators/patterns/cdl_ladderbottom.md
+      - CDL_LONGLEGGEDDOJI (Long-Legged Doji): indicators/patterns/cdl_longleggeddoji.md
+      - CDL_LONGLINE (Long Line Candle): indicators/patterns/cdl_longline.md
+      - CDL_MARUBOZU (Marubozu): indicators/patterns/cdl_marubozu.md
+      - CDL_MATCHINGLOW (Matching Low): indicators/patterns/cdl_matchinglow.md
+      - CDL_MATHOLD (Mat Hold): indicators/patterns/cdl_mathold.md
+      - CDL_MEETINGLINES (Meeting Lines): indicators/patterns/cdl_meetinglines.md
+      - CDL_MORNINGDOJISTAR (Morning Doji Star): indicators/patterns/cdl_morningdojistar.md
+      - CDL_MORNINGSTAR (Morning Star): indicators/patterns/cdl_morningstar.md
+      - CDL_ONNECK (On-Neck Pattern): indicators/patterns/cdl_onneck.md
+      - CDL_PIERCING (Piercing Pattern): indicators/patterns/cdl_piercing.md
+      - CDL_RICKSHAWMAN (Rickshaw Man): indicators/patterns/cdl_rickshawman.md
+      - CDL_RISEFALL3METHODS (Rising/Falling Three Methods): indicators/patterns/cdl_risefall3methods.md
+      - CDL_SEPARATINGLINES (Separating Lines): indicators/patterns/cdl_separatinglines.md
+      - CDL_SHOOTINGSTAR (Shooting Star): indicators/patterns/cdl_shootingstar.md
+      - CDL_SHORTLINE (Short Line Candle): indicators/patterns/cdl_shortline.md
+      - CDL_SPINNINGTOP (Spinning Top): indicators/patterns/cdl_spinningtop.md
+      - CDL_STALLEDPATTERN (Stalled Pattern): indicators/patterns/cdl_stalledpattern.md
+      - CDL_STICKSANDWICH (Stick Sandwich): indicators/patterns/cdl_sticksandwich.md
+      - CDL_TAKURI (Takuri Line (Dragonfly Doji at Support)): indicators/patterns/cdl_takuri.md
+      - CDL_TASUKIGAP (Tasuki Gap): indicators/patterns/cdl_tasukigap.md
+      - CDL_THRUSTING (Thrusting Pattern): indicators/patterns/cdl_thrusting.md
+      - CDL_TRISTAR (Tristar): indicators/patterns/cdl_tristar.md
+      - CDL_UNIQUE3RIVER (Unique 3 River): indicators/patterns/cdl_unique3river.md
+      - CDL_UPSIDEGAP2CROWS (Upside Gap Two Crows): indicators/patterns/cdl_upsidegap2crows.md
+      - CDL_XSIDEGAP3METHODS (Upside/Downside Gap Three Methods): indicators/patterns/cdl_xsidegap3methods.md
   - API Reference: api-reference.md
   - Examples:
     - Trend Analysis: examples/trend-analysis.md
     - Momentum Trading: examples/momentum-trading.md
     - Volatility Analysis: examples/volatility-analysis.md
+    - Trend Following: examples/trend-following.md
+    - Adaptive Indicators: examples/adaptive-indicators.md
   - Contributing: contributing.md

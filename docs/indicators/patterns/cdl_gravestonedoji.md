@@ -1,4 +1,4 @@
-# CDL_CDL_GRAVESTONEDOJI (Gravestone Doji)
+# CDL_GRAVESTONEDOJI (Gravestone Doji)
 
 ## Overview
 

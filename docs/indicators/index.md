@@ -1,6 +1,6 @@
 # Technical Indicators
 
-SQA::TAI provides access to 200+ technical analysis indicators from the TA-Lib C library. All indicators are accessible through simple, intuitive Ruby methods.
+SQA::TAI provides access to 134 technical analysis indicators from the TA-Lib C library. All indicators are accessible through simple, intuitive Ruby methods.
 
 ## Indicator Categories
 
@@ -12,6 +12,7 @@ Moving averages and bands that overlay price charts:
 - [Exponential Moving Average (EMA)](overlap/ema.md)
 - [Weighted Moving Average (WMA)](overlap/wma.md)
 - [Bollinger Bands (BBANDS)](overlap/bbands.md)
+- [View All Overlap Studies](overlap/index.md)
 
 ### Momentum Indicators
 
@@ -35,6 +36,7 @@ Analyze trading volume:
 
 - [On Balance Volume (OBV)](volume/obv.md)
 - [Chaikin A/D Line (AD)](volume/ad.md)
+- [View All Volume Indicators](volume/index.md)
 
 ### Pattern Recognition
 
