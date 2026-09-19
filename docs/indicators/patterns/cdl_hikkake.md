@@ -1,4 +1,4 @@
-# CDL_CDL_HIKKAKE (Hikkake Pattern)
+# CDL_HIKKAKE (Hikkake Pattern)
 
 ## Overview
 

@@ -1,7 +1,7 @@
 <div align="center">
   <h1>SQA::TAI - Technical Analysis Indicators</h1>
 
-  <p>Ruby wrapper around the legendary <a href="https://ta-lib.org/">TA-Lib</a> C library, providing <strong>132 technical analysis indicators</strong> with a clean Ruby API.<br/>
+  <p>Ruby wrapper around the legendary <a href="https://ta-lib.org/">TA-Lib</a> C library, providing <strong>134 technical analysis indicators</strong> with a clean Ruby API.<br/>
       Part of the <a href="https://github.com/MadBomber/sqa">SQA</a> (Simple Qualitative Analysis) ecosystem.</p>
 </div>
 
@@ -13,12 +13,11 @@
 <td width="70%" valign="top">
 
 <h2>Features</h2>
-📊 **132 Indicators** - Comprehensive coverage with 94% of trading-relevant TA-Lib indicators<br/>
-⚡ **Blazing Fast** - C library performance with Ruby convenience<br/>
+📊 **134 Indicators** - Comprehensive coverage with 94% of trading-relevant TA-Lib indicators<br/>
+⚡ **Blazing Fast** - Talks directly to the TA-Lib C library via a vendored Fiddle binding, no unmaintained FFI gem in between<br/>
 🎯 **Clean API** - Simple, intuitive interface with keyword arguments<br/>
 ✅ **Well Tested** - 73 tests, 332 assertions, comprehensive coverage<br/>
 🔒 **Type Safe** - Parameter validation and error handling<br/>
-🐛 **Bug Fixed** - Includes monkey patch for ta_lib_ffi 0.3.0 multi-array parameter bug<br/>
 
 </td>
 </tr>
@@ -72,20 +71,22 @@ Then install the gem:
 gem install sqa-tai
 ```
 
-## Indicator Categories (132 Total)
+## Indicator Categories (134 Total)
 
-### Overlap Studies (15)
+### Overlap Studies (17)
 Moving averages and bands for trend analysis:
 
 - [SMA](indicators/overlap/sma.md) - Simple Moving Average
 - [EMA](indicators/overlap/ema.md) - Exponential Moving Average
 - [WMA](indicators/overlap/wma.md) - Weighted Moving Average
+- [MA](indicators/overlap/ma.md) - Moving Average (generic, configurable MA type)
 - [DEMA](indicators/overlap/dema.md) - Double Exponential Moving Average
 - [TEMA](indicators/overlap/tema.md) - Triple Exponential Moving Average
 - [TRIMA](indicators/overlap/trima.md) - Triangular Moving Average
 - [KAMA](indicators/overlap/kama.md) - Kaufman Adaptive Moving Average
 - [T3](indicators/overlap/t3.md) - Triple Exponential Moving Average (T3)
 - [BBANDS](indicators/overlap/bbands.md) - Bollinger Bands
+- [ACCBANDS](indicators/overlap/accbands.md) - Acceleration Bands
 - [SAREXT](indicators/volatility/sarext.md) - Parabolic SAR Extended
 - [HT_TRENDLINE](indicators/volatility/ht_trendline.md) - Hilbert Transform Instantaneous Trendline
 - [MAMA](indicators/volatility/mama.md) - MESA Adaptive Moving Average
@@ -93,7 +94,7 @@ Moving averages and bands for trend analysis:
 - [MIDPOINT](indicators/volatility/midpoint.md) - Midpoint over period
 - [MIDPRICE](indicators/volatility/midprice.md) - Midpoint Price over period
 
-### Momentum Indicators (30)
+### Momentum Indicators (31)
 Measure rate of price change:
 
 - [RSI](indicators/momentum/rsi.md) - Relative Strength Index
@@ -114,6 +115,7 @@ Measure rate of price change:
 - [BOP](indicators/momentum/bop.md) - Balance of Power
 - [CMO](indicators/momentum/cmo.md) - Chande Momentum Oscillator
 - [DX](indicators/momentum/dx.md) - Directional Movement Index
+- [IMI](indicators/momentum/imi.md) - Intraday Momentum Index
 - [MACDEXT](indicators/momentum/macdext.md) - MACD with Controllable MA Type
 - [MACDFIX](indicators/momentum/macdfix.md) - MACD Fix 12/26
 - [MFI](indicators/momentum/mfi.md) - Money Flow Index

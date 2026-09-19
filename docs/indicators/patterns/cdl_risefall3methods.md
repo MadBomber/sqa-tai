@@ -1,4 +1,4 @@
-# CDL_CDL_RISEFALL3METHODS (Rising/Falling Three Methods)
+# CDL_RISEFALL3METHODS (Rising/Falling Three Methods)
 
 ## Overview
 

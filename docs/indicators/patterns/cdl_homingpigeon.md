@@ -1,4 +1,4 @@
-# CDL_CDL_HOMINGPIGEON (Homing Pigeon)
+# CDL_HOMINGPIGEON (Homing Pigeon)
 
 ## Overview
 

@@ -1,4 +1,4 @@
-# CDL_CDL_MATHOLD (Mat Hold)
+# CDL_MATHOLD (Mat Hold)
 
 ## Overview
 

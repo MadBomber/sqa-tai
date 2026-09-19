@@ -18,7 +18,6 @@ class SQA::TAI::VolatilityIndicatorsTest < Minitest::Test
 
   def test_natr
     skip "TA-Lib not installed" unless SQA::TAI.available?
-    # Fixed by lib/extensions/ta_lib_ffi.rb monkey patch
 
     result = SQA::TAI.natr(TestData::HIGH, TestData::LOW, TestData::CLOSE, period: 5)
 
@@ -31,7 +30,6 @@ class SQA::TAI::VolatilityIndicatorsTest < Minitest::Test
 
   def test_sar
     skip "TA-Lib not installed" unless SQA::TAI.available?
-    # Fixed by lib/extensions/ta_lib_ffi.rb monkey patch
 
     result = SQA::TAI.sar(TestData::HIGH, TestData::LOW)
 

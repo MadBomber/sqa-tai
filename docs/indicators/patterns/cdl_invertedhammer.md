@@ -1,8 +1,8 @@
-# CDL_CDL_INVERTEDHAMMER (Inverted Hammer)
+# CDL_INVERTEDHAMMER (Inverted Hammer)
 
 ## Overview
 
-The Inverted Hammer is a single-candle bullish reversal pattern that bullish reversal pattern with long upper shadow at bottom of downtrend. This pattern is used to identify potential trend changes and provides traders with entry signals when combined with proper confirmation.
+The Inverted Hammer is a single-candle bullish reversal pattern with a long upper shadow that forms at the bottom of a downtrend. This pattern is used to identify potential trend changes and provides traders with entry signals when combined with proper confirmation.
 
 ## Parameters
 

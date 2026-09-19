@@ -1,4 +1,4 @@
-# CDL_CDL_LONGLEGGEDDOJI (Long-Legged Doji)
+# CDL_LONGLEGGEDDOJI (Long-Legged Doji)
 
 ## Overview
 

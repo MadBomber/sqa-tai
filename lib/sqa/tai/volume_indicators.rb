@@ -13,7 +13,10 @@ module SQA
         validate_prices!(close)
         validate_prices!(volume)
 
-        TALibFFI.obv(close, volume)
+        # OBV's second parameter is a TA_Input_Price bundle consisting of
+        # just the VOLUME flag, so it's still wrapped in an array even
+        # though it's a single series.
+        Native.obv(close, [volume])
       end
 
       # Chaikin A/D Line
@@ -29,7 +32,7 @@ module SQA
         validate_prices!(close)
         validate_prices!(volume)
 
-        TALibFFI.ad(high, low, close, volume)
+        Native.ad([high, low, close, volume])
       end
 
       # Chaikin A/D Oscillator
@@ -40,6 +43,9 @@ module SQA
       # @param fast_period [Integer] Fast period (default: 3)
       # @param slow_period [Integer] Slow period (default: 10)
       # @return [Array<Float>] ADOSC values
+      # :reek:LongParameterList -- mirrors TA-Lib's own ADOSC signature;
+      # bundling these would be a breaking public API change (see
+      # MomentumIndicators/VolatilityIndicators for the fuller rationale).
       def adosc(high, low, close, volume, fast_period: 3, slow_period: 10)
         check_available!
         validate_prices!(high)
@@ -47,7 +53,7 @@ module SQA
         validate_prices!(close)
         validate_prices!(volume)
 
-        TALibFFI.adosc(high, low, close, volume, fast_period: fast_period, slow_period: slow_period)
+        Native.adosc([high, low, close, volume], fast_period:, slow_period:)
       end
     end
   end

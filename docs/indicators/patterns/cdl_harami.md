@@ -1,8 +1,8 @@
-# CDL_CDL_HARAMI (Harami)
+# CDL_HARAMI (Harami)
 
 ## Overview
 
-The Harami is a two-candle reversal pattern that reversal pattern where second candle is contained within first candle. This pattern is used to identify potential trend changes and provides traders with entry signals when combined with proper confirmation.
+The Harami is a two-candle reversal pattern where the second candle is contained within the first candle's range. This pattern is used to identify potential trend changes and provides traders with entry signals when combined with proper confirmation.
 
 ## Parameters
 

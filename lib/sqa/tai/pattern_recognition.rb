@@ -3,6 +3,12 @@
 module SQA
   module TAI
     # Pattern Recognition (Candlestick Patterns)
+    #
+    # :reek:DataClump -- all 61 patterns intentionally take TA-Lib's own
+    # OHLC (+ optional penetration) signature as separate positional args;
+    # bundling them into a value object would be a breaking public API
+    # change for this gem and its downstream consumers (sqa, sqa-cli,
+    # sqa-advisor) and their 133 published indicator doc pages.
     module PatternRecognition
       # Doji candlestick pattern
       # @param open [Array<Float>] Open prices
@@ -17,7 +23,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdldoji(open, high, low, close)
+        Native.cdldoji([open, high, low, close])
       end
 
       # Hammer candlestick pattern
@@ -28,7 +34,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlhammer(open, high, low, close)
+        Native.cdlhammer([open, high, low, close])
       end
 
       # Engulfing pattern
@@ -39,7 +45,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlengulfing(open, high, low, close)
+        Native.cdlengulfing([open, high, low, close])
       end
 
       # Morning Star pattern
@@ -50,7 +56,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlmorningstar(open, high, low, close, penetration: penetration)
+        Native.cdlmorningstar([open, high, low, close], penetration: penetration)
       end
 
       # Evening Star pattern
@@ -61,7 +67,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdleveningstar(open, high, low, close, penetration: penetration)
+        Native.cdleveningstar([open, high, low, close], penetration: penetration)
       end
 
       # Harami pattern
@@ -72,7 +78,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlharami(open, high, low, close)
+        Native.cdlharami([open, high, low, close])
       end
 
       # Piercing pattern
@@ -83,7 +89,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlpiercing(open, high, low, close)
+        Native.cdlpiercing([open, high, low, close])
       end
 
       # Shooting Star pattern
@@ -94,7 +100,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlshootingstar(open, high, low, close)
+        Native.cdlshootingstar([open, high, low, close])
       end
 
       # Marubozu pattern
@@ -105,7 +111,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlmarubozu(open, high, low, close)
+        Native.cdlmarubozu([open, high, low, close])
       end
 
       # Spinning Top pattern
@@ -116,7 +122,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlspinningtop(open, high, low, close)
+        Native.cdlspinningtop([open, high, low, close])
       end
 
       # Dragonfly Doji pattern
@@ -127,7 +133,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdldragonflydoji(open, high, low, close)
+        Native.cdldragonflydoji([open, high, low, close])
       end
 
       # Gravestone Doji pattern
@@ -138,7 +144,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlgravestonedoji(open, high, low, close)
+        Native.cdlgravestonedoji([open, high, low, close])
       end
 
       # Two Crows pattern
@@ -149,7 +155,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdl2crows(open, high, low, close)
+        Native.cdl2crows([open, high, low, close])
       end
 
       # Three Black Crows pattern
@@ -160,7 +166,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdl3blackcrows(open, high, low, close)
+        Native.cdl3blackcrows([open, high, low, close])
       end
 
       # Three Inside Up/Down pattern
@@ -171,7 +177,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdl3inside(open, high, low, close)
+        Native.cdl3inside([open, high, low, close])
       end
 
       # Three Line Strike pattern
@@ -182,7 +188,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdl3linestrike(open, high, low, close)
+        Native.cdl3linestrike([open, high, low, close])
       end
 
       # Three Outside Up/Down pattern
@@ -193,7 +199,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdl3outside(open, high, low, close)
+        Native.cdl3outside([open, high, low, close])
       end
 
       # Three Stars In The South pattern
@@ -204,7 +210,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdl3starsinsouth(open, high, low, close)
+        Native.cdl3starsinsouth([open, high, low, close])
       end
 
       # Three Advancing White Soldiers pattern
@@ -215,7 +221,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdl3whitesoldiers(open, high, low, close)
+        Native.cdl3whitesoldiers([open, high, low, close])
       end
 
       # Abandoned Baby pattern
@@ -226,7 +232,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlabandonedbaby(open, high, low, close, penetration: penetration)
+        Native.cdlabandonedbaby([open, high, low, close], penetration: penetration)
       end
 
       # Advance Block pattern
@@ -237,7 +243,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdladvanceblock(open, high, low, close)
+        Native.cdladvanceblock([open, high, low, close])
       end
 
       # Belt-hold pattern
@@ -248,7 +254,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlbelthold(open, high, low, close)
+        Native.cdlbelthold([open, high, low, close])
       end
 
       # Breakaway pattern
@@ -259,7 +265,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlbreakaway(open, high, low, close)
+        Native.cdlbreakaway([open, high, low, close])
       end
 
       # Closing Marubozu pattern
@@ -270,7 +276,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlclosingmarubozu(open, high, low, close)
+        Native.cdlclosingmarubozu([open, high, low, close])
       end
 
       # Concealing Baby Swallow pattern
@@ -281,7 +287,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlconcealbabyswall(open, high, low, close)
+        Native.cdlconcealbabyswall([open, high, low, close])
       end
 
       # Counterattack pattern
@@ -292,7 +298,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlcounterattack(open, high, low, close)
+        Native.cdlcounterattack([open, high, low, close])
       end
 
       # Dark Cloud Cover pattern
@@ -303,7 +309,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdldarkcloudcover(open, high, low, close, penetration: penetration)
+        Native.cdldarkcloudcover([open, high, low, close], penetration: penetration)
       end
 
       # Doji Star pattern
@@ -314,7 +320,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdldojistar(open, high, low, close)
+        Native.cdldojistar([open, high, low, close])
       end
 
       # Evening Doji Star pattern
@@ -325,7 +331,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdleveningdojistar(open, high, low, close, penetration: penetration)
+        Native.cdleveningdojistar([open, high, low, close], penetration: penetration)
       end
 
       # Up/Down-gap side-by-side white lines pattern
@@ -336,7 +342,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlgapsidesidewhite(open, high, low, close)
+        Native.cdlgapsidesidewhite([open, high, low, close])
       end
 
       # Hanging Man pattern
@@ -347,7 +353,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlhangingman(open, high, low, close)
+        Native.cdlhangingman([open, high, low, close])
       end
 
       # Harami Cross pattern
@@ -358,7 +364,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlharamicross(open, high, low, close)
+        Native.cdlharamicross([open, high, low, close])
       end
 
       # High-Wave Candle pattern
@@ -369,7 +375,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlhighwave(open, high, low, close)
+        Native.cdlhighwave([open, high, low, close])
       end
 
       # Hikkake pattern
@@ -380,7 +386,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlhikkake(open, high, low, close)
+        Native.cdlhikkake([open, high, low, close])
       end
 
       # Modified Hikkake pattern
@@ -391,7 +397,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlhikkakemod(open, high, low, close)
+        Native.cdlhikkakemod([open, high, low, close])
       end
 
       # Homing Pigeon pattern
@@ -402,7 +408,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlhomingpigeon(open, high, low, close)
+        Native.cdlhomingpigeon([open, high, low, close])
       end
 
       # Identical Three Crows pattern
@@ -413,7 +419,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlidentical3crows(open, high, low, close)
+        Native.cdlidentical3crows([open, high, low, close])
       end
 
       # In-Neck pattern
@@ -424,7 +430,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlinneck(open, high, low, close)
+        Native.cdlinneck([open, high, low, close])
       end
 
       # Inverted Hammer pattern
@@ -435,7 +441,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlinvertedhammer(open, high, low, close)
+        Native.cdlinvertedhammer([open, high, low, close])
       end
 
       # Kicking pattern
@@ -446,7 +452,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlkicking(open, high, low, close)
+        Native.cdlkicking([open, high, low, close])
       end
 
       # Kicking - bull/bear determined by the longer marubozu
@@ -457,7 +463,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlkickingbylength(open, high, low, close)
+        Native.cdlkickingbylength([open, high, low, close])
       end
 
       # Ladder Bottom pattern
@@ -468,7 +474,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlladderbottom(open, high, low, close)
+        Native.cdlladderbottom([open, high, low, close])
       end
 
       # Long Legged Doji pattern
@@ -479,7 +485,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdllongleggeddoji(open, high, low, close)
+        Native.cdllongleggeddoji([open, high, low, close])
       end
 
       # Long Line Candle pattern
@@ -490,7 +496,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdllongline(open, high, low, close)
+        Native.cdllongline([open, high, low, close])
       end
 
       # Matching Low pattern
@@ -501,7 +507,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlmatchinglow(open, high, low, close)
+        Native.cdlmatchinglow([open, high, low, close])
       end
 
       # Mat Hold pattern
@@ -512,7 +518,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlmathold(open, high, low, close, penetration: penetration)
+        Native.cdlmathold([open, high, low, close], penetration: penetration)
       end
 
       # Morning Doji Star pattern
@@ -523,7 +529,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlmorningdojistar(open, high, low, close, penetration: penetration)
+        Native.cdlmorningdojistar([open, high, low, close], penetration: penetration)
       end
 
       # On-Neck pattern
@@ -534,7 +540,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlonneck(open, high, low, close)
+        Native.cdlonneck([open, high, low, close])
       end
 
       # Rickshaw Man pattern
@@ -545,7 +551,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlrickshawman(open, high, low, close)
+        Native.cdlrickshawman([open, high, low, close])
       end
 
       # Rising/Falling Three Methods pattern
@@ -556,7 +562,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlrisefall3methods(open, high, low, close)
+        Native.cdlrisefall3methods([open, high, low, close])
       end
 
       # Separating Lines pattern
@@ -567,7 +573,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlseparatinglines(open, high, low, close)
+        Native.cdlseparatinglines([open, high, low, close])
       end
 
       # Short Line Candle pattern
@@ -578,7 +584,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlshortline(open, high, low, close)
+        Native.cdlshortline([open, high, low, close])
       end
 
       # Stalled Pattern
@@ -589,7 +595,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlstalledpattern(open, high, low, close)
+        Native.cdlstalledpattern([open, high, low, close])
       end
 
       # Stick Sandwich pattern
@@ -600,7 +606,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlsticksandwich(open, high, low, close)
+        Native.cdlsticksandwich([open, high, low, close])
       end
 
       # Takuri (Dragonfly Doji with very long lower shadow) pattern
@@ -611,7 +617,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdltakuri(open, high, low, close)
+        Native.cdltakuri([open, high, low, close])
       end
 
       # Tasuki Gap pattern
@@ -622,7 +628,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdltasukigap(open, high, low, close)
+        Native.cdltasukigap([open, high, low, close])
       end
 
       # Thrusting pattern
@@ -633,7 +639,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlthrusting(open, high, low, close)
+        Native.cdlthrusting([open, high, low, close])
       end
 
       # Tristar pattern
@@ -644,7 +650,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdltristar(open, high, low, close)
+        Native.cdltristar([open, high, low, close])
       end
 
       # Unique 3 River pattern
@@ -655,7 +661,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlunique3river(open, high, low, close)
+        Native.cdlunique3river([open, high, low, close])
       end
 
       # Upside Gap Two Crows pattern
@@ -666,7 +672,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlupsidegap2crows(open, high, low, close)
+        Native.cdlupsidegap2crows([open, high, low, close])
       end
 
       # Upside/Downside Gap Three Methods pattern
@@ -677,7 +683,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.cdlxsidegap3methods(open, high, low, close)
+        Native.cdlxsidegap3methods([open, high, low, close])
       end
     end
   end

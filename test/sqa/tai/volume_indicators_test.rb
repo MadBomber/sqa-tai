@@ -5,7 +5,6 @@ require "test_helper"
 class SQA::TAI::VolumeIndicatorsTest < Minitest::Test
   def test_obv_volume_indicator
     skip "TA-Lib not installed" unless SQA::TAI.available?
-    # Fixed by lib/extensions/ta_lib_ffi.rb monkey patch
 
     result = SQA::TAI.obv(TestData::CLOSE, TestData::VOLUME)
 

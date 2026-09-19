@@ -1,6 +1,9 @@
 # API Reference
 
-Complete API reference for SQA::TAI.
+A quick reference for `SQA::TAI`'s module-level methods, exceptions, and the most
+commonly used indicators. For the complete signature, parameters, and worked
+examples of every indicator, see the [Indicators](indicators/index.md) section —
+each of the 134 indicators has its own page there.
 
 ## Module Methods
 
@@ -28,6 +31,9 @@ SQA::TAI.check_available!
 ```
 
 ## Overlap Studies
+
+A sample of frequently used indicators from this category; see the
+[full Overlap Studies list](indicators/index.md#overlap-studies) for all 17.
 
 ### `SQA::TAI.sma(prices, period:)`
 

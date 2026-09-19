@@ -1,4 +1,4 @@
-# CDL_CDL_MARUBOZU (Marubozu)
+# CDL_MARUBOZU (Marubozu)
 
 ## Overview
 

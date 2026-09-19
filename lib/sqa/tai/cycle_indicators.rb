@@ -11,7 +11,7 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        TALibFFI.ht_dcperiod(prices)
+        Native.ht_dcperiod(prices)
       end
 
       # Hilbert Transform - Trend vs Cycle Mode
@@ -21,7 +21,7 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        TALibFFI.ht_trendmode(prices)
+        Native.ht_trendmode(prices)
       end
 
       # Hilbert Transform - Dominant Cycle Phase
@@ -31,7 +31,7 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        TALibFFI.ht_dcphase(prices)
+        Native.ht_dcphase(prices)
       end
 
       # Hilbert Transform - Phasor Components
@@ -41,14 +41,8 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        result = TALibFFI.ht_phasor(prices)
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:in_phase], result[:quadrature]]
-        else
-          result
-        end
+        result = Native.ht_phasor(prices)
+        [result[:in_phase], result[:quadrature]]
       end
 
       # Hilbert Transform - SineWave
@@ -58,14 +52,8 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        result = TALibFFI.ht_sine(prices)
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:sine], result[:lead_sine]]
-        else
-          result
-        end
+        result = Native.ht_sine(prices)
+        [result[:sine], result[:lead_sine]]
       end
     end
   end

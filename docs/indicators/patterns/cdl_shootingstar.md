@@ -1,4 +1,4 @@
-# CDL_CDL_SHOOTINGSTAR (Shooting Star)
+# CDL_SHOOTINGSTAR (Shooting Star)
 
 ## Overview
 

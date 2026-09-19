@@ -15,7 +15,7 @@ module SQA
         validate_prices!(prices_2)
         validate_period!(period, [prices_1.size, prices_2.size].min)
 
-        TALibFFI.correl(prices_1, prices_2, time_period: period)
+        Native.correl(prices_1, prices_2, time_period: period)
       end
 
       # Beta
@@ -29,7 +29,7 @@ module SQA
         validate_prices!(prices_2)
         validate_period!(period, [prices_1.size, prices_2.size].min)
 
-        TALibFFI.beta(prices_1, prices_2, time_period: period)
+        Native.beta(prices_1, prices_2, time_period: period)
       end
 
       # Variance
@@ -42,7 +42,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.var(prices, time_period: period, nbdev: nbdev)
+        Native.var(prices, time_period: period, nbdev:)
       end
 
       # Standard Deviation
@@ -55,7 +55,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.stddev(prices, time_period: period, nbdev: nbdev)
+        Native.stddev(prices, time_period: period, nbdev:)
       end
 
       # Linear Regression
@@ -67,7 +67,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.linearreg(prices, time_period: period)
+        Native.linearreg(prices, time_period: period)
       end
 
       # Linear Regression Angle
@@ -79,7 +79,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.linearreg_angle(prices, time_period: period)
+        Native.linearreg_angle(prices, time_period: period)
       end
 
       # Linear Regression Intercept
@@ -91,7 +91,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.linearreg_intercept(prices, time_period: period)
+        Native.linearreg_intercept(prices, time_period: period)
       end
 
       # Linear Regression Slope
@@ -103,7 +103,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.linearreg_slope(prices, time_period: period)
+        Native.linearreg_slope(prices, time_period: period)
       end
 
       # Time Series Forecast
@@ -115,7 +115,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.tsf(prices, time_period: period)
+        Native.tsf(prices, time_period: period)
       end
     end
   end

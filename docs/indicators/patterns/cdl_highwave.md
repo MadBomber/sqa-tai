@@ -1,4 +1,4 @@
-# CDL_CDL_HIGHWAVE (High Wave Candle)
+# CDL_HIGHWAVE (High Wave Candle)
 
 ## Overview
 

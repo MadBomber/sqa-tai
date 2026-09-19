@@ -3,6 +3,13 @@
 module SQA
   module TAI
     # Volatility Indicators
+    #
+    # :reek:DataClump and :reek:LongParameterList -- these methods
+    # intentionally mirror TA-Lib's own C function signatures (separate
+    # high/low/close/period args, up to 7 for sarext); bundling them into
+    # a value object would be a breaking public API change for this gem
+    # and its downstream consumers (sqa, sqa-cli, sqa-advisor) and their
+    # 133 published indicator doc pages.
     module VolatilityIndicators
       # Average True Range
       # @param high [Array<Float>] High prices
@@ -16,7 +23,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.atr(high, low, close, time_period: period)
+        Native.atr([high, low, close], time_period: period)
       end
 
       # True Range
@@ -30,7 +37,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.trange(high, low, close)
+        Native.trange([high, low, close])
       end
 
       # Normalized Average True Range
@@ -45,7 +52,7 @@ module SQA
         validate_prices!(low)
         validate_prices!(close)
 
-        TALibFFI.natr(high, low, close, time_period: period)
+        Native.natr([high, low, close], time_period: period)
       end
 
       # Parabolic SAR
@@ -59,7 +66,7 @@ module SQA
         validate_prices!(high)
         validate_prices!(low)
 
-        TALibFFI.sar(high, low, acceleration: acceleration, maximum: maximum)
+        Native.sar([high, low], acceleration:, maximum:)
       end
 
       # Parabolic SAR - Extended
@@ -77,12 +84,12 @@ module SQA
         validate_prices!(high)
         validate_prices!(low)
 
-        TALibFFI.sarext(high, low,
-                        start_value: start_value,
-                        offset_on_reverse: offset_on_reverse,
-                        af_init: acceleration_init,
-                        af_increment: acceleration_step,
-                        af_max: acceleration_max)
+        Native.sarext([high, low],
+                      start_value:,
+                      offset_on_reverse:,
+                      af_init: acceleration_init,
+                      af_increment: acceleration_step,
+                      af_max: acceleration_max)
       end
 
       # Acceleration Bands
@@ -98,14 +105,8 @@ module SQA
         validate_prices!(close)
         validate_period!(period, [high.size, low.size, close.size].min)
 
-        result = TALibFFI.accbands(high, low, close, time_period: period)
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:upper_band], result[:middle_band], result[:lower_band]]
-        else
-          result
-        end
+        result = Native.accbands([high, low, close], time_period: period)
+        [result[:upper_band], result[:middle_band], result[:lower_band]]
       end
 
       # Hilbert Transform - Instantaneous Trendline
@@ -115,7 +116,7 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        TALibFFI.ht_trendline(prices)
+        Native.ht_trendline(prices)
       end
 
       # MESA Adaptive Moving Average
@@ -127,14 +128,8 @@ module SQA
         check_available!
         validate_prices!(prices)
 
-        result = TALibFFI.mama(prices, fastlimit: fast_limit, slowlimit: slow_limit)
-
-        # Handle hash return format from newer ta_lib_ffi versions
-        if result.is_a?(Hash)
-          [result[:mama], result[:fama]]
-        else
-          result
-        end
+        result = Native.mama(prices, fastlimit: fast_limit, slowlimit: slow_limit)
+        [result[:mama], result[:fama]]
       end
 
       # Moving Average with Variable Period
@@ -147,7 +142,7 @@ module SQA
         validate_prices!(prices)
         validate_prices!(periods)
 
-        TALibFFI.mavp(prices, periods, ma_type: ma_type)
+        Native.mavp(prices, periods, ma_type:)
       end
 
       # Midpoint over period
@@ -159,7 +154,7 @@ module SQA
         validate_prices!(prices)
         validate_period!(period, prices.size)
 
-        TALibFFI.midpoint(prices, time_period: period)
+        Native.midpoint(prices, time_period: period)
       end
 
       # Midpoint Price over period
@@ -173,7 +168,7 @@ module SQA
         validate_prices!(low)
         validate_period!(period, [high.size, low.size].min)
 
-        TALibFFI.midprice(high, low, time_period: period)
+        Native.midprice([high, low], time_period: period)
       end
     end
   end

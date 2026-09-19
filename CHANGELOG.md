@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-18
+### Changed
+- Dropped the unmaintained `ta_lib_ffi` gem dependency. `sqa-tai` now talks
+  to the installed TA-Lib C library directly via a vendored Fiddle binding
+  (`SQA::TAI::Native`), using TA-Lib's own abstract interface
+  (`TA_GetFuncInfo`/`TA_Get{Input,OptInput,Output}ParameterInfo`) to
+  discover each function's signature at runtime instead of depending on
+  hand-written, unmaintained bindings.
+### Fixed
+- Fixed an ABI mismatch where `ta_lib_ffi`'s `TA_FuncInfo` struct declared
+  a `camelCaseName` field that doesn't exist in current TA-Lib builds
+  (Homebrew's 0.8.x community fork), which misaligned every subsequent
+  struct field and caused any indicator call to hang while allocating
+  unbounded memory.
+- Fixed indicators whose TA-Lib input is `TA_Input_Price` (all OHLC(V)
+  indicators and all 61 candlestick pattern functions) to bundle their
+  price arrays into a single argument (e.g. `atr([high, low, close], ...)`)
+  as the C API requires, instead of passing them as separate positional
+  arguments — this had previously been worked around with a monkey patch
+  (`lib/extensions/ta_lib_ffi.rb`, now removed) that patched the wrong
+  layer instead of fixing the call sites.
+
+## [0.3.0] - 2026-07-02
+- Coordinated version bump to v0.3.0 across the SQA workspace.
+
 ## [0.1.2] 2025-11-13
 ### Added
 - Help system for accessing indicator documentation (`SQA::TAI.help`)

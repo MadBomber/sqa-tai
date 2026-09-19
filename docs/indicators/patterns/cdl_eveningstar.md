@@ -1,8 +1,8 @@
-# CDL_CDL_EVENINGSTAR (Evening Star)
+# CDL_EVENINGSTAR (Evening Star)
 
 ## Overview
 
-The Evening Star is a three-candle bearish reversal pattern that bearish reversal pattern at the top of an uptrend. This pattern is used to identify potential trend changes and provides traders with entry signals when combined with proper confirmation.
+The Evening Star is a three-candle bearish reversal pattern that forms at the top of an uptrend. This pattern is used to identify potential trend changes and provides traders with entry signals when combined with proper confirmation.
 
 ## Parameters
 

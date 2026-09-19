@@ -1,4 +1,4 @@
-# CDL_CDL_LADDERBOTTOM (Ladder Bottom)
+# CDL_LADDERBOTTOM (Ladder Bottom)
 
 ## Overview
 
