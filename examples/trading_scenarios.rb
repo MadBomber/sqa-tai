@@ -29,6 +29,7 @@ require "open3"
 
 DB              = File.join(ENV.fetch("SQA_DATA_DIR", File.expand_path("~/sqa_data")), "sqa.db")
 BANKROLL        = 10_000.0
+MIN_BANK        = 0.01 # a buy never takes the bank below one cent
 DEFAULT_PERIODS = [5, 10, 15].freeze
 
 # ---- scenarios ------------------------------------------------------------
@@ -80,11 +81,22 @@ end
 
 # ---- simulation -----------------------------------------------------------
 
+# Most whole shares `cash` can buy at `price` while leaving at least
+# MIN_BANK in the bank -- a purchase that would take the balance below a cent
+# buys one share fewer.
+def affordable_shares(cash, price, min_bank = MIN_BANK)
+  spendable = cash - min_bank
+  return 0 unless spendable.positive? && price.positive?
+
+  (spendable / price).floor
+end
+
 # Account state after acting on one signal at `price`.  Returns
 # [cash, shares, trade or nil]; a trade is { side:, index:, shares:, price: }.
+# The bank always keeps at least MIN_BANK.
 def apply_signal(signal, cash, shares, price, index)
   if signal == :buy && shares.zero?
-    bought = (cash / price).floor
+    bought = affordable_shares(cash, price)
     return [cash, shares, nil] if bought.zero?
 
     [cash - (bought * price), bought, { side: :buy, index:, shares: bought, price: }]
@@ -118,7 +130,7 @@ def trip_returns(trades) = round_trips(trades).map { |buy, sell| ((sell[:price] 
 # Value of $bankroll put into whole shares at the close of index `start` and held.
 def buy_and_hold_value(closes, start = 0, bankroll = BANKROLL)
   entry  = closes[start]
-  shares = (bankroll / entry).floor
+  shares = affordable_shares(bankroll, entry)
   bankroll - (shares * entry) + (shares * closes.last)
 end
 
