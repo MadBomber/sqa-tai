@@ -11,10 +11,13 @@
 # the last close.  Results are compared against buying and holding whole
 # shares with the same $10,000.
 #
-# usage: examples/trading_scenarios.rb [TICKER|all] [PERIOD...] [SCENARIO]
+# usage: examples/trading_scenarios.rb [TICKER|all] [PERIOD...] [FROM] [SCENARIO]
 #   TICKER   = a symbol with price history (default: nvda), or "all" for a
 #              one-line-per-ticker comparison of every symbol in the database
 #   PERIOD   = lookback in trading days (default: 5 10 15)
+#   FROM     = YYYY-MM-DD; start trading (and buy & hold) on the first bar on
+#              or after this date (default: the start of the history).  Closes
+#              before it still feed the moving average, so signals start at once.
 #   SCENARIO = a scenario name (default: sma_reversion); see SCENARIOS below
 #
 # Reads daily bars from $SQA_DATA_DIR/sqa.db (default ~/sqa_data) via the
@@ -92,12 +95,13 @@ def apply_signal(signal, cash, shares, price, index)
   end
 end
 
-# Run a signal rule over the closes.  Returns { cash:, shares:, trades: }.
-def simulate(closes, rule, bankroll = BANKROLL)
+# Run a signal rule over the closes from index `start` on.  Returns
+# { cash:, shares:, trades: }.
+def simulate(closes, rule, start = 0, bankroll = BANKROLL)
   cash   = bankroll
   shares = 0
   trades = []
-  closes.each_index do |today|
+  (start...closes.size).each do |today|
     cash, shares, trade = apply_signal(rule.call(closes, today), cash, shares, closes[today], today)
     trades << trade if trade
   end
@@ -111,10 +115,11 @@ def round_trips(trades) = trades.each_slice(2).select { it.size == 2 }
 # Percent gain of each completed round trip.
 def trip_returns(trades) = round_trips(trades).map { |buy, sell| ((sell[:price] / buy[:price]) - 1.0) * 100 }
 
-# Value of $bankroll put into whole shares on the first close and held.
-def buy_and_hold_value(closes, bankroll = BANKROLL)
-  shares = (bankroll / closes.first).floor
-  bankroll - (shares * closes.first) + (shares * closes.last)
+# Value of $bankroll put into whole shares at the close of index `start` and held.
+def buy_and_hold_value(closes, start = 0, bankroll = BANKROLL)
+  entry  = closes[start]
+  shares = (bankroll / entry).floor
+  bankroll - (shares * entry) + (shares * closes.last)
 end
 
 def pct_change(value, bankroll = BANKROLL) = ((value / bankroll) - 1.0) * 100
@@ -122,8 +127,8 @@ def pct_change(value, bankroll = BANKROLL) = ((value / bankroll) - 1.0) * 100
 def mean_or_nil(values) = values.empty? ? nil : values.sum / values.size
 
 # Ending account and trade statistics for one lookback period.
-def period_result(closes, rule, period)
-  result  = simulate(closes, rule)
+def period_result(closes, rule, period, start = 0)
+  result  = simulate(closes, rule, start)
   stock   = result[:shares] * closes.last
   final   = result[:cash] + stock
   returns = trip_returns(result[:trades])
@@ -134,14 +139,20 @@ def period_result(closes, rule, period)
 end
 
 # { ticker:, bars:, from:, to:, last_close:, hold_pct:, dates:, results: [period_result...] }
-def ticker_summary(db, ticker, builder, periods)
-  bars   = load_bars(db, ticker)
-  closes = bars.map(&:last)
-  return { ticker:, bars: 0 } if closes.empty?
+# Index of the first bar on or after `from` (0 when from is nil; nil when none).
+def start_index(dates, from) = from ? dates.bsearch_index { it >= from } : 0
 
-  { ticker:, bars: bars.size, from: bars.first.first, to: bars.last.first, last_close: closes.last,
-    hold_pct: pct_change(buy_and_hold_value(closes)), dates: bars.map(&:first),
-    results: periods.map { period_result(closes, builder.call(it), it) } }
+# `bars` counts only the traded bars, from the start date on.
+def ticker_summary(db, ticker, builder, periods, from = nil)
+  bars   = load_bars(db, ticker)
+  dates  = bars.map(&:first)
+  closes = bars.map(&:last)
+  start  = start_index(dates, from)
+  return { ticker:, bars: 0 } unless start
+
+  { ticker:, bars: bars.size - start, from: dates[start], to: dates.last, last_close: closes.last,
+    hold_pct: pct_change(buy_and_hold_value(closes, start)), dates:,
+    results: periods.map { period_result(closes, builder.call(it), it, start) } }
 end
 
 # ---- reporting ------------------------------------------------------------
@@ -225,10 +236,11 @@ def beat_counts(summaries, periods)
 end
 
 # Comparison table: one row per ticker, ranked by the first period's total value.
-def comparison_report(summaries, periods, name, description)
+def comparison_report(summaries, periods, name, description, from = nil)
   usable = summaries.reject { it[:bars].zero? }
   [
     "scenario: #{name} -- #{description}  (#{money(BANKROLL)} per stock, whole shares)",
+    "trading from #{from || 'the start of each history'} through #{usable.map { it[:to] }.max}",
     *comparison_header(periods),
     *usable.sort_by { -it[:results].first[:final] }.map { comparison_row(it) },
     beat_counts(usable, periods)
@@ -237,25 +249,34 @@ end
 
 # ---- command line ---------------------------------------------------------
 
-# Split arguments after the ticker into [periods, scenario name].
-def parse_options(args)
-  periods, names = args.partition { it.match?(/\A\d+\z/) }
-  periods = periods.map(&:to_i)
-  abort "periods must be at least 1" if periods.any?(&:zero?)
-  [periods.empty? ? DEFAULT_PERIODS : periods, names.first || SCENARIOS.keys.first]
+DATE_ARG = /\A\d{4}-\d{2}-\d{2}\z/
+
+def parse_date(text)
+  Date.iso8601(text)
+rescue Date::Error
+  abort "bad date #{text.inspect} (want YYYY-MM-DD)"
 end
 
-def run(db, ticker, periods, scenario)
+# Split arguments after the ticker into [periods, from date or nil, scenario name].
+def parse_options(args)
+  dates, rest    = args.partition { it.match?(DATE_ARG) }
+  periods, names = rest.partition { it.match?(/\A\d+\z/) }
+  periods = periods.map(&:to_i)
+  abort "periods must be at least 1" if periods.any?(&:zero?)
+  [periods.empty? ? DEFAULT_PERIODS : periods, dates.first&.then { parse_date(it) }, names.first || SCENARIOS.keys.first]
+end
+
+def run(db, ticker, periods, from, scenario)
   description, builder = SCENARIOS.fetch(scenario) do
     abort "unknown scenario #{scenario.inspect} (have: #{SCENARIOS.keys.join(', ')})"
   end
   if ticker == "all"
-    summaries = all_tickers(db).map { ticker_summary(db, it, builder, periods) }
-    return comparison_report(summaries, periods, scenario, description)
+    summaries = all_tickers(db).map { ticker_summary(db, it, builder, periods, from) }
+    return comparison_report(summaries, periods, scenario, description, from)
   end
 
-  summary = ticker_summary(db, ticker, builder, periods)
-  abort "no price history for #{ticker.upcase} in #{db}" if summary[:bars].zero?
+  summary = ticker_summary(db, ticker, builder, periods, from)
+  abort "no price history for #{ticker.upcase} #{"on or after #{from} " if from}in #{db}" if summary[:bars].zero?
   detail_report(summary, scenario, description)
 end
 
