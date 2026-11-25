@@ -10,17 +10,23 @@
 # up, then apply the SQL.  Symbols already in the database are skipped.
 #
 # For every symbol the report shows the largest one-day rise and fall of the
-# adjusted close and flags three signs of bad data:
-#   - a "dividend" worth more than BIG_DIVIDEND of the prior close (the TDS
-#     error, see fix_tds.rb -- though real spin-offs trip it too)
+# adjusted close and flags four signs of bad data:
+#   - a split and a sizeable "dividend" on the same date -- Yahoo counting one
+#     distribution twice, which makes every earlier price too small (the TDS
+#     error, see fix_tds.rb)
+#   - a "dividend" worth more than BIG_DIVIDEND of the prior close (real
+#     spin-offs trip it too)
 #   - a one-day move beyond JUMP_UP / JUMP_DOWN (real spikes trip it too)
 #   - more than STALE_SHARE of the bars having zero volume, which usually
 #     means placeholder prices from before the stock really traded
-# A flag is a prompt to look, not proof of an error.  When a symbol's early
-# history is unreliable, give it a start date to load only the bars from
-# that date on -- the checks then cover only those bars.
+# A flag is a prompt to look, not proof of an error.  Two remedies:
+#   SYMBOL:YYYY-MM-DD   load only the bars from that date on, when the early
+#                       history is unreliable (the checks then cover only those)
+#   SYMBOL~YYYY-MM-DD   ignore the dividend on that date: every earlier bar is
+#                       rescaled as if Yahoo had not applied it
+# Both can be combined, e.g. XYZ:1990-01-01~2005-05-16.
 #
-# usage: examples/add_stocks.rb OUT.sql SYMBOL[:YYYY-MM-DD] [SYMBOL[:YYYY-MM-DD]...]
+# usage: examples/add_stocks.rb OUT.sql SPEC [SPEC...]
 #        cp $SQA_DATA_DIR/sqa.db $SQA_DATA_DIR/sqa.db.before-add
 #        sqlite3 $SQA_DATA_DIR/sqa.db < OUT.sql
 #
@@ -32,30 +38,15 @@ require_relative "fetch_yahoo"
 require_relative "trading_scenarios"
 
 SOURCE       = "yahoo_finance"
-BIG_DIVIDEND = 0.2 # a dividend above this share of the prior close is flagged
-JUMP_UP      = 2.5 # a close-to-close ratio above this is flagged
-JUMP_DOWN    = 0.4 # ... or below this
+BIG_DIVIDEND = 0.2  # a dividend above this share of the prior close is flagged
+TWIN_SHARE   = 0.05 # a dividend above this share, on a split date, is flagged as a possible double count
+JUMP_UP      = 2.5  # a close-to-close ratio above this is flagged
+JUMP_DOWN    = 0.4  # ... or below this
 STALE_SHARE  = 0.05 # more than this share of zero-volume bars is flagged
-PAUSE        = 0.5 # seconds between downloads
+PAUSE        = 0.5  # seconds between downloads
+SPEC         = /\A(?<symbol>[^:~]+)(?::(?<from>\d{4}-\d{2}-\d{2}))?(?:~(?<ignore>\d{4}-\d{2}-\d{2}))?\z/
 
 # ---- the download ---------------------------------------------------------
-
-# [[date, open, high, low, close, volume], ...] adjusted, oldest first.
-# Bars missing a price or volume are dropped; a result with no bars gives [].
-def adjusted_bars(result)
-  return [] unless result["timestamp"]
-
-  quote    = result.dig("indicators", "quote", 0)
-  adjusted = result.dig("indicators", "adjclose", 0, "adjclose") || quote["close"]
-  result["timestamp"].each_index.filter_map do |index|
-    close = quote["close"][index]
-    next unless close&.positive? && adjusted[index] && quote["open"][index] && quote["volume"][index]
-
-    factor = adjusted[index] / close
-    prices = %w[open high low].map { (quote[it][index] * factor).round(6) }
-    [iso_day(result["timestamp"][index]), *prices, adjusted[index].round(6), quote["volume"][index].to_i]
-  end
-end
 
 # { date => raw (unadjusted for dividends) close }.
 def raw_closes(result)
@@ -63,19 +54,57 @@ def raw_closes(result)
   result["timestamp"].each_index.filter_map { closes[it] && [iso_day(result["timestamp"][it]), closes[it]] }.to_h
 end
 
-# ---- checks ---------------------------------------------------------------
-
-# [[date, amount, share of the prior close], ...] for dividends on or after
-# `from` that are above the limit.
-def big_dividends(result, from, limit = BIG_DIVIDEND)
+# [[date, amount, share of the prior close], ...] for every dividend that has a prior bar.
+def dividend_shares(result)
   closes = raw_closes(result)
   days   = closes.keys
   dividends(result).filter_map do |date, amount|
     at = days.bsearch_index { it >= date }
-    next unless date > from && at&.positive?
+    [date, amount, amount / closes[days[at - 1]]] if at&.positive?
+  end
+end
 
-    share = amount / closes[days[at - 1]]
-    [date, amount, share] if share > limit
+# The factor Yahoo applied to every bar before `date` for the dividend paid
+# that day: 1 - dividend / prior close.
+def dividend_factor(result, date)
+  found = dividend_shares(result).find { |day, _, _| day == date } or abort "no dividend on #{date} to ignore"
+  1.0 - found.last
+end
+
+# [[date, open, high, low, close, volume], ...] adjusted, oldest first.
+# Bars missing a price or volume are dropped; a result with no bars gives [].
+# With `ignore`, the dividend on that date is left out of the adjustment.
+def adjusted_bars(result, ignore = nil)
+  return [] unless result["timestamp"]
+
+  quote    = result.dig("indicators", "quote", 0)
+  adjusted = result.dig("indicators", "adjclose", 0, "adjclose") || quote["close"]
+  undo     = ignore ? dividend_factor(result, ignore) : 1.0
+  result["timestamp"].each_index.filter_map do |index|
+    close = quote["close"][index]
+    next unless close&.positive? && adjusted[index] && quote["open"][index] && quote["volume"][index]
+
+    day    = iso_day(result["timestamp"][index])
+    factor = adjusted[index] / close / (ignore && day < ignore ? undo : 1.0)
+    prices = %w[open high low close].map { (quote[it][index] * factor).round(6) }
+    [day, *prices, quote["volume"][index].to_i]
+  end
+end
+
+# ---- checks ---------------------------------------------------------------
+
+# Notes for dividends after `from` that look wrong: on a split date (a
+# possible double count) or simply very large.  The ignored date is skipped.
+def dividend_notes(result, from, ignore)
+  split_ratios = splits(result).to_h
+  dividend_shares(result).filter_map do |date, amount, share|
+    next unless date > from && date != ignore
+
+    if split_ratios[date] && share > TWIN_SHARE
+      "split #{split_ratios[date]} and dividend #{amount} both on #{date} -- possible double count (try ~#{date})"
+    elsif share > BIG_DIVIDEND
+      "dividend #{amount} on #{date} = #{(share * 100).round}% of price"
+    end
   end
 end
 
@@ -93,11 +122,9 @@ def extreme_moves(bars)
   [ratios.max_by(&:last), ratios.min_by(&:last)]
 end
 
-def flags(result, bars)
+def flags(result, bars, ignore = nil)
   up, down = extreme_moves(bars)
-  list = big_dividends(result, bars.first[0]).map do |date, amount, share|
-    "dividend #{amount} on #{date} = #{(share * 100).round}% of price"
-  end
+  list = dividend_notes(result, bars.first[0], ignore)
   list << "rose #{up.last.round(2)}x on #{up.first}" if up.last > JUMP_UP
   list << "fell to #{down.last.round(2)}x on #{down.first}" if down.last < JUMP_DOWN
   list << stale_note(bars)
@@ -123,39 +150,41 @@ def symbol_sql(ticker, meta, bars, now) = [stock_sql(ticker, meta, now), *bars.m
 
 # ---- command line ---------------------------------------------------------
 
-def report_line(symbol, meta, bars, notes)
-  up, down = extreme_moves(bars)
-  line = "#{symbol.ljust(6)} #{bars.size.to_s.rjust(6)}  #{bars.first[0]} .. #{bars.last[0]}  " \
-         "max #{format('%.2f', up.last)}x  min #{format('%.2f', down.last)}x  #{meta['longName'] || meta['shortName']}"
-  [line, *notes.map { "         ** #{it}" }]
-end
-
-# "SU:1997-01-01" -> ["SU", "1997-01-01"]; "su" -> ["SU", nil].
+# "SU:1997-01-01" -> { symbol: "SU", from: "1997-01-01", ignore: nil }.
 def parse_spec(spec)
-  symbol, from = spec.split(":", 2)
-  abort "bad start date in #{spec.inspect} (want SYMBOL:YYYY-MM-DD)" if from && !from.match?(/\A\d{4}-\d{2}-\d{2}\z/)
-  [symbol.upcase, from]
+  match = SPEC.match(spec) or abort "bad spec #{spec.inspect} (want SYMBOL[:YYYY-MM-DD][~YYYY-MM-DD])"
+  { symbol: match[:symbol].upcase, from: match[:from], ignore: match[:ignore] }
 end
 
-# [report lines, SQL lines] for one symbol, keeping only bars on or after `from`.
-def add_symbol(symbol, from, now)
-  result = chart_result(download_chart(symbol))
-  bars   = adjusted_bars(result)
-  bars   = bars.drop_while { it[0] < from } if from
-  return [["#{symbol.ljust(6)} no usable bars"], []] if bars.size < 2
+def report_line(spec, meta, bars, notes)
+  up, down = extreme_moves(bars)
+  line = "#{spec[:symbol].ljust(6)} #{bars.size.to_s.rjust(6)}  #{bars.first[0]} .. #{bars.last[0]}  " \
+         "max #{format('%.2f', up.last)}x  min #{format('%.2f', down.last)}x  #{meta['longName'] || meta['shortName']}"
+  ignored = spec[:ignore] && "         ignoring the dividend on #{spec[:ignore]}"
+  [line, ignored, *notes.map { "         ** #{it}" }].compact
+end
+
+# [report lines, SQL lines] for one symbol spec.
+def add_symbol(spec, now)
+  result = chart_result(download_chart(spec[:symbol]))
+  bars   = adjusted_bars(result, spec[:ignore])
+  bars   = bars.drop_while { it[0] < spec[:from] } if spec[:from]
+  return [["#{spec[:symbol].ljust(6)} no usable bars"], []] if bars.size < 2
 
   meta = result["meta"] || {}
-  [report_line(symbol, meta, bars, flags(result, bars)), symbol_sql(symbol.downcase, meta, bars, now)]
+  [report_line(spec, meta, bars, flags(result, bars, spec[:ignore])), symbol_sql(spec[:symbol].downcase, meta, bars, now)]
 end
+
+def all_stock_tickers(db) = query(db, "SELECT ticker FROM stocks;").flatten
 
 def run_add(db, out, specs, now = Time.now.utc.iso8601)
   existing = all_stock_tickers(db)
   lines    = []
   sql      = ["BEGIN;"]
-  specs.map { parse_spec(it) }.uniq(&:first).each do |symbol, from|
-    next lines << "#{symbol.ljust(6)} already in the database -- skipped" if existing.include?(symbol.downcase)
+  specs.map { parse_spec(it) }.uniq { it[:symbol] }.each do |spec|
+    next lines << "#{spec[:symbol].ljust(6)} already in the database -- skipped" if existing.include?(spec[:symbol].downcase)
 
-    report, statements = add_symbol(symbol, from, now)
+    report, statements = add_symbol(spec, now)
     lines.concat(report)
     sql.concat(statements)
     sleep PAUSE
@@ -164,11 +193,9 @@ def run_add(db, out, specs, now = Time.now.utc.iso8601)
   [*lines, "#{sql.count { it.start_with?('INSERT INTO stocks') }} symbols, #{sql.size - 1} statements written to #{out}"].join("\n")
 end
 
-def all_stock_tickers(db) = query(db, "SELECT ticker FROM stocks;").flatten
-
 if $PROGRAM_NAME == __FILE__
-  out, *symbols = ARGV
-  abort "usage: #{$PROGRAM_NAME} OUT.sql SYMBOL[:YYYY-MM-DD] [SYMBOL[:YYYY-MM-DD]...]" if out.nil? || symbols.empty?
+  out, *specs = ARGV
+  abort "usage: #{$PROGRAM_NAME} OUT.sql SYMBOL[:YYYY-MM-DD][~YYYY-MM-DD] ..." if out.nil? || specs.empty?
 
-  puts run_add(DB, out, symbols)
+  puts run_add(DB, out, specs)
 end
