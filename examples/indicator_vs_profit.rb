@@ -17,8 +17,8 @@
 #   same period  indicator and result both over the full history (hindsight)
 #   predictive   indicator over [TRAIN_FROM, TEST_FROM), result from TEST_FROM on
 #
-# Each is reported for all tickers and again without the tickers in SUSPECT,
-# whose price history has a known bad bar.
+# Each is reported for all tickers and, when SUSPECT lists any tickers whose
+# price history has a known bad bar, again without them.
 #
 # usage: examples/indicator_vs_profit.rb [TRAIN_FROM] [TEST_FROM]
 #   TRAIN_FROM = YYYY-MM-DD start of the indicator window (default: 2025-01-01)
@@ -31,7 +31,7 @@ require_relative "efficiency_ratio"
 
 CHOP_PERIOD = 14
 ER_PERIOD   = 10
-SUSPECT     = %w[tds].freeze # TDS 2005-05-16 adjusted close jumps 40x in one day
+SUSPECT     = %w[].freeze # lowercase tickers to also report without, e.g. %w[tds]
 DEFAULT_TRAIN_FROM = Date.new(2025, 1, 1)
 DEFAULT_TEST_FROM  = Date.new(2026, 1, 1)
 
@@ -155,15 +155,23 @@ def ticker_table(rows)
   [heading, *rows.sort_by { -it[:chop_train] }.map { ticker_line(it) }]
 end
 
+# The correlation block for all tickers, plus one without the suspect tickers
+# when there are any.
+def correlation_blocks(rows, suspect = SUSPECT)
+  blocks = [correlation_block("all tickers", rows)]
+  unless suspect.empty?
+    clean = rows.reject { suspect.include?(it[:ticker]) }
+    blocks << correlation_block("without #{suspect.join(', ').upcase}", clean)
+  end
+  blocks.map { it.join("\n") }.join("\n\n")
+end
+
 def report(rows, train_from, test_from)
-  clean = rows.reject { SUSPECT.include?(it[:ticker]) }
   <<~REPORT
     training window #{train_from} .. #{test_from - 1}, test window #{test_from} on
     excess = log(strategy final / buy & hold final); above 0 the strategy won
 
-    #{correlation_block('all tickers', rows).join("\n")}
-
-    #{correlation_block("without #{SUSPECT.join(', ').upcase}", clean).join("\n")}
+    #{correlation_blocks(rows)}
 
     per ticker -- indicators over the training window, excess over the test window:
     #{ticker_table(rows).join("\n")}
