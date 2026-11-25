@@ -11,9 +11,7 @@ class SQA::TAI::VolatilityIndicatorsTest < Minitest::Test
     assert_instance_of Array, result
     refute_empty result
     # ATR should always be positive
-    result.compact.each do |value|
-      assert value >= 0, "ATR should be positive"
-    end
+    assert result.compact.none?(&:negative?), "ATR should be positive"
   end
 
   def test_natr
@@ -23,9 +21,7 @@ class SQA::TAI::VolatilityIndicatorsTest < Minitest::Test
 
     assert_instance_of Array, result
     # NATR should always be positive for values that exist
-    result.compact.each do |value|
-      assert value >= 0, "NATR should be positive"
-    end
+    assert result.compact.none?(&:negative?), "NATR should be positive"
   end
 
   def test_sar
@@ -46,16 +42,14 @@ class SQA::TAI::VolatilityIndicatorsTest < Minitest::Test
     extended_close = TestData::CLOSE * 3
 
     upper, middle, lower = SQA::TAI.accbands(extended_high, extended_low, extended_close, period: 20)
+    bands = upper.zip(middle, lower).select(&:all?)
 
     assert_instance_of Array, upper
     assert_instance_of Array, middle
     assert_instance_of Array, lower
-
-    # Upper should be greater than middle, middle greater than lower
-    upper.compact.zip(middle.compact, lower.compact).each do |u, m, l|
-      assert u >= m if u && m
-      assert m >= l if m && l
-    end
+    refute_empty bands
+    # Every bar is ordered upper >= middle >= lower
+    assert_equal bands.map { it.sort.reverse }, bands
   end
 
   def test_sarext

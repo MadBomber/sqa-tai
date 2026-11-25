@@ -229,15 +229,17 @@ module SQA
             group: raw["group"].to_s,
             hint: raw["hint"].to_s,
             handle: handle_ptr,
-            inputs: collect_inputs(handle_ptr, raw["nbInput"]),
+            inputs: collect_io_params(handle_ptr, raw["nbInput"], TA_InputParameterInfo, :TA_GetInputParameterInfo, InputParam),
             opt_inputs: collect_opt_inputs(handle_ptr, raw["nbOptInput"]),
-            outputs: collect_outputs(handle_ptr, raw["nbOutput"])
+            outputs: collect_io_params(handle_ptr, raw["nbOutput"], TA_OutputParameterInfo, :TA_GetOutputParameterInfo, OutputParam)
           )
         end
 
-        def collect_inputs(handle_ptr, count)
-          collect_params(handle_ptr, count, TA_InputParameterInfo, method(:TA_GetInputParameterInfo)) do |raw_input|
-            InputParam.new(type: raw_input["type"], name: raw_input["paramName"].to_s, flags: raw_input["flags"])
+        # Inputs and outputs carry the same three fields; only the TA-Lib
+        # struct, its getter and the Ruby value class differ.
+        def collect_io_params(handle_ptr, count, struct_type, getter, param_class)
+          collect_params(handle_ptr, count, struct_type, method(getter)) do |raw_param|
+            param_class.new(type: raw_param["type"], name: raw_param["paramName"].to_s, flags: raw_param["flags"])
           end
         end
 
@@ -245,12 +247,6 @@ module SQA
           collect_params(handle_ptr, count, TA_OptInputParameterInfo, method(:TA_GetOptInputParameterInfo)) do |raw_opt|
             OptInput.new(type: raw_opt["type"], name: raw_opt["paramName"].to_s, flags: raw_opt["flags"],
                          display_name: raw_opt["displayName"].to_s, default_value: raw_opt["defaultValue"], hint: raw_opt["hint"].to_s)
-          end
-        end
-
-        def collect_outputs(handle_ptr, count)
-          collect_params(handle_ptr, count, TA_OutputParameterInfo, method(:TA_GetOutputParameterInfo)) do |raw_output|
-            OutputParam.new(type: raw_output["type"], name: raw_output["paramName"].to_s, flags: raw_output["flags"])
           end
         end
 
@@ -378,15 +374,16 @@ module SQA
           end
         end
 
-        def prepare_double_array(array)
-          ptr = Fiddle::Pointer.malloc(Fiddle::SIZEOF_DOUBLE * array.length)
-          ptr[0, Fiddle::SIZEOF_DOUBLE * array.length] = array.map(&:to_f).pack("d*")
-          ptr
-        end
+        def prepare_double_array(array) = pack_c_array(array.map(&:to_f), Fiddle::SIZEOF_DOUBLE, "d*")
 
-        def prepare_integer_array(array)
-          ptr = Fiddle::Pointer.malloc(Fiddle::SIZEOF_INT * array.length)
-          ptr[0, Fiddle::SIZEOF_INT * array.length] = array.map(&:to_i).pack("l*")
+        def prepare_integer_array(array) = pack_c_array(array.map(&:to_i), Fiddle::SIZEOF_INT, "l*")
+
+        # Copies +values+ into freshly malloc'd C memory, +element_size+ bytes
+        # each, packed with +format+ (an Array#pack directive).
+        def pack_c_array(values, element_size, format)
+          byte_size = element_size * values.length
+          ptr = Fiddle::Pointer.malloc(byte_size)
+          ptr[0, byte_size] = values.pack(format)
           ptr
         end
 

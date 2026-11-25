@@ -1,0 +1,9 @@
+# Fasterer performance-hint gate (asgard fasterer_check).
+#
+# each_with_index_vs_while is rejected for this gem: every flagged loop in
+# lib/sqa/tai/native.rb walks a TA-Lib function's parameter list (at most
+# a handful of entries) and makes a C call per entry, so the iterator's
+# overhead is not measurable, and a hand-rolled `while` counter would only
+# make the binding harder to read.
+speedups:
+  each_with_index_vs_while: false

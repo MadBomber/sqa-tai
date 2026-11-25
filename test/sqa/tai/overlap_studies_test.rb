@@ -80,38 +80,40 @@ class SQA::TAI::OverlapStudiesTest < Minitest::Test
     skip "TA-Lib not installed" unless SQA::TAI.available?
 
     upper, middle, lower = SQA::TAI.bbands(TestData::PRICES, period: 5)
+    bands = upper.zip(middle, lower).select(&:all?)
 
     assert_instance_of Array, upper
     assert_instance_of Array, middle
     assert_instance_of Array, lower
-
-    # Upper should be greater than middle, middle greater than lower
-    upper.compact.zip(middle.compact, lower.compact).each do |u, m, l|
-      assert u >= m if u && m
-      assert m >= l if m && l
-    end
+    refute_empty bands
+    # Every bar is ordered upper >= middle >= lower
+    assert_equal bands.map { it.sort.reverse }, bands
   end
 
-  def test_ma_generic_moving_average
+  def test_ma_as_sma
     skip "TA-Lib not installed" unless SQA::TAI.available?
 
-    # Test SMA (ma_type: 0)
-    result_sma = SQA::TAI.ma(TestData::PRICES, period: 5, ma_type: 0)
-    assert_instance_of Array, result_sma
-    refute_empty result_sma
+    result = SQA::TAI.ma(TestData::PRICES, period: 5, ma_type: 0)
 
-    # Test EMA (ma_type: 1)
-    result_ema = SQA::TAI.ma(TestData::PRICES, period: 5, ma_type: 1)
-    assert_instance_of Array, result_ema
-    refute_empty result_ema
+    refute_empty result
+    assert_equal SQA::TAI.sma(TestData::PRICES, period: 5), result
+  end
 
-    # Test WMA (ma_type: 2)
-    result_wma = SQA::TAI.ma(TestData::PRICES, period: 5, ma_type: 2)
-    assert_instance_of Array, result_wma
-    refute_empty result_wma
+  def test_ma_as_ema
+    skip "TA-Lib not installed" unless SQA::TAI.available?
 
-    # All should return arrays of the same length
-    assert_equal result_sma.length, result_ema.length
-    assert_equal result_ema.length, result_wma.length
+    result = SQA::TAI.ma(TestData::PRICES, period: 5, ma_type: 1)
+
+    refute_empty result
+    assert_equal SQA::TAI.ema(TestData::PRICES, period: 5), result
+  end
+
+  def test_ma_as_wma
+    skip "TA-Lib not installed" unless SQA::TAI.available?
+
+    result = SQA::TAI.ma(TestData::PRICES, period: 5, ma_type: 2)
+
+    refute_empty result
+    assert_equal SQA::TAI.wma(TestData::PRICES, period: 5), result
   end
 end

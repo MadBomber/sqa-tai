@@ -6,3 +6,6 @@ coverage/
 
 # Local cross-repo dev lockfile (Gemfile.local)
 /Gemfile.local.lock
+
+# temporary junk
+tmp/

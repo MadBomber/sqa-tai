@@ -9,36 +9,44 @@ class SQA::TAITest < Minitest::Test
   end
 
   def test_module_exists
-    assert defined?(SQA::TAI)
+    assert_kind_of Module, SQA::TAI
+    assert_respond_to SQA::TAI, :sma
   end
 
   def test_availability_check
     # Should return true or false, not raise
-    result = SQA::TAI.available?
-    assert [true, false].include?(result)
+    assert_includes [true, false], SQA::TAI.available?
   end
 
-  def test_invalid_parameters
+  def test_empty_array_is_invalid
     skip "TA-Lib not installed" unless SQA::TAI.available?
 
-    # Empty array
-    assert_raises(SQA::TAI::InvalidParameterError) do
-      SQA::TAI.sma([], period: 5)
-    end
+    error = assert_raises(SQA::TAI::InvalidParameterError) { SQA::TAI.sma([], period: 5) }
 
-    # Nil array
-    assert_raises(SQA::TAI::InvalidParameterError) do
-      SQA::TAI.sma(nil, period: 5)
-    end
+    assert_match(/cannot be empty/, error.message)
+  end
 
-    # Period larger than data
-    assert_raises(SQA::TAI::InvalidParameterError) do
-      SQA::TAI.sma([1, 2, 3], period: 10)
-    end
+  def test_nil_array_is_invalid
+    skip "TA-Lib not installed" unless SQA::TAI.available?
 
-    # Negative period
-    assert_raises(SQA::TAI::InvalidParameterError) do
-      SQA::TAI.sma(TestData::PRICES, period: -5)
-    end
+    error = assert_raises(SQA::TAI::InvalidParameterError) { SQA::TAI.sma(nil, period: 5) }
+
+    assert_match(/cannot be nil/, error.message)
+  end
+
+  def test_period_larger_than_data_is_invalid
+    skip "TA-Lib not installed" unless SQA::TAI.available?
+
+    error = assert_raises(SQA::TAI::InvalidParameterError) { SQA::TAI.sma([1, 2, 3], period: 10) }
+
+    assert_match(/cannot exceed data size/, error.message)
+  end
+
+  def test_negative_period_is_invalid
+    skip "TA-Lib not installed" unless SQA::TAI.available?
+
+    error = assert_raises(SQA::TAI::InvalidParameterError) { SQA::TAI.sma(TestData::PRICES, period: -5) }
+
+    assert_match(/must be positive/, error.message)
   end
 end

@@ -39,7 +39,7 @@ Gem::Specification.new do |spec|
   # Development dependencies
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
-  spec.add_development_dependency "minitest", "~> 5.0"
+  spec.add_development_dependency "minitest", "~> 6.0" # asgard test_check runs minitest 6's `minitest` executable
   spec.add_development_dependency "minitest-reporters"
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "debug"
