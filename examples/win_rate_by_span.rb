@@ -6,10 +6,12 @@
 # For every trading day in a ticker's history, buy at the close, hold for the
 # given span, sell at the close, and report how often that made money.
 #
-# usage: examples/win_rate_by_span.rb [TICKER|all] [SPAN...]
+# usage: examples/win_rate_by_span.rb [TICKER|all] [SPAN...] [FROM]
 #   TICKER = a symbol with price history (default: nvda), or "all" for a
 #            one-line-per-ticker comparison of every symbol in the database
 #   SPAN   = <n>y | <n>m | <n>w | <n>d  (calendar time; default: 1y 6m 3m 6w 3w)
+#   FROM   = YYYY-MM-DD; only use bars on or after this date, so every entry
+#            and exit falls in that window (default: the whole history)
 #
 # Reads daily bars from $SQA_DATA_DIR/sqa.db (default ~/sqa_data) via the
 # sqlite3 command-line tool.  Educational only -- not investment advice.
@@ -110,9 +112,12 @@ def analyze(dates, closes, span)
   return_stats(outcomes.map { it[:final] }).merge(path_stats(outcomes))
 end
 
+# The bars dated on or after `from` (all of them when from is nil).
+def bars_since(bars, from) = from ? bars.drop_while { |date, _| date < from } : bars
+
 # { ticker:, bars:, from:, to:, stats: [analyze result or nil per span] }
-def ticker_summary(db, ticker, spans)
-  bars   = load_bars(db, ticker)
+def ticker_summary(db, ticker, spans, from = nil)
+  bars   = bars_since(load_bars(db, ticker), from)
   dates  = bars.map(&:first)
   closes = bars.map(&:last)
   { ticker:, bars: bars.size, from: dates.first, to: dates.last,
@@ -180,15 +185,27 @@ end
 
 # ---- command line ---------------------------------------------------------
 
-def run(db, ticker, spans)
-  return comparison_report(all_tickers(db).map { ticker_summary(db, it, spans) }, spans) if ticker == "all"
+def run(db, ticker, spans, from = nil)
+  if ticker == "all"
+    summaries = all_tickers(db).map { ticker_summary(db, it, spans, from) }.reject { it[:bars].zero? }
+    return comparison_report(summaries, spans)
+  end
 
-  summary = ticker_summary(db, ticker, spans)
-  abort "no price history for #{ticker.upcase} in #{db}" if summary[:bars].zero?
+  summary = ticker_summary(db, ticker, spans, from)
+  abort "no price history for #{ticker.upcase} #{"on or after #{from} " if from}in #{db}" if summary[:bars].zero?
   detail_report(summary, spans)
 end
 
-if $PROGRAM_NAME == __FILE__
-  spans = ARGV[1..].to_a
-  puts run(DB, (ARGV[0] || "nvda").downcase, spans.empty? ? DEFAULT_SPANS : spans)
+def parse_date(text)
+  Date.iso8601(text)
+rescue Date::Error
+  abort "bad date #{text.inspect} (want YYYY-MM-DD)"
 end
+
+# Split arguments after the ticker into [spans, from date or nil].
+def parse_options(args)
+  dates, spans = args.partition { it.match?(/\A\d{4}-\d{2}-\d{2}\z/) }
+  [spans.empty? ? DEFAULT_SPANS : spans, dates.first&.then { parse_date(it) }]
+end
+
+puts run(DB, (ARGV[0] || "nvda").downcase, *parse_options(ARGV[1..].to_a)) if $PROGRAM_NAME == __FILE__
