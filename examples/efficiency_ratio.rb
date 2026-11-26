@@ -40,12 +40,23 @@ def daily_volatility(closes)
   Math.sqrt(returns.sum { (it - avg)**2 } / (returns.size - 1)) * 100
 end
 
+# The row for one ticker, or nil when its history is too short (or too flat)
+# to give a ratio for every window.
 def ticker_row(db, ticker)
-  closes  = load_bars(db, ticker).map(&:last)
+  closes = load_bars(db, ticker).map(&:last)
+  ratios = WINDOWS.map { rolling_er(closes, it) }
+  return nil if ratios.any?(&:empty?)
+
   summary = ticker_summary(db, ticker, SCENARIOS["sma_reversion"].last, DEFAULT_PERIODS)
   beat    = summary[:results].count { it[:strategy_pct] > summary[:hold_pct] }
-  { ticker:, bars: closes.size, ers: WINDOWS.map { mean(rolling_er(closes, it)) },
+  { ticker:, bars: closes.size, ers: ratios.map { mean(it) },
     whole: rolling_er(closes, closes.size - 1).first, vol: daily_volatility(closes), beat: }
+end
+
+# [rows, tickers left out for lack of history].
+def ticker_rows(db, tickers)
+  rows = tickers.to_h { [it, ticker_row(db, it)] }
+  [rows.values.compact, rows.select { |_, row| row.nil? }.keys]
 end
 
 # ---- reporting ------------------------------------------------------------
@@ -65,16 +76,19 @@ def group_er(rows) = rows.empty? ? "n/a" : format("%.3f", mean(rows.map { it[:er
 
 # Table sorted choppiest first (lowest 10-day ER), then the mean ER of the
 # tickers where the strategy ever beat buy & hold versus where it never did.
-def report(rows)
+# `skipped` lists the tickers left out for lack of history.
+def report(rows, skipped = [])
   sorted = rows.sort_by { it[:ers][1] }
   won, lost = rows.partition { it[:beat].positive? }
+  omitted = skipped.empty? ? "" : "left out, fewer than #{WINDOWS.max + 1} bars: #{skipped.map(&:upcase).join(', ')}\n"
   <<~REPORT
     #{header_line}
     #{sorted.map { row_line(it) }.join("\n")}
 
     mean 10-day ER where the strategy beat buy & hold at least once: #{group_er(won)} (#{won.size} tickers)
     mean 10-day ER where it never did:                              #{group_er(lost)} (#{lost.size} tickers)
+    #{omitted}
   REPORT
 end
 
-puts report(all_tickers(DB).map { ticker_row(DB, it) }) if $PROGRAM_NAME == __FILE__
+puts report(*ticker_rows(DB, all_tickers(DB))) if $PROGRAM_NAME == __FILE__
