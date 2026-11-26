@@ -22,9 +22,10 @@ require "uri"
 
 CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/"
 
-def chart_uri(symbol, now = Time.now)
+# `from` is the first moment wanted, in seconds since 1970 (default: everything).
+def chart_uri(symbol, now = Time.now, from = 0)
   uri = URI("#{CHART_URL}#{URI.encode_www_form_component(symbol)}")
-  uri.query = URI.encode_www_form("period1" => 0, "period2" => now.to_i, "interval" => "1d", "events" => "div,split")
+  uri.query = URI.encode_www_form("period1" => from.to_i, "period2" => now.to_i, "interval" => "1d", "events" => "div,split")
   uri
 end
 
