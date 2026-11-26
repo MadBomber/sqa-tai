@@ -26,9 +26,14 @@
 #                       rescaled as if Yahoo had not applied it
 # Both can be combined, e.g. XYZ:1990-01-01~2005-05-16.
 #
-# usage: examples/add_stocks.rb OUT.sql SPEC [SPEC...]
+# usage: examples/add_stocks.rb [options] OUT.sql SPEC [SPEC...]
 #        cp $SQA_DATA_DIR/sqa.db $SQA_DATA_DIR/sqa.db.before-add
 #        sqlite3 $SQA_DATA_DIR/sqa.db < OUT.sql
+#   OUT.sql = where to write the SQL
+#   SPEC    = SYMBOL[:YYYY-MM-DD][~YYYY-MM-DD], see above
+#
+# options:
+#   -h, --help   show this help
 #
 # Reads $SQA_DATA_DIR/sqa.db (default ~/sqa_data) via the sqlite3
 # command-line tool.  Educational only -- not investment advice.
@@ -194,8 +199,9 @@ def run_add(db, out, specs, now = Time.now.utc.iso8601)
 end
 
 if $PROGRAM_NAME == __FILE__
+  parse_demo_options(ARGV, __FILE__)
   out, *specs = ARGV
-  abort "usage: #{$PROGRAM_NAME} OUT.sql SYMBOL[:YYYY-MM-DD][~YYYY-MM-DD] ..." if out.nil? || specs.empty?
+  abort "usage: #{$PROGRAM_NAME} OUT.sql SYMBOL[:YYYY-MM-DD][~YYYY-MM-DD] ... (try --help)" if out.nil? || specs.empty?
 
   puts run_add(DB, out, specs)
 end

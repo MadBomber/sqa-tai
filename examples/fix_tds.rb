@@ -22,9 +22,12 @@
 # flip a signal on them, so results may shift.
 #
 # usage: examples/fetch_yahoo.rb TDS tds.json
-#        examples/fix_tds.rb tds.json fix_tds.sql
+#        examples/fix_tds.rb [options] tds.json fix_tds.sql
 #        cp $SQA_DATA_DIR/sqa.db $SQA_DATA_DIR/sqa.db.before-tds-fix
 #        sqlite3 $SQA_DATA_DIR/sqa.db < fix_tds.sql
+#
+# options:
+#   -h, --help   show this help
 #
 # Reads $SQA_DATA_DIR/sqa.db (default ~/sqa_data) via the sqlite3
 # command-line tool.  Educational only -- not investment advice.
@@ -128,8 +131,9 @@ def run(db, json_path, out)
 end
 
 if $PROGRAM_NAME == __FILE__
+  parse_demo_options(ARGV, __FILE__)
   json_path, out = ARGV
-  abort "usage: #{$PROGRAM_NAME} TDS.json OUT.sql" unless json_path && out
+  abort "usage: #{$PROGRAM_NAME} TDS.json OUT.sql (try --help)" unless json_path && out
 
   puts run(DB, json_path, out)
 end

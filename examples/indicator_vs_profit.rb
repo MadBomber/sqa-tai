@@ -14,15 +14,25 @@
 #
 # using Spearman rank correlation, in two ways:
 #
-#   same period  indicator and result both over the full history (hindsight)
+#   same period  indicator and result both over the --window (hindsight)
 #   predictive   indicator over [TRAIN_FROM, TEST_FROM), result from TEST_FROM on
 #
 # Each is reported for all tickers and, when SUSPECT lists any tickers whose
 # price history has a known bad bar, again without them.
 #
-# usage: examples/indicator_vs_profit.rb [TRAIN_FROM] [TEST_FROM]
+# usage: examples/indicator_vs_profit.rb [options] [TRAIN_FROM] [TEST_FROM]
 #   TRAIN_FROM = YYYY-MM-DD start of the indicator window (default: 2025-01-01)
 #   TEST_FROM  = YYYY-MM-DD start of the trading window   (default: 2026-01-01)
+#
+# options:
+#   --window DAYS    limit the same-period comparison to the last DAYS calendar
+#                    days before the latest date in the database (default: 730,
+#                    two years; "all" for the full history); the predictive
+#                    one keeps its own dates
+#   --cash DOLLARS   starting cash for every strategy run (default: 10000)
+#   -h, --help       show this help
+#
+# example: examples/indicator_vs_profit.rb --window 1095 2025-06-01 2026-03-01
 #
 # Reads daily bars from $SQA_DATA_DIR/sqa.db (default ~/sqa_data) via the
 # sqlite3 command-line tool.  Educational only -- not investment advice.
@@ -78,10 +88,9 @@ def mean_er(closes, first, last, period = ER_PERIOD) = mean(rolling_er(closes[fi
 # ---- strategy result ------------------------------------------------------
 
 # log(strategy final / buy & hold final) per lookback period, trading from `from` on.
-def excess_returns(db, ticker, from = nil)
-  summary = ticker_summary(db, ticker, SCENARIOS["sma_reversion"].last, DEFAULT_PERIODS, from)
-  hold    = BANKROLL * (1 + (summary[:hold_pct] / 100))
-  summary[:results].map { Math.log(it[:final] / hold) }
+def excess_returns(db, ticker, from = nil, bankroll = BANKROLL)
+  summary = ticker_summary(db, ticker, SCENARIOS["sma_reversion"].last, DEFAULT_PERIODS, from, bankroll:)
+  summary[:results].map { Math.log(it[:final] / summary[:hold_value]) }
 end
 
 # ---- statistics -----------------------------------------------------------
@@ -104,25 +113,29 @@ def spearman(xs, ys) = pearson(ranks(xs), ranks(ys))
 
 # ---- per-ticker measurements ----------------------------------------------
 
-def ticker_measures(db, ticker, train_from, test_from)
+# Indicators and strategy results for one ticker, or nil when it lacks the
+# bars.  The same-period measures cover bars from `from` on (nil: all of them).
+def ticker_measures(db, ticker, train_from, test_from, from: nil, bankroll: BANKROLL)
   bars   = load_hlc(db, ticker)
   closes = bars.map(&:last)
   dates  = bars.map(&:first)
+  first  = start_index(dates, from)
   train  = dates.bsearch_index { it >= train_from }
   test   = dates.bsearch_index { it >= test_from }
-  return nil unless train && test && test - train > CHOP_PERIOD
+  return nil unless first && train && test && test - train > CHOP_PERIOD && bars.size - first > CHOP_PERIOD
 
-  { ticker:, er_all: mean_er(closes, 0, closes.size - 1), chop_all: mean_chop(bars, 0, bars.size - 1),
+  last = bars.size - 1
+  { ticker:, er_all: mean_er(closes, first, last), chop_all: mean_chop(bars, first, last),
     er_train: mean_er(closes, train, test - 1), chop_train: mean_chop(bars, train, test - 1),
-    excess_all: excess_returns(db, ticker), excess_test: excess_returns(db, ticker, test_from) }
+    excess_all: excess_returns(db, ticker, from, bankroll), excess_test: excess_returns(db, ticker, test_from, bankroll) }
 end
 
 # ---- reporting ------------------------------------------------------------
 
 # [label, indicator key, result key]
 CORRELATIONS = [
-  ["full-history ER10   vs full history", :er_all, :excess_all],
-  ["full-history CHOP14 vs full history", :chop_all, :excess_all],
+  ["same-period ER10   vs same-period result", :er_all, :excess_all],
+  ["same-period CHOP14 vs same-period result", :chop_all, :excess_all],
   ["training ER10   vs test result", :er_train, :excess_test],
   ["training CHOP14 vs test result", :chop_train, :excess_test]
 ].freeze
@@ -132,7 +145,7 @@ def correlation_line(rows, label, indicator, result)
     rho = spearman(rows.map { it[indicator] }, rows.map { it[result][index] })
     "#{"#{period}-day".rjust(7)} #{format('%+.2f', rho)}"
   end
-  "  #{label.ljust(38)}#{cells.join('   ')}"
+  "  #{label.ljust(42)}#{cells.join('   ')}"
 end
 
 def correlation_block(name, rows)
@@ -166,8 +179,9 @@ def correlation_blocks(rows, suspect = SUSPECT)
   blocks.map { it.join("\n") }.join("\n\n")
 end
 
-def report(rows, train_from, test_from)
+def report(rows, train_from, test_from, from = nil)
   <<~REPORT
+    same period: #{from ? "#{from} on" : 'each full history'}
     training window #{train_from} .. #{test_from - 1}, test window #{test_from} on
     excess = log(strategy final / buy & hold final); above 0 the strategy won
 
@@ -180,14 +194,17 @@ end
 
 # ---- command line ---------------------------------------------------------
 
-def run(db, train_from, test_from)
+def run(db, train_from, test_from, from: nil, bankroll: BANKROLL)
   abort "TRAIN_FROM must be before TEST_FROM" unless train_from < test_from
 
-  report(all_tickers(db).filter_map { ticker_measures(db, it, train_from, test_from) }, train_from, test_from)
+  rows = all_tickers(db).filter_map { ticker_measures(db, it, train_from, test_from, from:, bankroll:) }
+  report(rows, train_from, test_from, from)
 end
 
 if $PROGRAM_NAME == __FILE__
+  options    = parse_demo_options(ARGV, __FILE__, window: true, cash: true)
   train_from = ARGV[0] ? parse_date(ARGV[0]) : DEFAULT_TRAIN_FROM
   test_from  = ARGV[1] ? parse_date(ARGV[1]) : DEFAULT_TEST_FROM
-  puts run(DB, train_from, test_from)
+  from       = analysis_start(nil, options[:window]) { latest_day(DB) }
+  puts run(DB, train_from, test_from, from:, bankroll: options.fetch(:cash, BANKROLL))
 end

@@ -13,26 +13,39 @@
 # trend filter), all 61 candlestick patterns, and buy & hold.
 #
 # Trading model: a signal on one bar trades at the next bar's open, in whole
-# shares, starting from $10,000, paying COST per side, with at least one cent
-# always left in the bank.
+# shares, starting from the --cash amount, paying COST per side, with at
+# least $1 always left in the bank.
 #
 # Score (higher is better):
 #   mar     compound annual growth / maximum drawdown   (default)
 #   sharpe  annualised mean / standard deviation of daily returns
 #   return  compound annual growth alone
 #
-# Method: each stock's history is split in time.  Every candidate is scored
-# on the training part (after a warm-up so all indicators are ready); the
-# winner is then run, with a fresh bankroll, on the test part and compared
-# with buy & hold there.  The report also shows how the winner ranked among
-# all candidates on the test part, and the rank correlation between training
-# and test scores -- near zero means the training ranking carries no
-# information about the future.
+# Method: the bars of each stock's window are split in time.  Every candidate
+# is scored on the training part; the winner is then run, with fresh cash,
+# on the test part and compared with buy & hold there.  Bars before the
+# window still warm up the indicators, and training never starts before bar
+# WARMUP, so a stock younger than the window loses its first WARMUP bars.
+# The report also shows how the winner ranked among all candidates on the
+# test part, and the rank correlation between training and test scores --
+# near zero means the training ranking carries no information about the
+# future.
 #
-# usage: examples/strategy_search.rb [TICKER|all] [SCORE] [SPLIT]
+# usage: examples/strategy_search.rb [options] [TICKER|all] [SCORE] [SPLIT]
 #   TICKER = a symbol (detail: its top candidates), or "all" (default)
 #   SCORE  = mar | sharpe | return            (default: mar)
-#   SPLIT  = fraction of bars used for training (default: 0.7)
+#   SPLIT  = fraction of the window used for training (default: 0.7)
+#
+# options:
+#   --window DAYS    search only the last DAYS calendar days before the latest
+#                    date in the database (default: 730, two years; "all" for
+#                    the whole history).  Training needs MIN_TRAIN (250) bars,
+#                    so with SPLIT 0.7 the window must be about 520 days or more.
+#   --cash DOLLARS   starting cash for every run (default: 10000)
+#   -h, --help       show this help
+#
+# examples: examples/strategy_search.rb nvda --window 1095
+#           examples/strategy_search.rb all sharpe --window all --cash 2500
 #
 # Reads daily bars from $SQA_DATA_DIR/sqa.db (default ~/sqa_data) via the
 # sqlite3 command-line tool.  Educational only -- not investment advice.
@@ -423,17 +436,25 @@ end
 
 # ---- search ---------------------------------------------------------------
 
-# Index of the first test bar.
-def split_index(size, fraction) = (size * fraction).to_i
+# Index of the first test bar: `fraction` of the way through bars first..size-1.
+def split_index(size, fraction, first = 0) = first + ((size - first) * fraction).to_i
 
-# One row per candidate that could be computed:
+# [first training bar, first test bar] for a market whose window starts at
+# `from` (nil: the whole history), or nil when no bar is on or after `from`.
+# Training starts at the window but never before the warm-up ends.
+def search_bounds(market, fraction, from = nil)
+  first = start_index(market.dates, from) or return nil
+  [[WARMUP, first].max, split_index(market.size, fraction, first)]
+end
+
+# One row per candidate that could be computed, training on bars
+# train_start...split and testing on the rest:
 # { name:, family:, train:, test:, train_score:, test_score: }.
-def evaluate(market, strategies, fraction, kind)
-  split = split_index(market.size, fraction)
+def evaluate(market, strategies, kind, (train_start, split), bankroll: BANKROLL)
   strategies.filter_map do |candidate|
     signal = candidate.build.call(market)
-    train  = simulate(market, signal, WARMUP, split - 1)
-    test   = simulate(market, signal, split, market.size - 1)
+    train  = simulate(market, signal, train_start, split - 1, bankroll:)
+    test   = simulate(market, signal, split, market.size - 1, bankroll:)
     { name: candidate.name, family: candidate.family, train:, test:,
       train_score: score(train, kind), test_score: score(test, kind) }
   rescue SQA::TAI::Error, ArgumentError, NoMethodError
@@ -464,16 +485,19 @@ def test_percentile(row, rows)
 end
 
 # Search result for one market, or { ticker:, skipped: reason }.
-def search(market, fraction, kind)
+def search(market, fraction, kind, from: nil, bankroll: BANKROLL)
   ticker = market.ticker
-  split  = split_index(market.size, fraction)
-  return { ticker:, skipped: "needs #{WARMUP + MIN_TRAIN} training bars" } if split - WARMUP < MIN_TRAIN
+  bounds = search_bounds(market, fraction, from) or return { ticker:, skipped: "no bars on or after #{from}" }
+  train_start, split = bounds
+  if split - train_start < MIN_TRAIN
+    return { ticker:, skipped: "#{[split - train_start, 0].max} training bars after the warm-up, needs #{MIN_TRAIN}" }
+  end
 
-  rows  = evaluate(market, catalog, fraction, kind).select { eligible?(it) }
+  rows  = evaluate(market, catalog, kind, bounds, bankroll:).select { eligible?(it) }
   best  = rows.max_by { it[:train_score] }
-  { ticker:, bars: market.size, train_from: market.dates[WARMUP], test_from: market.dates[split], to: market.dates.last,
-    rows:, best:, hold: rows.find { it[:family] == :baseline }, percentile: test_percentile(best, rows),
-    rho: rank_correlation(rows.map { it[:train_score] }, rows.map { it[:test_score] }) }
+  { ticker:, bars: market.size - train_start, train_from: market.dates[train_start], test_from: market.dates[split],
+    to: market.dates.last, rows:, best:, hold: rows.find { it[:family] == :baseline },
+    percentile: test_percentile(best, rows), rho: rank_correlation(rows.map { it[:train_score] }, rows.map { it[:test_score] }) }
 end
 
 # Run the block in a forked process; returns a pipe that yields its marshalled result.
@@ -490,9 +514,9 @@ end
 
 # Run `search` for every market, one forked process each, a few at a time.
 # The markets are loaded by the caller, so only one process reads the database.
-def search_all(markets, fraction, kind, workers = Etc.nprocessors)
+def search_all(markets, fraction, kind, from: nil, bankroll: BANKROLL, workers: Etc.nprocessors)
   markets.each_slice(workers).flat_map do |group|
-    pipes   = group.map { |market| fork_result { search(market, fraction, kind) } }
+    pipes   = group.map { |market| fork_result { search(market, fraction, kind, from:, bankroll:) } }
     results = pipes.map { Marshal.load(it.read) } # rubocop:disable Security/MarshalLoad -- our own child processes
     Process.waitall
     results
@@ -540,11 +564,14 @@ def summary_footer(found)
   FOOTER
 end
 
-def summary_report(results, kind, fraction)
+# What the training and test parts are drawn from, for the report heading.
+def search_scope(from) = from ? "the bars from #{from} on (never before bar #{WARMUP})" : "each history after a #{WARMUP}-bar warm-up"
+
+def summary_report(results, kind, fraction, from = nil, bankroll = BANKROLL)
   found, skipped = results.partition { it[:best] }
   [
-    "score: #{kind}; training on the first #{(fraction * 100).round}% of each history after a #{WARMUP}-bar warm-up, " \
-    "testing on the rest; cost #{COST * 100}% per side",
+    "score: #{kind}; training on the first #{(fraction * 100).round}% of #{search_scope(from)}, " \
+    "testing on the rest; cost #{COST * 100}% per side; starting cash #{money(bankroll)}",
     "beat = chosen strategy scored above buy & hold on the test part; pct = share of candidates it beat there",
     *summary_header(kind), *found.map { summary_row(it) }, summary_footer(found),
     *skipped.map { "skipped #{it[:ticker].upcase}: #{it[:skipped]}" }
@@ -587,17 +614,22 @@ def parse_search_options(args)
   [kind, (numbers.first || 0.7).to_f]
 end
 
-def run_search(db, ticker, kind, fraction)
+def run_search(db, ticker, kind, fraction, from: nil, bankroll: BANKROLL)
   if ticker == "all"
     markets = all_tickers(db).map { load_market(db, it) }
-    return summary_report(search_all(markets, fraction, kind), kind, fraction)
+    return summary_report(search_all(markets, fraction, kind, from:, bankroll:), kind, fraction, from, bankroll)
   end
 
   market = load_market(db, ticker)
   abort "no price history for #{ticker.upcase} in #{db}" unless market.size.positive?
-  found = search(market, fraction, kind)
+  found = search(market, fraction, kind, from:, bankroll:)
   abort "#{ticker.upcase}: #{found[:skipped]}" if found[:skipped]
   detail_report(found, kind)
 end
 
-puts run_search(DB, (ARGV[0] || "all").downcase, *parse_search_options(ARGV[1..].to_a)) if $PROGRAM_NAME == __FILE__
+if $PROGRAM_NAME == __FILE__
+  options        = parse_demo_options(ARGV, __FILE__, window: true, cash: true)
+  kind, fraction = parse_search_options(ARGV[1..].to_a)
+  from           = analysis_start(nil, options[:window]) { latest_day(DB) }
+  puts run_search(DB, (ARGV[0] || "all").downcase, kind, fraction, from:, bankroll: options.fetch(:cash, BANKROLL))
+end

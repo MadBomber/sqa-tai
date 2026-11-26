@@ -9,16 +9,20 @@
 # here as an event on the jump date (see fix_tds.rb), while a real move has
 # none.
 #
-# usage: examples/fetch_yahoo.rb SYMBOL OUT.json [MIN_DIVIDEND]
+# usage: examples/fetch_yahoo.rb [options] SYMBOL OUT.json [MIN_DIVIDEND]
 #   SYMBOL       = ticker symbol, e.g. TDS
 #   OUT.json     = where to save the raw chart response
 #   MIN_DIVIDEND = list dividends of at least this many dollars (default: 1)
+#
+# options:
+#   -h, --help   show this help
 #
 # Educational only -- not investment advice.
 
 require "json"
 require "net/http"
 require "uri"
+require_relative "demo_options"
 
 CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/"
 
@@ -68,8 +72,9 @@ def summary(result, min_dividend)
 end
 
 if $PROGRAM_NAME == __FILE__
+  parse_demo_options(ARGV, __FILE__)
   symbol, out, min_dividend = ARGV
-  abort "usage: #{$PROGRAM_NAME} SYMBOL OUT.json [MIN_DIVIDEND]" unless symbol && out
+  abort "usage: #{$PROGRAM_NAME} SYMBOL OUT.json [MIN_DIVIDEND] (try --help)" unless symbol && out
 
   body = download_chart(symbol)
   File.write(out, body)

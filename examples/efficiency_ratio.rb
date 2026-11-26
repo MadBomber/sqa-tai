@@ -13,7 +13,17 @@
 # n = 5, 10, 15.  The whole-history ER shrinks as the history grows, so it
 # does not compare across tickers of different ages.
 #
-# usage: examples/efficiency_ratio.rb
+# usage: examples/efficiency_ratio.rb [options]
+#
+# options:
+#   --window DAYS    measure, and trade, only the last DAYS calendar days
+#                    before the latest date in the database (default: 730,
+#                    two years; "all" for the whole history); earlier closes
+#                    still warm up the averages
+#   --cash DOLLARS   starting cash for the sma_reversion runs (default: 10000)
+#   -h, --help       show this help
+#
+# example: examples/efficiency_ratio.rb --window 1095
 #
 # Reads daily bars from $SQA_DATA_DIR/sqa.db (default ~/sqa_data) via the
 # sqlite3 command-line tool.  Educational only -- not investment advice.
@@ -40,22 +50,25 @@ def daily_volatility(closes)
   Math.sqrt(returns.sum { (it - avg)**2 } / (returns.size - 1)) * 100
 end
 
-# The row for one ticker, or nil when its history is too short (or too flat)
-# to give a ratio for every window.
-def ticker_row(db, ticker)
-  closes = load_bars(db, ticker).map(&:last)
+# The closes of the bars dated on or after `from` (all of them when from is nil).
+def closes_since(bars, from) = (from ? bars.drop_while { |date, _| date < from } : bars).map(&:last)
+
+# The row for one ticker, or nil when its history (from `from` on) is too
+# short or too flat to give a ratio for every window.
+def ticker_row(db, ticker, from = nil, bankroll = BANKROLL)
+  closes = closes_since(load_bars(db, ticker), from)
   ratios = WINDOWS.map { rolling_er(closes, it) }
   return nil if ratios.any?(&:empty?)
 
-  summary = ticker_summary(db, ticker, SCENARIOS["sma_reversion"].last, DEFAULT_PERIODS)
+  summary = ticker_summary(db, ticker, SCENARIOS["sma_reversion"].last, DEFAULT_PERIODS, from, bankroll:)
   beat    = summary[:results].count { it[:strategy_pct] > summary[:hold_pct] }
   { ticker:, bars: closes.size, ers: ratios.map { mean(it) },
     whole: rolling_er(closes, closes.size - 1).first, vol: daily_volatility(closes), beat: }
 end
 
 # [rows, tickers left out for lack of history].
-def ticker_rows(db, tickers)
-  rows = tickers.to_h { [it, ticker_row(db, it)] }
+def ticker_rows(db, tickers, from: nil, bankroll: BANKROLL)
+  rows = tickers.to_h { [it, ticker_row(db, it, from, bankroll)] }
   [rows.values.compact, rows.select { |_, row| row.nil? }.keys]
 end
 
@@ -76,12 +89,14 @@ def group_er(rows) = rows.empty? ? "n/a" : format("%.3f", mean(rows.map { it[:er
 
 # Table sorted choppiest first (lowest 10-day ER), then the mean ER of the
 # tickers where the strategy ever beat buy & hold versus where it never did.
-# `skipped` lists the tickers left out for lack of history.
-def report(rows, skipped = [])
+# `skipped` lists the tickers left out for lack of history; `from` is the
+# start of the window (nil for the whole history).
+def report(rows, skipped = [], from = nil)
   sorted = rows.sort_by { it[:ers][1] }
   won, lost = rows.partition { it[:beat].positive? }
   omitted = skipped.empty? ? "" : "left out, fewer than #{WINDOWS.max + 1} bars: #{skipped.map(&:upcase).join(', ')}\n"
   <<~REPORT
+    #{from ? "bars from #{from} on" : 'whole history of each ticker'}
     #{header_line}
     #{sorted.map { row_line(it) }.join("\n")}
 
@@ -91,4 +106,11 @@ def report(rows, skipped = [])
   REPORT
 end
 
-puts report(*ticker_rows(DB, all_tickers(DB))) if $PROGRAM_NAME == __FILE__
+if $PROGRAM_NAME == __FILE__
+  options = parse_demo_options(ARGV, __FILE__, window: true, cash: true)
+  abort "unexpected arguments: #{ARGV.join(' ')} (try --help)" unless ARGV.empty?
+
+  from = analysis_start(nil, options[:window]) { latest_day(DB) }
+  rows, skipped = ticker_rows(DB, all_tickers(DB), from:, bankroll: options.fetch(:cash, BANKROLL))
+  puts report(rows, skipped, from)
+end

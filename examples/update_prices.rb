@@ -24,9 +24,12 @@
 # yet) is reported and tried again on the next run.  Only days after a
 # ticker's last stored bar are filled, not older gaps.
 #
-# usage: examples/update_prices.rb [--dry-run] [TICKER...]
-#   --dry-run  = report what would change without writing to the database
+# usage: examples/update_prices.rb [options] [TICKER...]
 #   TICKER...  = update only these tickers (default: every ticker stored)
+#
+# options:
+#   --dry-run    report what would change without writing to the database
+#   -h, --help   show this help
 #
 # Reads and writes $SQA_DATA_DIR/sqa.db (default ~/sqa_data) via the sqlite3
 # command-line tool; all changes are made in one transaction.
@@ -165,9 +168,8 @@ end
 
 # [dry_run, tickers] from the command-line arguments.
 def parse_update_args(args)
-  flags, tickers = args.partition { it.start_with?("--") }
-  abort "usage: #{$PROGRAM_NAME} [--dry-run] [TICKER...]" unless (flags - ["--dry-run"]).empty?
-  [flags.include?("--dry-run"), tickers.map(&:downcase)]
+  options = parse_demo_options(args, __FILE__) { |opts, found| opts.on("--dry-run") { found[:dry_run] = true } }
+  [options.fetch(:dry_run, false), args.map(&:downcase)]
 end
 
 # The stored tickers to update; unknown names in `wanted` abort.

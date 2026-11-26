@@ -6,12 +6,24 @@
 # For every trading day in a ticker's history, buy at the close, hold for the
 # given span, sell at the close, and report how often that made money.
 #
-# usage: examples/win_rate_by_span.rb [TICKER|all] [SPAN...] [FROM]
+# There is no cash setting: every entry is measured as a percentage return.
+#
+# usage: examples/win_rate_by_span.rb [options] [TICKER|all] [SPAN...] [FROM]
 #   TICKER = a symbol with price history (default: nvda), or "all" for a
 #            one-line-per-ticker comparison of every symbol in the database
 #   SPAN   = <n>y | <n>m | <n>w | <n>d  (calendar time; default: 1y 6m 3m 6w 3w)
 #   FROM   = YYYY-MM-DD; only use bars on or after this date, so every entry
-#            and exit falls in that window (default: the whole history)
+#            and exit falls in that window, instead of using --window
+#
+# options:
+#   --window DAYS  use only the last DAYS calendar days before the latest date
+#                  in the database (default: 730, two years; "all" for the
+#                  whole history).  A span must fit inside it: with the
+#                  default window a 1y hold has entries only in the first year.
+#   -h, --help     show this help
+#
+# examples: examples/win_rate_by_span.rb all 3m 6w 3w
+#           examples/win_rate_by_span.rb nvda 5y 1y --window all
 #
 # Reads daily bars from $SQA_DATA_DIR/sqa.db (default ~/sqa_data) via the
 # sqlite3 command-line tool.  Educational only -- not investment advice.
@@ -19,6 +31,7 @@
 require "csv"
 require "date"
 require "open3"
+require_relative "demo_options"
 
 DB            = File.join(ENV.fetch("SQA_DATA_DIR", File.expand_path("~/sqa_data")), "sqa.db")
 DEFAULT_SPANS = %w[1y 6m 3m 6w 3w].freeze
@@ -46,6 +59,9 @@ end
 
 # Every ticker that has price history, in alphabetical order.
 def all_tickers(db) = query(db, "SELECT DISTINCT ticker FROM prices ORDER BY ticker;").flatten
+
+# The latest day stored for any ticker.
+def latest_day(db) = Date.parse(query(db, "SELECT MAX(timestamp) FROM prices;").flatten.first)
 
 # [[Date, adjusted close], ...] oldest first.
 def load_bars(db, ticker)
@@ -208,4 +224,8 @@ def parse_options(args)
   [spans.empty? ? DEFAULT_SPANS : spans, dates.first&.then { parse_date(it) }]
 end
 
-puts run(DB, (ARGV[0] || "nvda").downcase, *parse_options(ARGV[1..].to_a)) if $PROGRAM_NAME == __FILE__
+if $PROGRAM_NAME == __FILE__
+  options     = parse_demo_options(ARGV, __FILE__, window: true)
+  spans, from = parse_options(ARGV[1..].to_a)
+  puts run(DB, (ARGV[0] || "nvda").downcase, spans, analysis_start(from, options[:window]) { latest_day(DB) })
+end
