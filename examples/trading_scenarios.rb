@@ -3,22 +3,38 @@
 
 # Simple trading scenarios, each starting with a $10,000 bankroll per stock.
 #
-# Every scenario builds a signal rule for a lookback period: given the closes
-# up to today, the rule returns :buy, :sell or nil.  The simulator trades at
-# today's close in whole shares only -- a :buy spends as much cash as whole
-# shares allow (when flat), a :sell liquidates the whole position (when
-# holding).  Leftover cash stays in the bank; any open position is valued at
-# the last close.  Results are compared against buying and holding whole
-# shares with the same $10,000.
+# Every scenario builds a signal rule for a number N (usually a lookback in
+# trading days): given the closes up to today, the rule returns :buy, :sell or
+# nil.  The simulator trades at today's close in whole shares only -- a :buy
+# spends as much cash as whole shares allow (when flat), a :sell liquidates
+# the whole position (when holding).  Leftover cash stays in the bank; any
+# open position is valued at the last close.  There are no trading costs.
+# Results are compared against buying and holding whole shares with the same
+# $10,000.
 #
-# usage: examples/trading_scenarios.rb [TICKER|all] [PERIOD...] [FROM] [SCENARIO]
+# Scenarios (N defaults in brackets):
+#   sma_reversion        buy below / sell above the prior N-day average [5 10 15]
+#   sma_trend            buy above / sell below the prior N-day average [50 100 200]
+#   sma_cross            hold while the N-day average is above the 4N-day one [10 20 50]
+#   breakout             buy a new N-day high, sell a new N/2-day low [20 55 100]
+#   momentum             hold while the close is above the close N days ago [63 126 252]
+#   rsi_reversion        buy when the N-day RSI is under 30, sell over 70 [2 5 14]
+#   bollinger_reversion  buy under the lower N-day band, sell over the average [10 20 50]
+#   macd                 hold while MACD (fast N) is above its signal line [6 12 24]
+#   turn_of_month        buy a month's last day, sell the next month's Nth day [1 3 5]
+#   sell_in_may          hold the N months starting in November [4 6 8]
+# All work from one stock's daily closes (and dates).  Strategies that rank
+# many stocks against each other, pair two stocks, or need fundamentals or
+# earnings dates do not fit this one-stock simulator and are not here.
+#
+# usage: examples/trading_scenarios.rb [TICKER|all] [N...] [FROM] [SCENARIO]
 #   TICKER   = a symbol with price history (default: nvda), or "all" for a
 #              one-line-per-ticker comparison of every symbol in the database
-#   PERIOD   = lookback in trading days (default: 5 10 15)
+#   N        = one or more values for the scenario's number (default: see above)
 #   FROM     = YYYY-MM-DD; start trading (and buy & hold) on the first bar on
 #              or after this date (default: the start of the history).  Closes
-#              before it still feed the moving average, so signals start at once.
-#   SCENARIO = a scenario name (default: sma_reversion); see SCENARIOS below
+#              before it still feed the rule, so signals start at once.
+#   SCENARIO = a scenario name (default: sma_reversion)
 #
 # Reads daily bars from $SQA_DATA_DIR/sqa.db (default ~/sqa_data) via the
 # sqlite3 command-line tool.  Educational only -- not investment advice.
@@ -54,10 +70,197 @@ def sma_reversion_signal(closes, today, period)
   end
 end
 
-# name => [description, builder: period -> rule(closes, today)]
+# :buy for a positive value, :sell for a negative one, nil for zero or nil.
+def side(value)
+  return nil unless value
+
+  if value.positive? then :buy
+  elsif value.negative? then :sell
+  end
+end
+
+# Mean of the `period` closes ending at index `today` (today's close included);
+# nil until there are that many.
+def average_through(closes, today, period)
+  return nil if today + 1 < period
+
+  closes[(today - period + 1)..today].sum / period
+end
+
+# Trend following: buy when the close is above the average of the previous
+# `period` closes, sell when it is below (Faber's 200-day rule, on daily bars).
+def sma_trend_signal(closes, today, period)
+  average = prior_average(closes, today, period)
+  average && side(closes[today] - average)
+end
+
+# Moving-average crossover: buy while the `period`-day average is above the
+# average four times as long, sell while below (50 gives the 50/200 "golden
+# cross").
+def sma_cross_signal(closes, today, period)
+  slow = average_through(closes, today, period * 4)
+  slow && side(average_through(closes, today, period) - slow)
+end
+
+# Channel breakout (Donchian / Turtle rules, on closes): buy on a close above
+# the highest of the previous `period` closes, sell on a close below the
+# lowest of the previous period/2 closes.
+def breakout_signal(closes, today, period)
+  return nil if today < period
+
+  exit_span = [period / 2, 1].max
+  close     = closes[today]
+  if close > closes[(today - period)...today].max then :buy
+  elsif close < closes[(today - exit_span)...today].min then :sell
+  end
+end
+
+# Time-series momentum: buy while the close is above the close `period` days
+# ago, sell while below (252 is the usual 12 months).
+def momentum_signal(closes, today, period)
+  return nil if today < period
+
+  side(closes[today] - closes[today - period])
+end
+
+# Relative strength index over the last `period` close-to-close changes,
+# using plain averages of the gains and losses (Cutler's form of Wilder's
+# RSI); nil until there are enough bars or when the price has not moved.
+def simple_rsi(closes, today, period)
+  return nil if today < period
+
+  changes = closes[(today - period)..today].each_cons(2).map { |before, after| after - before }
+  gains   = changes.select(&:positive?).sum
+  moved   = changes.sum(&:abs)
+  moved.zero? ? nil : 100.0 * gains / moved
+end
+
+RSI_LOW  = 30.0
+RSI_HIGH = 70.0
+
+# RSI mean reversion: buy when the `period`-day RSI is below RSI_LOW, sell
+# when it is above RSI_HIGH.
+def rsi_reversion_signal(closes, today, period)
+  rsi = simple_rsi(closes, today, period)
+  return nil unless rsi
+
+  if rsi < RSI_LOW then :buy
+  elsif rsi > RSI_HIGH then :sell
+  end
+end
+
+BAND_WIDTH = 2.0 # Bollinger band distance from the average, in standard deviations
+
+# [average, standard deviation] of the `period` closes ending at `today`; nil
+# until there are that many.
+def band_stats(closes, today, period)
+  average = average_through(closes, today, period)
+  return nil unless average
+
+  window = closes[(today - period + 1)..today]
+  [average, Math.sqrt(window.sum { (it - average)**2 } / period)]
+end
+
+# Bollinger band reversion: buy on a close below the lower band, sell on a
+# close above the middle band (the `period`-day average).
+def bollinger_reversion_signal(closes, today, period)
+  average, deviation = band_stats(closes, today, period)
+  return nil unless average
+
+  close = closes[today]
+  if close < average - (BAND_WIDTH * deviation) then :buy
+  elsif close > average then :sell
+  end
+end
+
+# Exponential moving average of every value, seeded with the first one.
+def ema_series(values, period)
+  weight = 2.0 / (period + 1)
+  values.each_with_object([]) { |value, out| out << (out.empty? ? value : out.last + (weight * (value - out.last))) }
+end
+
+# [fast, slow, signal] spans in the classic 12/26/9 proportions for a fast span.
+def macd_spans(period) = [period, [(period * 26 / 12.0).round, period + 1].max, [(period * 9 / 12.0).round, 1].max]
+
+# MACD line minus its signal line for every bar.
+def macd_gaps(closes, fast, slow, signal)
+  line = ema_series(closes, fast).zip(ema_series(closes, slow)).map { |quick, slack| quick - slack }
+  line.zip(ema_series(line, signal)).map { |macd, trigger| macd - trigger }
+end
+
+# MACD rule: buy while the MACD line is above its signal line, sell while
+# below.  The gaps are worked out once per closes array, then looked up.
+def macd_rule(period)
+  fast, slow, signal = macd_spans(period)
+  cache = {}.compare_by_identity
+  lambda do |closes, today|
+    next nil if today < slow + signal
+
+    cache.clear unless cache.key?(closes)
+    side((cache[closes] ||= macd_gaps(closes, fast, slow, signal))[today])
+  end
+end
+
+# True when the bar at `today` is the last one of its calendar month.  The
+# final bar of the history is never counted, since the next one is unknown.
+def month_end?(dates, today)
+  following = dates[today + 1]
+  !following.nil? && following.month != dates[today].month
+end
+
+# 1 for the first trading day of its month, 2 for the second, ...
+def trading_day_of_month(dates, today)
+  month = dates[today].month
+  count = 1
+  count += 1 while today >= count && dates[today - count].month == month
+  count
+end
+
+# Turn of the month: buy at the close of a month's last trading day, sell at
+# the close of the next month's `period`-th trading day.
+def turn_of_month_signal(dates, today, period)
+  if month_end?(dates, today) then :buy
+  elsif trading_day_of_month(dates, today) == period then :sell
+  end
+end
+
+# The `count` calendar months starting with November: 6 -> [11, 12, 1, 2, 3, 4].
+def winter_months(count) = (0...count).map { ((10 + it) % 12) + 1 }
+
+# "Sell in May": hold through the `period` months starting in November, stay
+# in cash for the rest of the year.
+def sell_in_may_signal(dates, today, period)
+  winter_months([period, 12].min).include?(dates[today].month) ? :buy : :sell
+end
+
+# Scenario builders: (period, dates) -> rule(closes, today).  `signal` names a
+# method taking (closes, today, period) or, for calendar rules, (dates, today, period).
+def price_scenario(signal) = ->(period, _dates) { ->(closes, today) { send(signal, closes, today, period) } }
+def calendar_scenario(signal) = ->(period, dates) { ->(_closes, today) { send(signal, dates, today, period) } }
+
+# name => [description, builder: (period, dates) -> rule(closes, today)]
 SCENARIOS = {
-  "sma_reversion" => ["Buy below / sell above the prior N-day average close",
-                      ->(period) { ->(closes, today) { sma_reversion_signal(closes, today, period) } }]
+  "sma_reversion" => ["Buy below / sell above the prior N-day average close", price_scenario(:sma_reversion_signal)],
+  "sma_trend" => ["Trend following: buy above / sell below the prior N-day average close", price_scenario(:sma_trend_signal)],
+  "sma_cross" => ["Crossover: hold while the N-day average is above the 4N-day average", price_scenario(:sma_cross_signal)],
+  "breakout" => ["Channel breakout: buy a new N-day high close, sell a new N/2-day low close", price_scenario(:breakout_signal)],
+  "momentum" => ["Time-series momentum: hold while the close is above the close N days ago", price_scenario(:momentum_signal)],
+  "rsi_reversion" => ["RSI reversion: buy when the N-day RSI is below 30, sell above 70", price_scenario(:rsi_reversion_signal)],
+  "bollinger_reversion" => ["Bollinger reversion: buy below the lower N-day band, sell above the N-day average",
+                            price_scenario(:bollinger_reversion_signal)],
+  "macd" => ["MACD: hold while the MACD line (fast N, slow 26N/12) is above its 9N/12 signal line",
+             ->(period, _dates) { macd_rule(period) }],
+  "turn_of_month" => ["Turn of the month: buy the last trading day, sell the Nth trading day of the next month",
+                      calendar_scenario(:turn_of_month_signal)],
+  "sell_in_may" => ["Sell in May: hold for the N months starting in November, cash otherwise",
+                    calendar_scenario(:sell_in_may_signal)]
+}.freeze
+
+# Lookback periods used when none are given; scenarios not listed use DEFAULT_PERIODS.
+SCENARIO_PERIODS = {
+  "sma_trend" => [50, 100, 200], "sma_cross" => [10, 20, 50], "breakout" => [20, 55, 100],
+  "momentum" => [63, 126, 252], "rsi_reversion" => [2, 5, 14], "bollinger_reversion" => [10, 20, 50],
+  "macd" => [6, 12, 24], "turn_of_month" => [1, 3, 5], "sell_in_may" => [4, 6, 8]
 }.freeze
 
 # ---- data access ----------------------------------------------------------
@@ -164,7 +367,7 @@ def ticker_summary(db, ticker, builder, periods, from = nil)
 
   { ticker:, bars: bars.size - start, from: dates[start], to: dates.last, last_close: closes.last,
     hold_pct: pct_change(buy_and_hold_value(closes, start)), dates:,
-    results: periods.map { period_result(closes, builder.call(it), it, start) } }
+    results: periods.map { period_result(closes, builder.call(it, dates), it, start) } }
 end
 
 # ---- reporting ------------------------------------------------------------
@@ -179,7 +382,7 @@ end
 
 # [heading, value formatter, width]
 DETAIL_COLUMNS = [
-  ["days", ->(r) { r[:period].to_s }, 4],
+  ["N", ->(r) { r[:period].to_s }, 4],
   ["shares held", ->(r) { r[:shares].to_s }, 11],
   ["bank (cash)", ->(r) { money(r[:cash]) }, 14],
   ["stock value", ->(r) { money(r[:stock]) }, 15],
@@ -203,7 +406,7 @@ end
 # Detailed report for a single ticker: one row per lookback period.
 def detail_report(summary, name, description)
   results = summary[:results]
-  trades  = results.flat_map { ["  #{it[:period]}-day:", *recent_trades(summary, it)] }
+  trades  = results.flat_map { ["  N = #{it[:period]}:", *recent_trades(summary, it)] }
   <<~REPORT
     #{summary[:ticker].upcase}  #{summary[:bars]} bars  #{summary[:from]} .. #{summary[:to]}  last close #{money(summary[:last_close])}
     scenario: #{name} -- #{description}
@@ -228,7 +431,7 @@ end
 def comparison_header(periods)
   block  = %w[shares bank total return].zip(PERIOD_WIDTHS).map { |text, width| text.rjust(width) }.join
   label  = "#{'ticker'.ljust(6)} #{'buy&hold'.rjust(11)}"
-  titles = periods.map { "#{it}-day average".center(block.size) }
+  titles = periods.map { "N = #{it}".center(block.size) }
   [[" " * label.size, *titles].join(" | "), [label, *periods.map { block }].join(" | ")]
 end
 
@@ -243,7 +446,7 @@ end
 def beat_counts(summaries, periods)
   periods.each_with_index.map do |period, index|
     beat = summaries.count { it[:results][index][:strategy_pct] > it[:hold_pct] }
-    "#{period}-day beat buy & hold on #{beat} of #{summaries.size}"
+    "N = #{period} beat buy & hold on #{beat} of #{summaries.size}"
   end.join(";  ")
 end
 
@@ -275,7 +478,8 @@ def parse_options(args)
   periods, names = rest.partition { it.match?(/\A\d+\z/) }
   periods = periods.map(&:to_i)
   abort "periods must be at least 1" if periods.any?(&:zero?)
-  [periods.empty? ? DEFAULT_PERIODS : periods, dates.first&.then { parse_date(it) }, names.first || SCENARIOS.keys.first]
+  name = names.first || SCENARIOS.keys.first
+  [periods.empty? ? SCENARIO_PERIODS.fetch(name, DEFAULT_PERIODS) : periods, dates.first&.then { parse_date(it) }, name]
 end
 
 def run(db, ticker, periods, from, scenario)
