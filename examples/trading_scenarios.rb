@@ -28,9 +28,30 @@
 # many stocks against each other, pair two stocks, or need fundamentals or
 # earnings dates do not fit this one-stock simulator and are not here.
 #
-# usage: examples/trading_scenarios.rb [options] [TICKER|all] [N...] [FROM] [SCENARIO]
-#   TICKER   = a symbol with price history (default: nvda), or "all" for a
-#              one-line-per-ticker comparison of every symbol in the database
+# The report ends with a recommendation for each ticker, from the signal its
+# best-performing N (over the window) gives on the latest close, and the
+# shares you say you hold:
+#   BUY    you hold none and the signal is buy
+#   SELL   you hold shares and the signal is sell
+#   HOLD   you hold shares and the signal is anything else
+#   WATCH  you hold none and the signal is anything else
+# A BUY or SELL comes with the price for the next session: the price at which
+# the signal still holds, found by trying prices for the next close.  Where
+# the signal holds at or below that price it is a limit (buy) or a stop
+# (sell); at or above, a stop (buy) or a limit (sell).  The calendar
+# scenarios do not depend on price, so they trade at market.  A BUY is sized
+# with the --cash amount.  WATCH lines are left out.  BUYs come first, ranked
+# by their two-week upside: the mean return over the 10 trading days after
+# each buy signal the same rule gave on that stock within the window (history,
+# not a forecast); SELLs and HOLDs follow.
+#
+# usage: examples/trading_scenarios.rb [options] [TICKER[,SHARES]...|all] [N...] [FROM] [SCENARIO]
+#   TICKER   = one or more symbols with price history (default: nvda), or
+#              "all" for a one-line-per-ticker comparison of every symbol in
+#              the database
+#   SHARES   = how many shares of that ticker you hold (default: 0), e.g.
+#              f,100 for 100 shares of Ford; with "all", any TICKER,SHARES
+#              given sets the holding of that ticker
 #   N        = one or more values for the scenario's number (default: see above)
 #   FROM     = YYYY-MM-DD; start trading (and buy & hold) on the first bar on
 #              or after this date, instead of using --window.  Closes before
@@ -44,7 +65,8 @@
 #   --cash DOLLARS   starting cash in the bank (default: 10000)
 #   -h, --help       show this help
 #
-# examples: examples/trading_scenarios.rb amd momentum --window 365
+# examples: examples/trading_scenarios.rb f,100 nvda amd,25 momentum
+#           examples/trading_scenarios.rb amd momentum --window 365
 #           examples/trading_scenarios.rb all breakout 20 55 --cash 2500
 #           examples/trading_scenarios.rb nvda sma_trend --window all
 #
@@ -372,8 +394,8 @@ end
 def start_index(dates, from) = from ? dates.bsearch_index { it >= from } : 0
 
 # { ticker:, bars:, from:, to:, last_close:, bankroll:, hold_value:, hold_pct:,
-#   dates:, results: [period_result...] }.  `bars` counts only the traded
-# bars, from the start date on.
+#   dates:, closes:, start:, results: [period_result...] }.  `bars` counts
+# only the traded bars, from index `start` on; dates and closes cover every bar.
 def ticker_summary(db, ticker, builder, periods, from = nil, bankroll: BANKROLL)
   bars   = load_bars(db, ticker)
   dates  = bars.map(&:first)
@@ -383,7 +405,7 @@ def ticker_summary(db, ticker, builder, periods, from = nil, bankroll: BANKROLL)
 
   hold_value = buy_and_hold_value(closes, start, bankroll)
   { ticker:, bars: bars.size - start, from: dates[start], to: dates.last, last_close: closes.last,
-    bankroll:, hold_value:, hold_pct: pct_change(hold_value, bankroll), dates:,
+    bankroll:, hold_value:, hold_pct: pct_change(hold_value, bankroll), dates:, closes:, start:,
     results: periods.map { period_result(closes, builder.call(it, dates), it, start, bankroll) } }
 end
 
@@ -479,9 +501,152 @@ def comparison_report(summaries, periods, name, description, from = nil, bankrol
   ].join("\n")
 end
 
+# ---- recommendation -------------------------------------------------------
+
+# Scenarios whose signal depends only on the date, so there is no price to search for.
+CALENDAR_SCENARIOS = %w[turn_of_month sell_in_may].freeze
+PRICE_RANGE        = 4.0 # the next-close search runs from last close / this to last close * this
+SEARCH_STEPS       = 32  # halvings of the search range (it ends far finer than a cent)
+UPSIDE_BARS        = 10  # trading days in the two weeks a buy's upside is measured over
+
+# Percent return over the `horizon` bars after each bar from `start` on where
+# the rule said :buy, for the bars that have that many bars after them.
+def buy_signal_returns(rule, closes, start, horizon = UPSIDE_BARS)
+  (start...(closes.size - horizon)).filter_map do |index|
+    ((closes[index + horizon] / closes[index]) - 1.0) * 100 if rule.call(closes, index) == :buy
+  end
+end
+
+# { mean:, count: } of buy_signal_returns, or nil when the rule never said buy.
+def two_week_upside(rule, closes, start)
+  returns = buy_signal_returns(rule, closes, start)
+  returns.empty? ? nil : { mean: returns.sum / returns.size, count: returns.size }
+end
+
+# What to do given the shares held and the latest signal: :buy, :sell, :hold or :watch.
+def holding_action(held, signal)
+  if held.positive? then signal == :sell ? :sell : :hold
+  else signal == :buy ? :buy : :watch
+  end
+end
+
+# The signal the rule would give if the next close were `price`.
+def next_signal(rule, closes, price) = rule.call([*closes, price], closes.size)
+
+# `price` rounded to the cent inward, so the rounded price still gives the
+# action: down when it holds at or below the price, up when at or above.
+def cent_inside(price, side) = side == :below ? (price * 100).floor / 100.0 : (price * 100).ceil / 100.0
+
+# Where, between `low` and `high`, the next close stops giving `action`, as
+# [:below or :above, price]: the action holds at that price and on that side
+# of it.  nil when the action holds at both ends of the range or at neither.
+def action_boundary(rule, closes, action, low, high, steps = SEARCH_STEPS)
+  at_low = next_signal(rule, closes, low) == action
+  return nil if at_low == (next_signal(rule, closes, high) == action)
+
+  inside, outside = at_low ? [low, high] : [high, low]
+  steps.times do
+    middle = (inside + outside) / 2
+    if next_signal(rule, closes, middle) == action then inside = middle
+    else outside = middle
+    end
+  end
+  side = at_low ? :below : :above
+  [side, cent_inside(inside, side)]
+end
+
+# [side, price] for a trade on the next session: a boundary from
+# action_boundary, or [:market, last close] when there is none to find.
+def order_price(rule, closes, action, calendar)
+  last     = closes.last
+  boundary = calendar ? nil : action_boundary(rule, closes, action, last / PRICE_RANGE, last * PRICE_RANGE)
+  boundary || [:market, last]
+end
+
+# Shares to trade: everything held for a sell, as many as the cash buys for a buy.
+def order_shares(action, held, price, bankroll) = action == :sell ? held : affordable_shares(bankroll, price)
+
+# { ticker:, held:, period:, signal:, action:, order: [side, price] or nil,
+#   shares:, upside: two_week_upside for a buy or nil }, from the
+# best-performing N of a ticker summary.
+def recommend(summary, builder, held, bankroll = BANKROLL, calendar: false)
+  period = summary[:results].max_by { it[:final] }[:period]
+  rule   = builder.call(period, summary[:dates])
+  closes = summary[:closes]
+  signal = rule.call(closes, closes.size - 1)
+  action = holding_action(held, signal)
+  order  = %i[buy sell].include?(action) ? order_price(rule, closes, action, calendar) : nil
+  { ticker: summary[:ticker], held:, period:, signal:, action:, order:,
+    shares: order && order_shares(action, held, order.last, bankroll),
+    upside: action == :buy ? two_week_upside(rule, closes, summary[:start]) : nil }
+end
+
+# The rows to report: WATCH dropped, BUYs first ranked by two-week upside
+# (those with no past buy signal last), then SELLs and HOLDs by ticker.
+def ranked_recommendations(rows)
+  buys, others = rows.reject { it[:action] == :watch }.partition { it[:action] == :buy }
+  [*buys.sort_by { [it[:upside] ? 0 : 1, -(it[:upside]&.fetch(:mean) || 0)] },
+   *others.sort_by { [it[:action] == :sell ? 0 : 1, it[:ticker]] }]
+end
+
+# "+3.2% (14)" -- mean two-week return after past buy signals, and how many.
+def upside_text(upside) = upside ? "#{format('%+.1f%%', upside[:mean])} (#{upside[:count]})" : "no past buys"
+
+# The order in words, e.g. "BUY 66 shares, limit $149.80 (at or below)".
+def order_text(action, shares, (side, price))
+  verb = "#{action.to_s.upcase} #{shares} shares"
+  case [action, side]
+  when %i[buy below], %i[sell above] then "#{verb}, limit #{money(price)} (at or #{side})"
+  when %i[buy above], %i[sell below] then "#{verb} at #{money(price)} or #{side} (#{action} stop)"
+  else "#{verb} at market (last close #{money(price)})"
+  end
+end
+
+def recommendation_line(row)
+  advice = row[:order] ? order_text(row[:action], row[:shares], row[:order]) : row[:action].to_s.upcase
+  upside = row[:action] == :buy ? upside_text(row[:upside]) : ""
+  "  #{row[:ticker].upcase.ljust(7)} #{row[:held].to_s.rjust(7)}  #{advice.ljust(52)}  #{upside.ljust(13)}  " \
+    "N = #{row[:period]}, signal #{row[:signal] || 'none'}"
+end
+
+# The closing section, one line per ticker that is not WATCH.  `holdings`
+# maps ticker => shares held.
+def recommendation_report(summaries, holdings, builder, scenario, bankroll = BANKROLL)
+  usable = summaries.reject { it[:bars].zero? }
+  rows   = usable.map do |summary|
+    recommend(summary, builder, holdings.fetch(summary[:ticker], 0), bankroll, calendar: CALENDAR_SCENARIOS.include?(scenario))
+  end
+  shown = ranked_recommendations(rows)
+  [
+    "",
+    "recommendation -- #{scenario}, each ticker's best N over the window, signal from the #{usable.map { it[:to] }.max} " \
+    "close, trade on the next session (buys sized from #{money(bankroll)}):",
+    "  #{'ticker'.ljust(7)} #{'held'.rjust(7)}  #{'action'.ljust(52)}  #{'2-wk upside'.ljust(13)}  rule",
+    *(shown.empty? ? ["  nothing to buy, sell or hold"] : shown.map { recommendation_line(it) }),
+    "#{rows.size - shown.size} WATCH (no shares, no buy signal) not shown",
+    "2-wk upside = mean return #{UPSIDE_BARS} trading days after the rule's past buy signals in the window " \
+    "(count in brackets); history, not a forecast",
+    "educational only -- not investment advice"
+  ].join("\n")
+end
+
 # ---- command line ---------------------------------------------------------
 
-DATE_ARG = /\A\d{4}-\d{2}-\d{2}\z/
+DATE_ARG    = /\A\d{4}-\d{2}-\d{2}\z/
+HOLDING_ARG = /\A(?<ticker>[a-z0-9.\-^=]+)(?:,(?<shares>\d+))?\z/i
+
+# "f,100" -> ["f", 100]; "f" -> ["f", 0].
+def parse_holding(text)
+  match = HOLDING_ARG.match(text) or abort "bad ticker #{text.inspect} (want TICKER or TICKER,SHARES)"
+  [match[:ticker].downcase, match[:shares].to_i]
+end
+
+# The holdings with "all" replaced by every ticker in `every`; a ticker given
+# with shares keeps them, the rest hold none.
+def expand_all(holdings, every)
+  shares = holdings.to_h
+  every.map { [it, shares.fetch(it, 0)] }
+end
 
 def parse_date(text)
   Date.iso8601(text)
@@ -489,33 +654,46 @@ rescue Date::Error
   abort "bad date #{text.inspect} (want YYYY-MM-DD)"
 end
 
-# Split arguments after the ticker into [periods, from date or nil, scenario name].
+# Split the positional arguments into [holdings [[ticker, shares], ...],
+# periods, from date or nil, scenario name].  Whole numbers are periods,
+# YYYY-MM-DD is FROM, a scenario name is the scenario, the rest are tickers.
 def parse_options(args)
   dates, rest    = args.partition { it.match?(DATE_ARG) }
-  periods, names = rest.partition { it.match?(/\A\d+\z/) }
+  periods, rest  = rest.partition { it.match?(/\A\d+\z/) }
+  names, tickers = rest.partition { SCENARIOS.key?(it) }
   periods = periods.map(&:to_i)
   abort "periods must be at least 1" if periods.any?(&:zero?)
-  name = names.first || SCENARIOS.keys.first
-  [periods.empty? ? SCENARIO_PERIODS.fetch(name, DEFAULT_PERIODS) : periods, dates.first&.then { parse_date(it) }, name]
+  name     = names.first || SCENARIOS.keys.first
+  holdings = tickers.empty? ? [["nvda", 0]] : tickers.map { parse_holding(it) }.uniq(&:first)
+  [holdings, periods.empty? ? SCENARIO_PERIODS.fetch(name, DEFAULT_PERIODS) : periods,
+   dates.first&.then { parse_date(it) }, name]
 end
 
-def run(db, ticker, periods, from, scenario, bankroll: BANKROLL)
-  description, builder = SCENARIOS.fetch(scenario) do
-    abort "unknown scenario #{scenario.inspect} (have: #{SCENARIOS.keys.join(', ')})"
-  end
-  if ticker == "all"
-    summaries = all_tickers(db).map { ticker_summary(db, it, builder, periods, from, bankroll:) }
-    return comparison_report(summaries, periods, scenario, description, from, bankroll)
-  end
+# Detail reports for named tickers; aborts on one with no history.
+def detail_reports(summaries, scenario, description, from, db)
+  summaries.map do |summary|
+    if summary[:bars].zero?
+      abort "no price history for #{summary[:ticker].upcase} #{"on or after #{from} " if from}in #{db} " \
+            "(scenarios: #{SCENARIOS.keys.join(', ')})"
+    end
+    detail_report(summary, scenario, description)
+  end.join("\n")
+end
 
-  summary = ticker_summary(db, ticker, builder, periods, from, bankroll:)
-  abort "no price history for #{ticker.upcase} #{"on or after #{from} " if from}in #{db}" if summary[:bars].zero?
-  detail_report(summary, scenario, description)
+def run(db, holdings, periods, from, scenario, bankroll: BANKROLL)
+  description, builder = SCENARIOS.fetch(scenario)
+  every    = holdings.any? { it.first == "all" }
+  holdings = expand_all(holdings, all_tickers(db)) if every
+  summaries = holdings.map { |ticker, _| ticker_summary(db, ticker, builder, periods, from, bankroll:) }
+  analysis  = if every then comparison_report(summaries, periods, scenario, description, from, bankroll)
+              else detail_reports(summaries, scenario, description, from, db)
+              end
+  [analysis, recommendation_report(summaries, holdings.to_h, builder, scenario, bankroll)].join("\n")
 end
 
 if $PROGRAM_NAME == __FILE__
   options = parse_demo_options(ARGV, __FILE__, window: true, cash: true)
-  periods, from, scenario = parse_options(ARGV[1..].to_a)
+  holdings, periods, from, scenario = parse_options(ARGV)
   from = analysis_start(from, options[:window]) { latest_day(DB) }
-  puts run(DB, (ARGV[0] || "nvda").downcase, periods, from, scenario, bankroll: options.fetch(:cash, BANKROLL))
+  puts run(DB, holdings, periods, from, scenario, bankroll: options.fetch(:cash, BANKROLL))
 end
